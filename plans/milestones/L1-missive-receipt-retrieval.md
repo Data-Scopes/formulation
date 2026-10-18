@@ -1,6 +1,6 @@
 # L1 — Missive receipt retrieval (whole resolutions)
 
-**Status:** in progress (STEPL0 done; next: STEPL1)  
+**Status:** in progress (STEPL1 done — 1780 labelled 680 pos / 2122 overig; next STEPL2)  
 **Steps:** STEPL0–STEPL4 under [`plans/steps/`](../steps/)  
 **Parallel to R1** — same machinery (char TF-IDF + LR on `resolutions_flat`), different document type. Do not mix into formula STEP2 or aanstelling scripts.
 

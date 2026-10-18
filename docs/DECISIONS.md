@@ -135,3 +135,9 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Context:** STEPS0 fixture IoU=1.0 for SW single/cloud/DAG. STEPS3 on 1780 (181 windows): zero empty spans; 30 full 6-token openings at align=9; among align>=6 cloud↔DAG spans agree. Overall cloud↔DAG equal-rate 0.33 (60/181) is driven by short partial matches (mostly 'ter Vergaderinge' / single-token) on STEPS1 0.35 neighbours — not failed true openings. STEPS1 cosine still uncalibrated; neural bake-off stays deferred.
 - **Decision:** Stop after TF-IDF → SW/DAG. No residual GysBERT (or other neural) pass on low-alignment leftovers. Keep deferred S1-neural-span-eval for a later GysBERT vs GloBERTise harness if chosen. Next classical work: calibrate STEPS1 threshold now that the span framework exists.
 - **Reason:** Classical alignment already recovers exact boilerplate on true 18c openings; leftovers look like framing false positives. A residual neural pass would be a methods bake-off (Doel B), not completing usable spans (Doel A). Mirror STEPR4.
+
+## 2026-10-18: S1 variable slots (proposer) after STEPS1 calibration
+
+- **Context:** Requeste openings leave the proposer (and similar fills) after the boilerplate span ending at Requeste. Longer gappy templates or post-span rules can extract those later.
+- **Decision:** Defer named variable-slot extraction (proposer, place, body) until after STEPS1 cosine threshold calibration. Keep opening_requeste_18c ending at Requeste for calibration; do not extend the template with semantic gaps in this phase.
+- **Reason:** Calibration needs a stable fixed skeleton + span metrics; slot semantics are a separate cut and would mix framing noise with extraction design.

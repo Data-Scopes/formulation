@@ -103,7 +103,7 @@ None applied yet.
 - **Track R (judged):** retrieve missing whole *aanstellingsresoluties* over `resolutions_flat` + delegates `resolutie_refs`. STEPR4 stopped after TF-IDF; selection in `aanstelling_selected`. Do not mix retrieval into formula STEP2.
 - **Track R2 (deferred):** pre-1705 expansion using ~615 reviewed keeps as exemplars (char k-NN/refit; optional dense rerank)—see [`plans/milestones/R2-pre1705-aanstelling-expansion.md`](plans/milestones/R2-pre1705-aanstelling-expansion.md). **Not active** until explicitly chosen.
 - **Track L:** retrieve *missive/brief* receipts with *geen resolutie gevallen / vereischende* (L1). Mirror R1; exclude aanstelling ids from L positives. Seeds: `missive_receipt_seeds`.
-- **Track S (judged):** formula **boundary evolution** — TF-IDF windows → Smith-Waterman (single / slot-cloud) → DAG for exact boilerplate spans. See [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md). STEPS4: stop (no GysBERT). Next classical: STEPS1 threshold calibration; L1 STEPL1 available.
+- **Track S (judged + calibrate):** formula **boundary evolution** — TF-IDF windows → Smith-Waterman (single / slot-cloud) → DAG. STEPS4: stop (no GysBERT). **Active classical:** STEPS1 cosine calibration ([`plans/steps/STEPS1-calibrate-threshold.md`](plans/steps/STEPS1-calibrate-threshold.md)). Proposer / variable-slot extraction deferred until after that cut. L1 STEPL2 available.
 - **Track F (paused):** formulaic language via PyPI `formula_detection` / `FormulaSearch` (M1). Do not fork the library or lift the `republic_clean` notebook tree. Not the harness for Track S.
 
 Do not mix tracks in one script. No live Elasticsearch.

@@ -1,6 +1,6 @@
 # Steps
 
-Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **S1 judged (stop after SW/DAG).** Next: STEPS1 cosine calibration, or L1 STEPL1. F/M1 FormulaSearch paused. R1 judged.
+Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **Active: STEPS1 threshold calibration.** L1 STEPL1 done; STEPL2 available. F/M1 paused. R1 judged.
 
 ## Track R — retrieval (R1)
 
@@ -17,7 +17,8 @@ Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per
 | Step | Guide | Status |
 |------|-------|--------|
 | L0 | [STEPL0-define-missive-receipt-type.md](STEPL0-define-missive-receipt-type.md) | done |
-| L1–L4 | (guides TBD) | not started |
+| L1 | [STEPL1-labelled-table.md](STEPL1-labelled-table.md) | done (1780) |
+| L2–L4 | (guides TBD) | not started |
 
 ## Track S — formula boundary evolution (S1)
 
@@ -25,6 +26,7 @@ Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per
 |------|-------|--------|
 | S0 | [STEPS0-boundary-scaffold.md](STEPS0-boundary-scaffold.md) | done |
 | S1 | [STEPS1-tfidf-window-framing.md](STEPS1-tfidf-window-framing.md) | done |
+| S1b | [STEPS1-calibrate-threshold.md](STEPS1-calibrate-threshold.md) | **active** |
 | S2 | [STEPS2-slot-cloud-bootstrap.md](STEPS2-slot-cloud-bootstrap.md) | done |
 | S3 | [STEPS3-dag-spans.md](STEPS3-dag-spans.md) | done |
 | S4 | [STEPS4-residual-or-stop.md](STEPS4-residual-or-stop.md) | done (stop) |

@@ -2,7 +2,7 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-One step per session. **S1 judged (stop after SW/DAG; no GysBERT).** Next classical S work: calibrate STEPS1 cosine thresholds. Retrieval L1 (STEPL1) remains available; F/M1 FormulaSearch paused; R1 judged.
+One step per session. **Active: STEPS1 threshold calibration** ([STEPS1-calibrate-threshold.md](plans/steps/STEPS1-calibrate-threshold.md)). Proposer/variable slots deferred. L1 STEPL1 labelled (1780); STEPL2 next when not on S. F/M1 paused; R1 judged.
 
 Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md).
 
@@ -38,7 +38,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 |-----------|-----|--------|
 | R1 Aanstelling retrieval | [R1-aanstelling-retrieval.md](plans/milestones/R1-aanstelling-retrieval.md) | done (stop after TF-IDF; selection frozen) |
 | R2 Pre-1705 aanstelling expansion | [R2-pre1705-aanstelling-expansion.md](plans/milestones/R2-pre1705-aanstelling-expansion.md) | **deferred** (registered; not started) |
-| L1 Missive-receipt retrieval | [L1-missive-receipt-retrieval.md](plans/milestones/L1-missive-receipt-retrieval.md) | in progress (STEPL0 done; next STEPL1) |
+| L1 Missive-receipt retrieval | [L1-missive-receipt-retrieval.md](plans/milestones/L1-missive-receipt-retrieval.md) | in progress (STEPL1 done 1780; next STEPL2) |
 | S1 Formula boundary evolution | [S1-formula-boundary-evolution.md](plans/milestones/S1-formula-boundary-evolution.md) | done (stop after SW/DAG; no GysBERT; calibrate STEPS1 next) |
 | M1 First runnable slice | [M1-first-slice.md](plans/milestones/M1-first-slice.md) | paused (STEP0–1 done; FormulaSearch STEP2+) |
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
@@ -61,7 +61,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | Step | Guide | Done when | Status |
 |------|-------|-----------|--------|
 | L0 | [STEPL0-define-missive-receipt-type.md](plans/steps/STEPL0-define-missive-receipt-type.md) | Type + seeds + cue inventory counts | done |
-| L1 | (STEPL1 — labelled table) | Provenanced positives + overig; exclude aanstelling ids | not started |
+| L1 | [STEPL1-labelled-table.md](plans/steps/STEPL1-labelled-table.md) | Provenanced positives + overig; exclude aanstelling ids | done (1780: 680+2122) |
 | L2 | (STEPL2 — TF-IDF baseline) | Holdout recall / precision / F1 | not started |
 | L3 | (STEPL3 — harvest) | Remainder high / grey / low | not started |
 | L4 | (STEPL4 — residual or stop) | Written decision | not started |
@@ -72,6 +72,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 |------|-------|-----------|--------|
 | S0 | [STEPS0-boundary-scaffold.md](plans/steps/STEPS0-boundary-scaffold.md) | Fixture + SW/DAG benchmark; provenanced metrics | done |
 | S1 | [STEPS1-tfidf-window-framing.md](plans/steps/STEPS1-tfidf-window-framing.md) | Candidate windows; threshold notes | done |
+| S1b | [STEPS1-calibrate-threshold.md](plans/steps/STEPS1-calibrate-threshold.md) | Frozen cosine cut (+ optional peak-dedup) | **active** |
 | S2 | [STEPS2-slot-cloud-bootstrap.md](plans/steps/STEPS2-slot-cloud-bootstrap.md) | Slot-clouds from hits; optional period filter | done |
 | S3 | [STEPS3-dag-spans.md](plans/steps/STEPS3-dag-spans.md) | Provenanced span output on real data | done |
 | S4 | [STEPS4-residual-or-stop.md](plans/steps/STEPS4-residual-or-stop.md) | Written GysBERT yes/no | done (stop) |
@@ -110,6 +111,7 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | `aanstelling_selected` | semi | Final R1 vergadering-aanstelling id list + rough names |
 | `aanstelling_pre1705_gold_review_xlsx` | explore | Early pre-1705 rows to score for new gold (`to_score` sheet) |
 | `missive_receipt_seeds` | explore | Hand seed texts for L1 (*geen resolutie* missive receipts) |
+| `missive_receipt_labelled` | frozen | Cue both-hits + seeds + 10× overig; STEPL1 |
 | `formula_boundary_cases` | explore | Tiny span-gold OCR windows for S1 STEPS0 benchmark |
 | `formula_boundary_benchmark_metrics` | semi | IoU / boundary delta / latency per method (STEPS0) |
 | `formula_tfidf_windows` | explore | STEPS1 candidate windows (cosine vs opening template) |
