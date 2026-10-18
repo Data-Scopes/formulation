@@ -2,17 +2,18 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-Two tracks, one step per session. **Active retrieval (next): Track L STEPL1** (missive receipt labelled table). Track F STEP2 remains available; R1 judged.
+One step per session. **S1 judged (stop after SW/DAG; no GysBERT).** Next classical S work: calibrate STEPS1 cosine thresholds. Retrieval L1 (STEPL1) remains available; F/M1 FormulaSearch paused; R1 judged.
 
-Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md).
+Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md).
 
-**Side plans / deferred tracks (not active):** [Presence lists 1630–1704](plans/presence-lists-1630-1704-side-plan.md) — raw session JSON harvest; [R2 pre-1705 aanstelling expansion](plans/milestones/R2-pre1705-aanstelling-expansion.md) — char/vector expansion using R1’s 615 pre-1705 keeps; **do not execute** until chosen.
+**Side plans / deferred tracks (not active):** [Presence lists 1630–1704](plans/presence-lists-1630-1704-side-plan.md) — raw session JSON harvest; [R2 pre-1705 aanstelling expansion](plans/milestones/R2-pre1705-aanstelling-expansion.md) — char/vector expansion using R1’s 615 pre-1705 keeps; [S1 17c requeste templates](plans/deferred/S1-17c-requeste-templates.md) — period map after 18c framing; [S1 neural span eval](plans/deferred/S1-neural-span-eval.md) — GysBERT vs GloBERTise (+ SW/DAG) comparison harness after STEPS4; **do not execute** until chosen.
 
 ## Goal
 
 - **Track R (judged):** recover missing whole *aanstellingsresoluties* from `resolutions_flat` by similarity to gold `resolutie_refs`. Stopped after char n-gram TF-IDF + logistic regression; no residual neural pass. Selection: `aanstelling_selected`.
-- **Track L (next):** recover *missive/brief receipt with no substantive resolution* (*geen resolutie gevallen / vereischende*). Mirror R1 machinery; different type filters.
-- **Track F:** detect, group, and type **formulaic language** in REPUBLIC resolutions as building blocks. Technical core: `formula_detection.FormulaSearch`; write through `data_io`. Resume at STEP2 when L1 pauses.
+- **Track L:** recover *missive/brief receipt with no substantive resolution* (*geen resolutie gevallen / vereischende*). Mirror R1 machinery; different type filters.
+- **Track S (judged):** evolve formula work to **exact template span boundaries** — TF-IDF windows → Smith-Waterman (single / slot-cloud) → DAG. See [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). STEPS0–4 done (stop; no GysBERT). Next: STEPS1 threshold calibration.
+- **Track F (paused):** `formula_detection.FormulaSearch` first slice (M1 STEP2+). Resume when S or L pauses; not the harness for S.
 
 ## One research thread (tracks are not sidesteps)
 
@@ -23,10 +24,11 @@ Same object: **templated administrative language** in States-General material (f
 | **R1** | whole resolution | Which sittings match the *aanstelling* document type? (char TF-IDF harvest) |
 | **R2** (deferred) | whole resolution, `year < 1705` | Expand pre-18c recall using **615 reviewed exemplars** + char k-NN/refit; optional dense rerank; not new gold |
 | **L1** | whole resolution | Which sittings are *missive/brief* receipts with *geen resolutie*? |
-| **M1–M3** | spans / building blocks | What recurring skeletons exist, how do they compose, where do they sit in the resolution? |
+| **S1** | token spans | Where does boilerplate end and the variable slot begin? (TF-IDF → SW → DAG) |
+| **M1–M3** | spans / building blocks | FormulaSearch / criteria path (paused while S runs); same typology story |
 | **Presence side plan** | session opening / presentielijst | Where is the presidium block in raw session text, across 1630–1704? (bracket: 1626–30 gold + 18c phrase seeds) |
 
-Shared machinery recurs: **character-level tolerance**, **manifest + provenance**, **candidate-then-structure** (fuzzy or n-gram recall, then pairing/position/criteria)—not one monolithic pipeline. Side plans stay off the active checklist but feed the same typology and segmentation story as formula work.
+Shared machinery recurs: **character-level tolerance**, **manifest + provenance**, **candidate-then-structure** (TF-IDF or fuzzy recall, then alignment / position / criteria)—not one monolithic pipeline. Side plans stay off the active checklist but feed the same typology and segmentation story as formula work.
 
 **Publications (REPUBLIC / formulas):** [docs/research-publications.md](docs/research-publications.md) — JOCCH preexisting structures + fuzzy boundaries; incremental modelling; attendance lists across centuries; formulaicity & regularisation (1576–1796).
 
@@ -37,7 +39,8 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | R1 Aanstelling retrieval | [R1-aanstelling-retrieval.md](plans/milestones/R1-aanstelling-retrieval.md) | done (stop after TF-IDF; selection frozen) |
 | R2 Pre-1705 aanstelling expansion | [R2-pre1705-aanstelling-expansion.md](plans/milestones/R2-pre1705-aanstelling-expansion.md) | **deferred** (registered; not started) |
 | L1 Missive-receipt retrieval | [L1-missive-receipt-retrieval.md](plans/milestones/L1-missive-receipt-retrieval.md) | in progress (STEPL0 done; next STEPL1) |
-| M1 First runnable slice | [M1-first-slice.md](plans/milestones/M1-first-slice.md) | in progress (STEP0–1 done; next STEP2) |
+| S1 Formula boundary evolution | [S1-formula-boundary-evolution.md](plans/milestones/S1-formula-boundary-evolution.md) | done (stop after SW/DAG; no GysBERT; calibrate STEPS1 next) |
+| M1 First runnable slice | [M1-first-slice.md](plans/milestones/M1-first-slice.md) | paused (STEP0–1 done; FormulaSearch STEP2+) |
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
 | M3 Composition + position | [M3-composition-and-position.md](plans/milestones/M3-composition-and-position.md) | not started |
 
@@ -53,7 +56,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | R3 | [STEPR3-harvest-buckets.md](plans/steps/STEPR3-harvest-buckets.md) | Unlabelled remainder scored high / grey / low | done |
 | R4 | [STEPR4-residual-or-stop.md](plans/steps/STEPR4-residual-or-stop.md) | Stop, or one residual neural pass on TF-IDF negatives | done (stop) |
 
-### Track L — missive receipt (L1), next
+### Track L — missive receipt (L1)
 
 | Step | Guide | Done when | Status |
 |------|-------|-----------|--------|
@@ -63,7 +66,17 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | L3 | (STEPL3 — harvest) | Remainder high / grey / low | not started |
 | L4 | (STEPL4 — residual or stop) | Written decision | not started |
 
-### Track F — formulas (M1)
+### Track S — formula boundary evolution (S1), judged
+
+| Step | Guide | Done when | Status |
+|------|-------|-----------|--------|
+| S0 | [STEPS0-boundary-scaffold.md](plans/steps/STEPS0-boundary-scaffold.md) | Fixture + SW/DAG benchmark; provenanced metrics | done |
+| S1 | [STEPS1-tfidf-window-framing.md](plans/steps/STEPS1-tfidf-window-framing.md) | Candidate windows; threshold notes | done |
+| S2 | [STEPS2-slot-cloud-bootstrap.md](plans/steps/STEPS2-slot-cloud-bootstrap.md) | Slot-clouds from hits; optional period filter | done |
+| S3 | [STEPS3-dag-spans.md](plans/steps/STEPS3-dag-spans.md) | Provenanced span output on real data | done |
+| S4 | [STEPS4-residual-or-stop.md](plans/steps/STEPS4-residual-or-stop.md) | Written GysBERT yes/no | done (stop) |
+
+### Track F — formulas (M1), paused
 
 | Step | Guide | Done when | Status |
 |------|-------|-----------|--------|
@@ -97,6 +110,14 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | `aanstelling_selected` | semi | Final R1 vergadering-aanstelling id list + rough names |
 | `aanstelling_pre1705_gold_review_xlsx` | explore | Early pre-1705 rows to score for new gold (`to_score` sheet) |
 | `missive_receipt_seeds` | explore | Hand seed texts for L1 (*geen resolutie* missive receipts) |
+| `formula_boundary_cases` | explore | Tiny span-gold OCR windows for S1 STEPS0 benchmark |
+| `formula_boundary_benchmark_metrics` | semi | IoU / boundary delta / latency per method (STEPS0) |
+| `formula_tfidf_windows` | explore | STEPS1 candidate windows (cosine vs opening template) |
+| `formula_tfidf_window_metrics` | semi | STEPS1 threshold notes + score distribution |
+| `formula_slot_cloud` | semi | STEPS2 frequency-weighted slot-cloud (`opening_requeste_18c`) |
+| `formula_slot_cloud_metrics` | semi | STEPS2 bootstrap notes (accept / optional-skip hypotheses) |
+| `formula_boundary_spans` | semi | STEPS3 SW/DAG token spans on STEPS1 windows |
+| `formula_boundary_span_metrics` | semi | STEPS3 latency / score / cloud↔DAG agreement notes |
 | `formula_documents` | frozen | republic_clean `documents.parquet`: formula-type flags per doc_id (1705–1796); path in `local.toml` |
 | `sample_resolutions` | explore | Offline sample JSONL with section/offsets; warm; formula STEP2 |
 | `s4_opening_phrase_candidates` | explore | Trimmed S4 fixture; optional local.toml → full 271-candidate file |
@@ -118,6 +139,14 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | Human Excel export | `aanstelling_retrieval_xlsx` | scratch `aanstelling_retrieval.xlsx` |
 | R1 selected list | `aanstelling_selected` | scratch parquet |
 | R1 results writeup | — | [`docs/r1-aanstelling-results.md`](docs/r1-aanstelling-results.md) |
+| Boundary span fixtures | `formula_boundary_cases` | `tests/fixtures/formula_boundary_cases.jsonl` |
+| Boundary benchmark metrics | `formula_boundary_benchmark_metrics` | scratch JSONL via `save_semi_structured` |
+| TF-IDF candidate windows | `formula_tfidf_windows` | scratch JSONL via `save_semi_structured` |
+| TF-IDF window metrics | `formula_tfidf_window_metrics` | scratch JSONL via `save_semi_structured` |
+| Slot-cloud (18c opening) | `formula_slot_cloud` | scratch JSONL via `save_semi_structured` |
+| Slot-cloud metrics | `formula_slot_cloud_metrics` | scratch JSONL via `save_semi_structured` |
+| Boundary spans (SW/DAG) | `formula_boundary_spans` | scratch JSONL via `save_semi_structured` |
+| Boundary span metrics | `formula_boundary_span_metrics` | scratch JSONL via `save_semi_structured` |
 | Formula documents matrix | `formula_documents` | `republic_clean/.../documents.parquet` via `local.toml` |
 | Sample corpus | `sample_resolutions` | `data/warm/datasets/corpus/sample_resolutions.jsonl` |
 | S4 seed fixture | `s4_opening_phrase_candidates` | `data/warm/datasets/seeds/s4_opening_phrase_candidates.jsonl` |

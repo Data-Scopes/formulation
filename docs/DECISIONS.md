@@ -82,8 +82,56 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Decision:** Start **Track L / L1** mirroring R1 (char TF-IDF + LR on `resolutions_flat`). Positives require receipt + null-decision close, not opening alone. Exclude `aanstelling_selected` ids from L positives. Seeds in `missive_receipt_seeds`. Next step STEPL0.
 - **Reason:** Opening-only harvest would drown in aanstellingen and referrals; R1 machinery transfers; type filter is the new work.
 
+## 2026-10-18: Track S — formula boundary evolution (after TF-IDF)
+
+- **Context:** R1 char `char_wb` TF-IDF works well for whole-resolution type recovery. Formula research needs exact boilerplate boundaries and variable slots; `FormulaSearch` (Track F / M1) is not the right first harness for that cut.
+- **Decision:** Register **Track S / S1** — phased TF-IDF windows → Smith-Waterman (single / slot-cloud) → DAG. GysBERT only as optional STEPS4 residual. Pause M1 FormulaSearch STEP2+ while S runs. Do not mix S scripts with L1/R1 harvest.
+- **Reason:** Same research object (templated language); evolution from coarse localisation to span structure. Keeps one-step-per-session clear via `STEPS*` prefix.
+
+## 2026-10-18: STEPS1 — TF-IDF window framing knobs
+
+- **Context:** PDF / design thread suggested char_wb 3–5 + `sublinear_tf`, threshold ~0.35–0.40, and optional stopwords / binary cosine / `strip_accents`.
+- **Decision:** STEPS1 uses `char_wb` 3–5 + `sublinear_tf=True` + `min_df=2`, cosine to the openings template from `formula_boundary_cases`, score windows of ~16 tokens (stride 2), separate align-pad for later SW. Fit IDF on the window corpus of a `resolutions_flat` year slice (default 1780). Default cut **0.35** is recorded as a **hypothesis** with score percentiles — not frozen. No stopword list, binary/BM25, `strip_accents`, or logistic regression in this step.
+- **Reason:** One sharpening change on the proven R1 vectorizer family; short windows match opening formulas; Track F sample corpus is not a gate; histogram before freezing the cut.
+
+## 2026-10-18: STEPS1 — 18c template first (17c later)
+
+- **Context:** Fixture template *Gepraesenteert ende gelesen sijnde de Requeste* barely appears in year slices; ≥0.35 hits on 1780 were mid-doc *gepraesenteert* noise. Real 18c openings are *IS ter Vergaderinge gele(e)sen de Requeste*. 17c also has *Op de Requeste* / *Is gelesen de requeste*, but that is a later expansion.
+- **Decision:** STEPS1 default query = `opening_requeste_18c` (`IS ter Vergaderinge geleesen de Requeste`). Scope framing POCs to **18th century** first. Defer 17c period templates / cloud. Keep STEPS0 `formula_boundary_cases` unchanged for SW/DAG gold.
+- **Reason:** One formula family + one period; avoid mixing diachronic variants into the first threshold pass.
+
+## 2026-10-18: STEPS1 — calibrate after framework
+
+- **Context:** With the 18c template, 1780 framing already yields real openings at high scores, but 0.35 still pulls provincial *ter Vergaderinge … leesen* neighbours; peak dedup / cut tuning is tempting.
+- **Decision:** **Do not calibrate** the cosine threshold (or related ranking knobs) until the Track S **framework** is in place: STEPS2 slot-cloud bootstrap → STEPS3 provenanced spans on real windows (SW/DAG on STEPS1 candidates). Keep 0.35 labelled hypothesis. 17c templates stay deferred.
+- **Reason:** Thresholds without cloud + span output optimize the wrong stage; finish the pipeline skeleton first.
+
+## 2026-10-18: STEPS2 — SW aggregate cloud (no MSA)
+
+- **Context:** Slot-clouds need observed OCR/spelling variants per template position; full MSA is heavy and out of scope for the S1 scaffold.
+- **Decision:** Bootstrap `formula_slot_cloud` by Smith-Waterman against the 18c canonical template on STEPS1 hits (or fixture seeds); frequency-weighted `variants` per slot; optional slots from skip-rate hypothesis (0.25). Record period/`year_*` as metadata. No MSA; no STEPS1 threshold calibration; 17c clouds still deferred.
+- **Reason:** Reuses STEPS0 SW; produces `variant_lists` for `align_sw_cloud`; keeps one formula family until span harvest (STEPS3) works.
+
+## 2026-10-18: STEPS3 — provenanced SW/DAG spans
+
+- **Context:** STEPS1 windows + STEPS2 cloud are ready; research needs exact boilerplate `[start, end)` on real (and shortened) openings before threshold tuning or a neural residual.
+- **Decision:** Harvest `formula_boundary_spans` with SW single, SW cloud, and DAG per window; map local spans to doc offsets via `token_start`; record latency / score / cloud↔DAG agreement in `formula_boundary_span_metrics`. Still **no** STEPS1 cosine calibration and **no** GysBERT (STEPS4). 18c `opening_requeste_18c` only.
+- **Reason:** Completes the TF-IDF → SW → DAG skeleton on real candidates; comparative span rows enable later cut tuning and residual decision.
+
+## 2026-10-18: STEPS4 residual named GysBERT; bake-off deferred
+
+- **Context:** Optional neural referee for hard formula spans could be GysBERT (plan default) or GloBERTise (VOC Early Modern). A fair comparison needs shared span gold and a harness beyond the residual gate.
+- **Decision:** STEPS4 remains a **written GysBERT yes/no** (mirror STEPR4). Register a later comparison/eval framework — GysBERT vs GloBERTise (+ SW/DAG baselines), IoU / boundary delta / latency on frozen gold leftovers — as [`plans/deferred/S1-neural-span-eval.md`](../plans/deferred/S1-neural-span-eval.md). Do not run that bake-off inside STEPS4.
+- **Reason:** Keep the residual decision cheap; methods comparison is Doel B and reuses STEPS0 metrics when chosen.
+
 ## 2026-09-23: STEPL0 — missive-receipt cue inventory (1780)
 
 - **Context:** Seeds registered (`missive_receipt_seeds`, 6 hand texts). Cue POC on `resolutions_flat` year 1780 via `pd.read_parquet(..., columns=[id, date, resolutions_text])`.
 - **Decision:** Keep open+close conjunction as the high-precision cue. Inventory: n=2796, open=1401, close=741, both=674. Open-only (~727) is large enough that opening alone is unusable; both≈close suggests most null-decision closes co-occur with the receipt open in this year.
 - **Reason:** Matches L1 type definition; STEPL1 can seed from both-hits (then exclude `aanstelling_selected`) plus hand seeds.
+
+## 2026-10-18: S1 stop after SW/DAG — no GysBERT residual
+
+- **Context:** STEPS0 fixture IoU=1.0 for SW single/cloud/DAG. STEPS3 on 1780 (181 windows): zero empty spans; 30 full 6-token openings at align=9; among align>=6 cloud↔DAG spans agree. Overall cloud↔DAG equal-rate 0.33 (60/181) is driven by short partial matches (mostly 'ter Vergaderinge' / single-token) on STEPS1 0.35 neighbours — not failed true openings. STEPS1 cosine still uncalibrated; neural bake-off stays deferred.
+- **Decision:** Stop after TF-IDF → SW/DAG. No residual GysBERT (or other neural) pass on low-alignment leftovers. Keep deferred S1-neural-span-eval for a later GysBERT vs GloBERTise harness if chosen. Next classical work: calibrate STEPS1 threshold now that the span framework exists.
+- **Reason:** Classical alignment already recovers exact boilerplate on true 18c openings; leftovers look like framing false positives. A residual neural pass would be a methods bake-off (Doel B), not completing usable spans (Doel A). Mirror STEPR4.
