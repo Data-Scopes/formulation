@@ -1,12 +1,14 @@
 # L1 — Missive receipt retrieval (whole resolutions)
 
-**Status:** in progress (STEPL1 done — 1780 labelled 680 pos / 2122 overig; next STEPL2)  
+**Status:** STEPL2 done (closed gate); **L3+ parked**  
 **Steps:** STEPL0–STEPL4 under [`plans/steps/`](../steps/)  
 **Parallel to R1** — same machinery (char TF-IDF + LR on `resolutions_flat`), different document type. Do not mix into formula STEP2 or aanstelling scripts.
 
 ## Goal
 
 Find whole resolutions whose act is **receiving a missive/brief** and recording that **no substantive resolution** was taken (info / *advertentie* only). Output a ranked candidate list, not formula spans.
+
+**Closed after STEPL2:** holdout metrics only (recall 0.934 / precision 0.907 / F1 0.920 on 1780 labelled). No remainder harvest. Working type definition remains `missive_receipt_labelled` (cues + seeds). Optional later: L3→`missive_receipt_selected` only with an explicit decision.
 
 Typical skeleton (orthography varies):
 

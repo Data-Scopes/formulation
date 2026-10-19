@@ -2,6 +2,8 @@
 
 Scratch evidence for the prove-first gate. **Registered stub:** logical name `formula_templates` → [`tests/fixtures/formula_templates.jsonl`](../../../tests/fixtures/formula_templates.jsonl) via `formulation.formula_templates`. Keep this folder as proof audit trail; do not load the scratch JSONL from pipeline code.
 
+**Design questions** (research north star): [`docs/template-design-questions.md`](../../template-design-questions.md).
+
 **Notebook (JSON + code sketch):** [`notebooks/proof_formula_schemas.ipynb`](../../../notebooks/proof_formula_schemas.ipynb)
 
 Re-run institution metrics with:

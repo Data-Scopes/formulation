@@ -1,6 +1,6 @@
 # Steps
 
-Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **Registry stub done** (`formula_templates`). Next choices: Track L STEPL2, wire boundary→registry, or institution_patterns. F/M1 paused. R1 judged.
+Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **STEPL2 done** (Track L parked). Next: registry wiring or institution_patterns. F/M1 paused. R1 judged.
 
 ## Track R — retrieval (R1)
 

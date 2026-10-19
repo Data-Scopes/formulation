@@ -211,6 +211,20 @@ phase = "frozen"
 description = "STEPL1 missive-receipt cue both-hits + hand seeds + 10× overig (aanstelling_selected excluded from positives)"
 parent = "resolutions_flat"
 
+[datasets.missive_receipt_tfidf_holdout]
+tier = "scratch"
+path = "missive_receipt_tfidf_holdout.parquet"
+phase = "frozen"
+description = "STEPL2 20% stratified holdout: archival fields plus TF-IDF+LR predictions (test split never used for fitting)"
+parent = "missive_receipt_labelled"
+
+[datasets.missive_receipt_tfidf_metrics]
+tier = "scratch"
+path = "missive_receipt_tfidf_metrics.jsonl"
+phase = "semi"
+description = "STEPL2 holdout recall, precision, F1 and frozen char_wb 3–5 / logistic regression settings"
+parent = "missive_receipt_tfidf_holdout"
+
 [datasets.formula_templates]
 tier = "hot"
 path = "tests/fixtures/formula_templates.jsonl"

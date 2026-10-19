@@ -2,16 +2,16 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-One step per session. **Registry stub done** (`formula_templates` + `formulation.formula_templates`). Prove-first: [docs/proofs/multi-template-registry/](docs/proofs/multi-template-registry/). STEPS1b cut 0.40 frozen on `opening_requeste_18c`. Next: Track L STEPL2, or wire boundary code to load tokens/threshold from registry, or period-keyed `institution_patterns` (republic_ner ORG). Proposer slots / 17c deferred. F/M1 paused; R1 judged.
+One step per session. **STEPL2 done** (closed gate: holdout recall 0.934 / precision 0.907 / F1 0.920). Track L **parked** — no STEPL3 harvest unless explicitly chosen. Next: wire boundary→registry, or period-keyed `institution_patterns`. F/M1 paused; R1 judged.
 
-Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md).
+Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md). Template **design questions** (north star, not a checklist): [`docs/template-design-questions.md`](docs/template-design-questions.md).
 
 **Side plans / deferred tracks (not active):** [Presence lists 1630–1704](plans/presence-lists-1630-1704-side-plan.md) — raw session JSON harvest; [R2 pre-1705 aanstelling expansion](plans/milestones/R2-pre1705-aanstelling-expansion.md) — char/vector expansion using R1’s 615 pre-1705 keeps; [S1 17c requeste templates](plans/deferred/S1-17c-requeste-templates.md) — period map after 18c framing; [S1 neural span eval](plans/deferred/S1-neural-span-eval.md) — GysBERT vs GloBERTise (+ SW/DAG) comparison harness after STEPS4; **do not execute** until chosen.
 
 ## Goal
 
 - **Track R (judged):** recover missing whole *aanstellingsresoluties* from `resolutions_flat` by similarity to gold `resolutie_refs`. Stopped after char n-gram TF-IDF + logistic regression; no residual neural pass. Selection: `aanstelling_selected`.
-- **Track L:** recover *missive/brief receipt with no substantive resolution* (*geen resolutie gevallen / vereischende*). Mirror R1 machinery; different type filters.
+- **Track L (parked after STEPL2):** recover *missive/brief receipt with no substantive resolution*. Labelled + holdout metrics done; L3 harvest not opened.
 - **Track S (judged):** evolve formula work to **exact template span boundaries** — TF-IDF windows → Smith-Waterman (single / slot-cloud) → DAG. See [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). STEPS0–4 + registry stub done (stop; no GysBERT).
 - **Track F (paused):** `formula_detection.FormulaSearch` first slice (M1 STEP2+). Resume when S or L pauses; not the harness for S.
 
@@ -38,7 +38,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 |-----------|-----|--------|
 | R1 Aanstelling retrieval | [R1-aanstelling-retrieval.md](plans/milestones/R1-aanstelling-retrieval.md) | done (stop after TF-IDF; selection frozen) |
 | R2 Pre-1705 aanstelling expansion | [R2-pre1705-aanstelling-expansion.md](plans/milestones/R2-pre1705-aanstelling-expansion.md) | **deferred** (registered; not started) |
-| L1 Missive-receipt retrieval | [L1-missive-receipt-retrieval.md](plans/milestones/L1-missive-receipt-retrieval.md) | in progress (STEPL1 done 1780; next STEPL2) |
+| L1 Missive-receipt retrieval | [L1-missive-receipt-retrieval.md](plans/milestones/L1-missive-receipt-retrieval.md) | STEPL2 done (closed gate); L3+ parked |
 | S1 Formula boundary evolution | [S1-formula-boundary-evolution.md](plans/milestones/S1-formula-boundary-evolution.md) | done (stop after SW/DAG; no GysBERT; STEPS1b cut 0.40; registry stub registered) |
 | M1 First runnable slice | [M1-first-slice.md](plans/milestones/M1-first-slice.md) | paused (STEP0–1 done; FormulaSearch STEP2+) |
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
@@ -62,9 +62,9 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 |------|-------|-----------|--------|
 | L0 | [STEPL0-define-missive-receipt-type.md](plans/steps/STEPL0-define-missive-receipt-type.md) | Type + seeds + cue inventory counts | done |
 | L1 | [STEPL1-labelled-table.md](plans/steps/STEPL1-labelled-table.md) | Provenanced positives + overig; exclude aanstelling ids | done (1780: 680+2122) |
-| L2 | (STEPL2 — TF-IDF baseline) | Holdout recall / precision / F1 | not started |
-| L3 | (STEPL3 — harvest) | Remainder high / grey / low | not started |
-| L4 | (STEPL4 — residual or stop) | Written decision | not started |
+| L2 | [STEPL2-tfidf-baseline.md](plans/steps/STEPL2-tfidf-baseline.md) | Holdout recall / precision / F1 | done (closed gate; R 0.934 P 0.907 F1 0.920) |
+| L3 | (STEPL3 — harvest) | Remainder high / grey / low | **parked** |
+| L4 | (STEPL4 — residual or stop) | Written decision | **parked** |
 
 ### Track S — formula boundary evolution (S1), judged
 
@@ -113,6 +113,8 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | `aanstelling_pre1705_gold_review_xlsx` | explore | Early pre-1705 rows to score for new gold (`to_score` sheet) |
 | `missive_receipt_seeds` | explore | Hand seed texts for L1 (*geen resolutie* missive receipts) |
 | `missive_receipt_labelled` | frozen | Cue both-hits + seeds + 10× overig; STEPL1 |
+| `missive_receipt_tfidf_holdout` | frozen | STEPL2 20% holdout scores |
+| `missive_receipt_tfidf_metrics` | semi | STEPL2 recall / precision / F1 + settings |
 | `formula_templates` | explore | Multi-template registry stub (framing / doc_flag / appointment / residual) |
 | `formula_boundary_cases` | explore | Tiny span-gold OCR windows for S1 STEPS0 benchmark |
 | `formula_boundary_benchmark_metrics` | semi | IoU / boundary delta / latency per method (STEPS0) |
@@ -143,6 +145,9 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | Human Excel export | `aanstelling_retrieval_xlsx` | scratch `aanstelling_retrieval.xlsx` |
 | R1 selected list | `aanstelling_selected` | scratch parquet |
 | R1 results writeup | — | [`docs/r1-aanstelling-results.md`](docs/r1-aanstelling-results.md) |
+| Missive labelled table | `missive_receipt_labelled` | scratch parquet |
+| Missive TF-IDF holdout | `missive_receipt_tfidf_holdout` | scratch parquet |
+| Missive TF-IDF metrics | `missive_receipt_tfidf_metrics` | scratch JSONL |
 | Formula template registry | `formula_templates` | `tests/fixtures/formula_templates.jsonl` |
 | Boundary span fixtures | `formula_boundary_cases` | `tests/fixtures/formula_boundary_cases.jsonl` |
 | Boundary benchmark metrics | `formula_boundary_benchmark_metrics` | scratch JSONL via `save_semi_structured` |

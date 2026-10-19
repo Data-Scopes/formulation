@@ -1,0 +1,212 @@
+{
+  "project": "formulation",
+  "last_updated": "2026-10-19 10:24",
+  "active_focus": "Track L STEPL0 (after R1 results report) — or formula STEP2",
+  "tasks": [
+    {
+      "id": "S0",
+      "title": "Project setup",
+      "status": "todo",
+      "notes": "Initialize manifest, data paths, and first reproducible checks."
+    },
+    {
+      "id": "R1",
+      "title": "Aanstelling retrieval",
+      "status": "done",
+      "notes": "Selection frozen 3820 ids (~18x gold). Results: docs/r1-aanstelling-results.md"
+    },
+    {
+      "id": "M1",
+      "title": "First runnable formula slice",
+      "status": "inprogress",
+      "notes": "STEP0-1 done. Next: STEP2 sample corpus and S4 seeds. R1 judged: stop after TF-IDF."
+    }
+  ],
+  "metrics": [
+    {
+      "scope": "R1",
+      "name": "recall",
+      "label": "holdout recall",
+      "value": "0.860465",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "0.860465"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "precision",
+      "label": "holdout precision",
+      "value": "0.973684",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "0.973684"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "f1",
+      "label": "holdout F1",
+      "value": "0.913580",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "0.913580"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "harvest_high",
+      "label": "remainder high (>0.85)",
+      "value": "1012",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "1012"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "harvest_p_gt_0_5",
+      "label": "remainder p>0.5",
+      "value": "2883",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "2883"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "harvest_review",
+      "label": "remainder (0.15,0.5]",
+      "value": "4137",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "4137"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "high_or_grey_recall",
+      "label": "holdout high-or-grey recall",
+      "value": "0.976744",
+      "history": [
+        {
+          "date": "2026-09-21",
+          "value": "0.976744"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "selected_n",
+      "label": "selected resolutions",
+      "value": "3820",
+      "history": [
+        {
+          "date": "2026-09-23",
+          "value": "3820"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "selected_vs_gold",
+      "label": "selected / gold multiplier",
+      "value": "17.93",
+      "history": [
+        {
+          "date": "2026-09-23",
+          "value": "17.93"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "selected_named_rate",
+      "label": "selected with rough name",
+      "value": "0.785",
+      "history": [
+        {
+          "date": "2026-09-23",
+          "value": "0.785"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "selected_pre_1705",
+      "label": "selected before 1705",
+      "value": "615",
+      "history": [
+        {
+          "date": "2026-09-23",
+          "value": "615"
+        }
+      ]
+    },
+    {
+      "scope": "R1",
+      "name": "review_suspect_keep_rate",
+      "label": "review_suspect keep rate",
+      "value": "0.72",
+      "history": [
+        {
+          "date": "2026-09-23",
+          "value": "0.72"
+        }
+      ]
+    },
+    {
+      "scope": "L1",
+      "name": "recall",
+      "label": "recall",
+      "value": "0.933824",
+      "history": [
+        {
+          "date": "2026-10-19",
+          "value": "0.933824"
+        }
+      ]
+    },
+    {
+      "scope": "L1",
+      "name": "precision",
+      "label": "precision",
+      "value": "0.907143",
+      "history": [
+        {
+          "date": "2026-10-19",
+          "value": "0.907143"
+        }
+      ]
+    },
+    {
+      "scope": "L1",
+      "name": "f1",
+      "label": "f1",
+      "value": "0.920290",
+      "history": [
+        {
+          "date": "2026-10-19",
+          "value": "0.920290"
+        }
+      ]
+    }
+  ],
+  "blockers": [],
+  "next_actions": [
+    "Read plans/steps/STEP2-sample-corpus-and-seeds.md",
+    "Register sample_resolutions and s4_opening_phrase_candidates; data_io.check"
+  ]
+}

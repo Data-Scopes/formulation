@@ -177,3 +177,15 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Context:** republic_ner ORG layer also covers committees/colleges. Useful for subject category of resolutions or hits. Risk of mixing that into formula_templates ids or treating committee label as template classification.
 - **Decision:** Treat NER committee/ORG mentions as content/subject specification (optional later subject_hints or doc facets). Do not use them as formula-template classification. Institution discriminator for appointment siblings remains a structural subtype gate, distinct from general subject tagging.
 - **Reason:** Template asks how language is shaped; committee asks what the business refers to. Collapsing them closes the catalogue wrongly and confuses framing with topic.
+
+## 2026-10-19: STEPL2 closed gate — park L3+ harvest
+
+- **Context:** Risk of a second R1-sized retrieval campaign (remainder score → review → selected list) with little gain for formula typology. User chose finish STEPL2 as a closed metric gate only.
+- **Decision:** Run STEPL2 holdout on `missive_receipt_labelled` (char_wb 3–5 + LR, same as R1). Record metrics; **do not** open STEPL3 harvest or freeze `missive_receipt_selected` unless a later explicit decision. Track L parked after L2. Working type definition remains cue+seeds labelled table. Next sessions: registry wiring or institution_patterns.
+- **Reason:** Holdout answers “is the cheap model usable?” without committing to full-corpus review. Cue-defined positives already carry the type; a completeness list is optional Doel A, not required for typology work.
+
+## 2026-10-19: Template design questions as research north star
+
+- **Context:** Limited catalogue coverage; user priority is how far templates get us (power/period, discrimination, formulas↔templates, harvest speed, further discrimination, detection feasibility) — with more questions expected.
+- **Decision:** Keep durable list as **design questions** in [`docs/template-design-questions.md`](template-design-questions.md), not as a pipeline checklist. Prefer small empirical probes that answer a few questions; record settled answers here; leave unresolved items in that doc.
+- **Reason:** Separates research framing from step execution so Track L/R ladders do not displace typology learning.
