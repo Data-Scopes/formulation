@@ -1,0 +1,289 @@
+# Machine-specific: copy to data_manifest.toml and edit tier roots.
+# LLM agents: add [datasets.<name>] BEFORE referencing logical_name in code.
+
+# -----------------------------------------------------------------------------
+# Policy metadata (optional)
+# -----------------------------------------------------------------------------
+[manifest]
+version = "1.0.0"
+project = "formulation"
+last_updated = "2026-10-19"
+
+# -----------------------------------------------------------------------------
+# Environment base directories (optional)
+# -----------------------------------------------------------------------------
+# If your manifest omits `[tiers.*]`, `data_io` can derive tier roots from
+# `environments.<DATA_ENV>.base_dir`.
+#
+# Switch with:
+#   export DATA_ENV=local
+#   export DATA_ENV=researchcloud
+[environments.local]
+base_dir = "./data"
+
+[environments.researchcloud]
+base_dir = "/mnt/shared/data"
+
+[phases]
+explore = "jsonl, pkl, xlsx, ad-hoc notebooks"
+semi = "jsonl, markdown+yaml frontmatter"
+frozen = "parquet (duckdb-queryable)"
+
+# Lean REPUBLIC annotation ES (public diginfra). Override indexes in
+# data_manifest.local.toml if the dated snapshot changes.
+[elasticsearch]
+host = "annotation.republic-caf.diginfra.org"
+scheme = "https"
+port = 443
+url_prefix = "elasticsearch"
+resolutions_index = "full_resolutions-2026-03-25"
+session_metadata_index = "session_metadata-2026-03-25"
+session_text_regions_index = "session_text_regions-2026-03-25"
+timeout = 60
+
+# In-repo defaults. Optional drive or full-S4 overrides go in gitignored
+# data_manifest.local.toml — do not hardcode /Volumes paths here.
+[tiers.hot]
+root = "."
+mount_check = ""
+
+[tiers.warm]
+root = "data/warm"
+mount_check = "data/warm"
+
+[tiers.scratch]
+root = "./output"
+mount_check = ""
+
+[tiers.cold]
+root = "data/cold"
+mount_check = "data/cold"
+
+# --- datasets: one block per logical name ---
+# Track R machine paths (2TB parquet, rc5 xlsx) are absolute overrides in
+# gitignored data_manifest.local.toml — do not remount [tiers.warm].
+# Formula first-slice names (sample_resolutions, s4_opening_phrase_candidates) land in STEP2.
+
+[datasets.formula_documents]
+tier = "hot"
+path = "notebooks/formulas/documents.parquet"
+phase = "frozen"
+description = "Notebook formula matrix (republic_clean): boolean formula-family flags per doc_id; 1705–1796 in current file"
+parent = ""
+
+[datasets.resolutions_flat]
+tier = "warm"
+path = "datasets/republic/resolutions/resolutions_flat.parquet"
+phase = "frozen"
+description = "One row per resolution with dates (shared REPUBLIC parquet; paragraph_texts + resolutions_text)"
+parent = ""
+
+[datasets.delegates_resolutie_refs]
+tier = "hot"
+path = "delegates_1705_1795_v1.0-rc5.xlsx"
+phase = "frozen"
+description = "Delegates 1705–1795 rc5 gold: resolutie_refs URNs (label list, not resolution text)"
+parent = ""
+
+[datasets.delegates_unique_1705_1795]
+tier = "hot"
+path = "delegates_1705_1795_unique.json"
+phase = "frozen"
+description = "Unique delegates 1705–1795 with semicolon-separated OCR name patterns (attendance variants); path override in local.toml"
+parent = ""
+
+[datasets.attendance_long_1705_1795]
+tier = "hot"
+path = "attendance_long_1705_1795.parquet"
+phase = "frozen"
+description = "Attendance-long 1705–1795 (rc6): per-sitting delegate spans with d/m/j; used for date-constrained name matching"
+parent = ""
+
+[datasets.aanstelling_gold_relocations]
+tier = "hot"
+path = "tests/fixtures/aanstelling_gold_relocations.jsonl"
+phase = "explore"
+description = "18 gold URNs relocated onto nearby resolutions_flat ids (session-num drift); still aanstelling positives"
+parent = "delegates_resolutie_refs"
+
+[datasets.aanstelling_labelled]
+tier = "scratch"
+path = "aanstelling_labelled.parquet"
+phase = "frozen"
+description = "Gold aanstelling resolutions joined to resolutions_text, plus a 10× overig sample (one row per resolution)"
+parent = "resolutions_flat"
+
+[datasets.aanstelling_tfidf_holdout]
+tier = "scratch"
+path = "aanstelling_tfidf_holdout.parquet"
+phase = "frozen"
+description = "STEPR2 20% stratified holdout: archival fields plus TF-IDF+LR predictions (test split never used for fitting)"
+parent = "aanstelling_labelled"
+
+[datasets.aanstelling_tfidf_metrics]
+tier = "scratch"
+path = "aanstelling_tfidf_metrics.jsonl"
+phase = "semi"
+description = "STEPR2 holdout recall, precision, F1 and frozen char_wb 3–5 / logistic regression settings"
+parent = "aanstelling_tfidf_holdout"
+
+[datasets.aanstelling_tfidf_harvest_poc]
+tier = "scratch"
+path = "aanstelling_tfidf_harvest_poc.parquet"
+phase = "explore"
+description = "STEPR3 POC: one-year unlabelled remainder with TF-IDF+LR scores and high/grey/low buckets"
+parent = "resolutions_flat"
+
+[datasets.aanstelling_tfidf_harvest_poc_metrics]
+tier = "scratch"
+path = "aanstelling_tfidf_harvest_poc_metrics.jsonl"
+phase = "semi"
+description = "STEPR3 POC: harvest-cut holdout metrics (high > 0.85 / low < 0.15) plus remainder-year bucket counts; does not replace STEPR2 metrics"
+parent = "aanstelling_tfidf_holdout"
+
+[datasets.aanstelling_tfidf_harvest]
+tier = "scratch"
+path = "aanstelling_tfidf_harvest.parquet"
+phase = "frozen"
+description = "STEPR3 full unlabelled remainder of resolutions_flat scored high/grey/low (char n-gram TF-IDF+LR refit on all labelled rows)"
+parent = "resolutions_flat"
+
+[datasets.aanstelling_retrieval_xlsx]
+tier = "scratch"
+path = "aanstelling_retrieval.xlsx"
+phase = "explore"
+description = "Human-readable R1 export: gold / ingest / review with ES, shape scores, and unique-pattern delegate matches"
+parent = "aanstelling_tfidf_harvest"
+
+[datasets.aanstelling_review_labels]
+tier = "scratch"
+path = "aanstelling_review_labels.jsonl"
+phase = "semi"
+description = "Human + rule review labels (keep/drop/other_appointment) for ingest_suspect and review_suspect"
+parent = "aanstelling_retrieval_xlsx"
+
+[datasets.aanstelling_selected]
+tier = "scratch"
+path = "aanstelling_selected.parquet"
+phase = "semi"
+description = "R1 selected vergadering-aanstellingen: gold + ingest keeps + review keeps, with refreshed rough names"
+parent = "aanstelling_tfidf_harvest"
+
+[datasets.aanstelling_pre1705_gold_review_xlsx]
+tier = "scratch"
+path = "aanstelling_pre1705_gold_review.xlsx"
+phase = "explore"
+description = "Human scoring workbook: early pre-1705 aanstelling candidates for new gold (to_score sheet)"
+parent = "aanstelling_tfidf_harvest"
+
+[datasets.aanstelling_pre1705_gold_review_meta]
+tier = "scratch"
+path = "aanstelling_pre1705_gold_review_meta.jsonl"
+phase = "semi"
+description = "Build summary for pre1705 gold review xlsx"
+parent = "aanstelling_pre1705_gold_review_xlsx"
+
+[datasets.aanstelling_gold_pre1705_review]
+tier = "scratch"
+path = "aanstelling_gold_pre1705_review.jsonl"
+phase = "semi"
+description = "Human keep labels from gold_pre1705 sheet (pre-1705 aanstelling; external review format)"
+parent = "aanstelling_pre1705_gold_review_xlsx"
+
+[datasets.aanstelling_pre1705_gold_impact_metrics]
+tier = "scratch"
+path = "aanstelling_pre1705_gold_impact_metrics.jsonl"
+phase = "semi"
+description = "Baseline vs augmented char centroid impact on pre-1705 review gold (eval script)"
+parent = "aanstelling_gold_pre1705_review"
+
+[datasets.missive_receipt_seeds]
+tier = "hot"
+path = "tests/fixtures/missive_receipt_seeds.jsonl"
+phase = "explore"
+description = "Hand seed texts for L1 missive/brief receipt with geen resolutie (advertentie)"
+parent = ""
+
+[datasets.missive_receipt_labelled]
+tier = "scratch"
+path = "missive_receipt_labelled.parquet"
+phase = "frozen"
+description = "STEPL1 missive-receipt cue both-hits + hand seeds + 10× overig (aanstelling_selected excluded from positives)"
+parent = "resolutions_flat"
+
+[datasets.formula_templates]
+tier = "hot"
+path = "tests/fixtures/formula_templates.jsonl"
+phase = "explore"
+description = "Multi-template registry stub (framing / doc_flag / appointment_subtype / residual); institution_patterns deferred"
+parent = ""
+
+[datasets.formula_boundary_cases]
+tier = "hot"
+path = "tests/fixtures/formula_boundary_cases.jsonl"
+phase = "explore"
+description = "Tiny span-gold OCR windows for Track S STEPS0 boundary benchmark (half-open token spans)"
+parent = ""
+
+[datasets.formula_boundary_benchmark_metrics]
+tier = "scratch"
+path = "formula_boundary_benchmark_metrics.jsonl"
+phase = "semi"
+description = "STEPS0 comparative IoU / boundary delta / latency for SW single, SW cloud, DAG"
+parent = "formula_boundary_cases"
+
+[datasets.formula_tfidf_windows]
+tier = "scratch"
+path = "formula_tfidf_windows.jsonl"
+phase = "explore"
+description = "STEPS1 candidate token windows (cosine vs opening template; char_wb 3–5 sublinear_tf)"
+parent = "resolutions_flat"
+
+[datasets.formula_tfidf_window_metrics]
+tier = "scratch"
+path = "formula_tfidf_window_metrics.jsonl"
+phase = "semi"
+description = "STEPS1 threshold notes and score distribution (0.35 cut is hypothesis)"
+parent = "formula_tfidf_windows"
+
+[datasets.formula_slot_cloud]
+tier = "scratch"
+path = "formula_slot_cloud.jsonl"
+phase = "semi"
+description = "STEPS2 frequency-weighted slot-cloud for opening_requeste_18c (SW aggregate; no MSA)"
+parent = "formula_tfidf_windows"
+
+[datasets.formula_slot_cloud_metrics]
+tier = "scratch"
+path = "formula_slot_cloud_metrics.jsonl"
+phase = "semi"
+description = "STEPS2 cloud bootstrap notes (accept ratio, optional skip rate hypotheses)"
+parent = "formula_slot_cloud"
+
+[datasets.formula_boundary_spans]
+tier = "scratch"
+path = "formula_boundary_spans.jsonl"
+phase = "semi"
+description = "STEPS3 SW single / SW cloud / DAG token spans on STEPS1 windows (half-open local+doc)"
+parent = "formula_tfidf_windows"
+
+[datasets.formula_boundary_span_metrics]
+tier = "scratch"
+path = "formula_boundary_span_metrics.jsonl"
+phase = "semi"
+description = "STEPS3 span harvest notes (latency, scores, cloud↔DAG agreement; no threshold freeze)"
+parent = "formula_boundary_spans"
+
+[datasets.example_input]
+tier = "warm"
+path = "datasets/corpus/raw_input.jsonl"
+phase = "explore"
+description = "Replace with your input dataset"
+parent = ""
+
+[datasets.example_output]
+tier = "scratch"
+path = "example_output.jsonl"
+phase = "semi"
+description = "Replace with your semi-structured output"
+parent = "example_input"

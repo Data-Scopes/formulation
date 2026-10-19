@@ -1,6 +1,6 @@
 # Prove-first: multi-template registry + appointment institution
 
-Scratch evidence only. **Not** registered in `data_manifest.toml`.
+Scratch evidence for the prove-first gate. **Registered stub:** logical name `formula_templates` → [`tests/fixtures/formula_templates.jsonl`](../../../tests/fixtures/formula_templates.jsonl) via `formulation.formula_templates`. Keep this folder as proof audit trail; do not load the scratch JSONL from pipeline code.
 
 **Notebook (JSON + code sketch):** [`notebooks/proof_formula_schemas.ipynb`](../../../notebooks/proof_formula_schemas.ipynb)
 
@@ -75,3 +75,17 @@ See `docs/DECISIONS.md` — proceed to implement registry with `discriminators: 
 | Same for formulas generally | Composition / branching, not one-id-per-surface-string |
 | 18c better known; 17c thinner (some in republic_ner) | Period-scoped entries; 17c inventory deferred until period map |
 | Imperfect resolution parsing (esp. 17c) | **Later:** use resolution templates to help re-segment / separate misparsed units — out of scope until catalogue + framing bases exist |
+
+### Committees (republic_ner) ≠ template class
+
+ORG/committee mentions (colleges, Gecommitteerde Raden, Rekenkamer, admiralties, …) are useful as **subject / content** tags on a resolution or hit — *what the business is about*.
+
+That is **not** formula-template classification. Keep separate:
+
+| Layer | Question | Example |
+|-------|----------|---------|
+| Template / formula class | *How* is it worded / which skeleton? | `opening_requeste_18c`, decision opener |
+| Appointment subtype discriminator | *Which office* is being filled? (still structural for R1 siblings) | `discriminators: ["institution"]` |
+| Subject / content (committees etc.) | *What* domain or body is referred to? | tag `Generaliteitsrekenkamer` on a missive about accounts |
+
+Do not collapse committee NER labels into `template_id`. Optional later field e.g. `subject_hints` / content facets on catalogue rows or on span/doc outputs — orthogonal to `role` / framing.

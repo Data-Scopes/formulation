@@ -154,6 +154,12 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Decision:** PASS prove-first. Keep proposed formula_templates schema (including nlp_start_marker, outcome_signal, role_depends_on_place, discriminators). Appointment lookalikes: use institution/college as primary discriminator before separate TF-IDF per sibling. Schedule manifest+loader implementation as a later step; do not register scratch JSONL yet. Improve vergadering-target institution patterns before production subtype tagging.
 - **Reason:** Schema encodes caveats without baking <START> or goedgevonden-as-approval into framing. Institution separates Rekenkamer siblings from R1 vergadering list with zero FP on the sample; incomplete recall/none-rate means discriminator is necessary but not yet sufficient alone.
 
+## 2026-10-19: Formula template registry stub registered
+
+- **Context:** Prove-first passed; next chosen step was manifest + loader stub (not STEPL2).
+- **Decision:** Register `formula_templates` → `tests/fixtures/formula_templates.jsonl` (hot / explore). Loader: `formulation.formula_templates` (`load_templates`, `get_template`, role filter, schema validation). Include `unknown_residual` row. Do **not** register docs/proofs scratch JSONL. Do not harvest `institution_patterns` or rewire STEPS1 constants in this step.
+- **Reason:** Promotes the gated schema into data_io without closing the catalogue or baking ORG pattern harvest into the stub.
+
 ## 2026-10-19: Appointment institution patterns from republic_ner ORG
 
 - **Context:** Prove-first institution discriminator used hand regex. republic_ner_matching already has ORG-annotations (tag_text+inv) and ORG-entities; surfaces shift by period (e.g. 1626 Gecommitteerde Raden ter Admirt. vs 1780 Collegie ter Admiraliteit).
@@ -165,3 +171,9 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Context:** Prove-first gate passed. User confirmed appointment discriminators=[institution] (later institution_patterns), not per-sibling TF-IDF yet. Further constraints: many templates unknown/rare; limited opening phrases branch into different templates (same for formulas); 18c known vs 17c thinner (republic_ner has some); imperfect resolution parsing especially 17c — templates may help re-separate later.
 - **Decision:** Implement registry progressively: wide categories first, then finer subtypes; prioritise recall over precision. Keep unknown/residual slots. Represent branching (shared opener → subtypes by zone/institution/period). Defer 17c period map and using templates to fix misparsed resolutions to a later stage.
 - **Reason:** Matches R1 sibling lesson and STEPS 18c-first cut; avoids closing the catalogue prematurely or baking precision models before coverage.
+
+## 2026-10-19: NER committees are content subject, not template class
+
+- **Context:** republic_ner ORG layer also covers committees/colleges. Useful for subject category of resolutions or hits. Risk of mixing that into formula_templates ids or treating committee label as template classification.
+- **Decision:** Treat NER committee/ORG mentions as content/subject specification (optional later subject_hints or doc facets). Do not use them as formula-template classification. Institution discriminator for appointment siblings remains a structural subtype gate, distinct from general subject tagging.
+- **Reason:** Template asks how language is shaped; committee asks what the business refers to. Collapsing them closes the catalogue wrongly and confuses framing with topic.
