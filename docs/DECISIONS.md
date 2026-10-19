@@ -141,3 +141,27 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Context:** Requeste openings leave the proposer (and similar fills) after the boilerplate span ending at Requeste. Longer gappy templates or post-span rules can extract those later.
 - **Decision:** Defer named variable-slot extraction (proposer, place, body) until after STEPS1 cosine threshold calibration. Keep opening_requeste_18c ending at Requeste for calibration; do not extend the template with semantic gaps in this phase.
 - **Reason:** Calibration needs a stable fixed skeleton + span metrics; slot semantics are a separate cut and would mix framing noise with extraction design.
+
+## 2026-10-19: STEPS1 freeze cosine threshold (18c)
+
+- **Context:** STEPS3 on 1780 at hypothesis 0.35: 181 windows, cloud↔dag agree 0.33, driven by provincial ter Vergaderinge neighbours (align≈3). Re-frame + re-harvest at 0.40: 59 windows, align_mean≈7.12, cloud↔dag agree 0.61; 52/59 align≥6; 7 residual ter-only. Template opening_requeste_18c only; 1715/1670 slices barely fire this skeleton.
+- **Decision:** Freeze DEFAULT_THRESHOLD at 0.40 for opening_requeste_18c (18c). Mark HYPOTHESIS_THRESHOLD=False. No peak-dedup rule. Do not treat 0.40 as a cross-century cut; 17c requeste templates stay deferred with their own calibration later.
+- **Reason:** Cut removes most STEPS1 neighbour noise while keeping true IS ter Vergaderinge geleesen de Requeste openings. Earlier centuries need different templates, not this threshold.
+
+## 2026-10-19: Multi-template registry prove-first gate
+
+- **Context:** Scratch registry records in docs/proofs/multi-template-registry/ (opening_requeste_18c framing; dual-zone requeste/rapport; goedgevonden with outcome_signal=false; nlp_start_marker for <START> artefact; appointment_vergadering vs appointment_rekenkamer with discriminators=[institution]). Institution proof: 50 selected vs 50 harvest Rekenkamer+cue — sibling primary rekenkamer 28/50 (56%), selected FP 0/50, selected none 86%.
+- **Decision:** PASS prove-first. Keep proposed formula_templates schema (including nlp_start_marker, outcome_signal, role_depends_on_place, discriminators). Appointment lookalikes: use institution/college as primary discriminator before separate TF-IDF per sibling. Schedule manifest+loader implementation as a later step; do not register scratch JSONL yet. Improve vergadering-target institution patterns before production subtype tagging.
+- **Reason:** Schema encodes caveats without baking <START> or goedgevonden-as-approval into framing. Institution separates Rekenkamer siblings from R1 vergadering list with zero FP on the sample; incomplete recall/none-rate means discriminator is necessary but not yet sufficient alone.
+
+## 2026-10-19: Appointment institution patterns from republic_ner ORG
+
+- **Context:** Prove-first institution discriminator used hand regex. republic_ner_matching already has ORG-annotations (tag_text+inv) and ORG-entities; surfaces shift by period (e.g. 1626 Gecommitteerde Raden ter Admirt. vs 1780 Collegie ter Admiraliteit).
+- **Decision:** When implementing appointment institution_patterns, harvest period/inventory-keyed variants from republic_ner ORG-annotations (+ link ORG-entities / instituten_lookup), not a single timeless regex. Keep discriminators=[institution] on appointment subtype registry rows.
+- **Reason:** Same college changes wording across centuries; static patterns will miss 17c or 18c and inflate none-rate on selected.
+
+## 2026-10-19: Registry: wide-to-narrow, recall first; open problems
+
+- **Context:** Prove-first gate passed. User confirmed appointment discriminators=[institution] (later institution_patterns), not per-sibling TF-IDF yet. Further constraints: many templates unknown/rare; limited opening phrases branch into different templates (same for formulas); 18c known vs 17c thinner (republic_ner has some); imperfect resolution parsing especially 17c — templates may help re-separate later.
+- **Decision:** Implement registry progressively: wide categories first, then finer subtypes; prioritise recall over precision. Keep unknown/residual slots. Represent branching (shared opener → subtypes by zone/institution/period). Defer 17c period map and using templates to fix misparsed resolutions to a later stage.
+- **Reason:** Matches R1 sibling lesson and STEPS 18c-first cut; avoids closing the catalogue prematurely or baking precision models before coverage.

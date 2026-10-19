@@ -1,0 +1,77 @@
+# Prove-first: multi-template registry + appointment institution
+
+Scratch evidence only. **Not** registered in `data_manifest.toml`.
+
+**Notebook (JSON + code sketch):** [`notebooks/proof_formula_schemas.ipynb`](../../../notebooks/proof_formula_schemas.ipynb)
+
+Re-run institution metrics with:
+
+```bash
+uv run python scripts/prove_appointment_institution.py
+```
+
+## 1. Registry schema scratch
+
+File: [`formula_templates_scratch.jsonl`](formula_templates_scratch.jsonl)
+
+| `template_id` | `role` | Checks |
+|---------------|--------|--------|
+| `opening_requeste_18c` | framing | tokens + frozen 0.40; no `<START>` in tokens |
+| `requeste_start` | doc_flag | `nlp_start_marker: true` (artefact) |
+| `requeste_any_zone` | doc_flag | `role_depends_on_place: true` |
+| `rapport_surface` | doc_flag | dual-zone illustration |
+| `goedgevonden_decision_opener` | doc_flag | `outcome_signal: false` |
+| `appointment_vergadering` | appointment_subtype | `discriminators: ["institution"]` |
+| `appointment_rekenkamer` | appointment_subtype | same cues family; different institution target |
+
+**Pass (human):** framing vs catalogue vs appointment-sibling is readable from fields alone; nothing treats `<START>` or *goedgevonden* as archival/outcome truth.
+
+## 2. Institution discriminator
+
+Files: [`appointment_institution_metrics.jsonl`](appointment_institution_metrics.jsonl), [`appointment_institution_sample.jsonl`](appointment_institution_sample.jsonl)
+
+Setup: 50 `aanstelling_selected` vs 50 harvest rows with Rekenkamer mention **and** `has_aanstelling_cue`.
+
+| Metric | Value |
+|--------|------:|
+| Sibling primary = `rekenkamer` | 28/50 (56%) |
+| Selected primary = `rekenkamer` (FP) | **0/50** |
+| Sibling `none` | 32% |
+| Selected `none` | 86% |
+
+**Pass with caveats:** Institution is a usable **positive** discriminator for Rekenkamer vs the vergadering list (no false Rekenkamer on selected; ≥50% recall on cued siblings). Incomplete alone: many selected rows lack a matched institution span (need better HHM/vergadering target patterns); sibling misses include OCR/other colleges (`raad_van_state`, admiralty). Do **not** ship a separate TF-IDF per sibling until institution gating is tried.
+
+### Next pattern source (republic_ner) — over time
+
+Do **not** freeze one regex set. In [`republic_ner_matching`](https://github.com/) the ORG layer already carries **inventory-dated surface forms**:
+
+| Source | What it gives |
+|--------|----------------|
+| `ORG-annotations.json` (`tag_text` + `inv`) | Empirical spellings per inventory (period proxy) |
+| `ORG-entities.json` | Canonical ids (e.g. Generaliteitsrekenkamer `O0000072`, admiralties) |
+| `instituten_lookup_cleaned` | GNB `ID_instelling` → naam (enriched `institutions` ids; different id space from ORG) |
+
+Observed shift (same college family):
+
+- inv **3185** (~1626): *Gecommitteerde Raden ter Admirt. tot Rotterdam*
+- inv **3835** (~1780): *Collegie ter Admiraliteit te Amsterdam*
+
+So registry `institution_patterns` (when implemented) should be **period- or inventory-keyed variants** harvested from that ORG annotation stream, not a single timeless string. Delegate `patterns_reference` (`year_min`/`year_max`) is person-side analogy; ORG needs the same discipline.
+
+## 3. Gate
+
+See `docs/DECISIONS.md` — proceed to implement registry with `discriminators: ["institution"]` for appointment subtypes; **prefer republic_ner ORG surfaces over time** before hand-tuned regex alone.
+
+## 4. Agreed approach and open problems
+
+**Approach (confirmed):** wide categories → finer subtypes; **recall before precision**. Appointment siblings: `discriminators: ["institution"]` (+ later period-keyed `institution_patterns`), not a TF-IDF model per sibling until needed.
+
+**Open problems (design constraints, not this session’s build):**
+
+| Issue | Implication |
+|-------|-------------|
+| Many templates unknown / rare | Registry must allow **unknown / residual** catalogue rows; do not pretend the scheme is closed |
+| Few opening phrases → many templates | Model **branching**: shared opener skeleton, then subtype by zone, institution, period |
+| Same for formulas generally | Composition / branching, not one-id-per-surface-string |
+| 18c better known; 17c thinner (some in republic_ner) | Period-scoped entries; 17c inventory deferred until period map |
+| Imperfect resolution parsing (esp. 17c) | **Later:** use resolution templates to help re-segment / separate misparsed units — out of scope until catalogue + framing bases exist |
