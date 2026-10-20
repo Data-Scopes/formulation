@@ -189,3 +189,150 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Context:** Limited catalogue coverage; user priority is how far templates get us (power/period, discrimination, formulas↔templates, harvest speed, further discrimination, detection feasibility) — with more questions expected.
 - **Decision:** Keep durable list as **design questions** in [`docs/template-design-questions.md`](template-design-questions.md), not as a pipeline checklist. Prefer small empirical probes that answer a few questions; record settled answers here; leave unresolved items in that doc.
 - **Reason:** Separates research framing from step execution so Track L/R ladders do not displace typology learning.
+
+## 2026-10-19: Boundary STEPS1–3 defaults from formula_templates
+
+- **Context:** Registry stub held `opening_requeste_18c` tokens + frozen 0.40, while `tfidf_windows` still hardcoded the same list. STEPL2 parked; user chose wire boundary→registry over institution_patterns.
+- **Decision:** `resolve_framing_template` is the source for STEPS1–3 framing id/tokens/threshold (`default_opening_template`, `default_framing_threshold`, slot-cloud `default_template`). Module snapshots (`OPENING_TEMPLATE_18C`, `DEFAULT_THRESHOLD`) load from the registry at import. Do **not** harvest `institution_patterns` in this step; do not change the 0.40 cut.
+- **Reason:** One edit to the framing row updates framing/scripts; avoids drift between fixture JSONL and boundary constants.
+
+## 2026-10-19: STEPS6 institution_patterns bookkeeping (no full ORG harvest)
+
+- **Context:** Next work after STEPS5 is period-keyed patterns from republic_ner ORG; full `ORG-annotations.json` is ~650MB on the 2TB warm drive. Session constrained to bookkeeping.
+- **Decision:** Register `org_annotations`, `org_entities`, `institution_patterns` (fixture seeds + loader `formulation.institution_patterns` with year/inv filter and target→ORG-entity map). Do **not** stream-aggregate annotations or rewire the prove script in this step. Committees remain content/subject, not template ids.
+- **Reason:** Unblocks schema/manifest/tests without a heavy harvest; harvest or prove-script wire-up is an explicit follow-up.
+
+## 2026-10-19: Prove script uses institution_patterns (not templates)
+
+- **Context:** STEPS6 registered fixture seeds; prove script still had inline regexes. User chose wire-up over full ORG stream-harvest.
+- **Decision:** `scripts/prove_appointment_institution.py` loads surfaces via `formulation.institution_patterns` (`extract_institutions` / `primary_institution`). Appointment `formula_templates` keep `discriminators: ["institution"]` + `institution_targets` only — no org pattern strings in the template registry. Broad null-dated seeds added for prove recall until harvest period-keys them.
+- **Reason:** One pattern store for the discriminator; templates stay structural ids, not NER surface lexicons.
+
+## 2026-10-19: S6c stream-harvest ORG → institution_patterns
+
+- **Context:** Full `ORG-annotations.json` (~650MB) must not be `json.load`ed; appointment targets already map to ORG-entity ids; inv needs year from inventory metadata.
+- **Decision:** Stream the annotations array (`raw_decode`), filter to `TARGET_ORG_ENTITIES`, aggregate `(target, entity, inv, tag_text)` → `n`, attach `year_min`/`year_max` from `inventory_metadata`, write provenanced scratch `institution_patterns` (+ metrics) via `save_semi_structured`. Keep fixture as `institution_patterns_seeds`; merge unmapped seeds (e.g. `gecommitteerde_raaden`) by default. `load_patterns` falls back to seeds when scratch is absent. Do not put surfaces in `formula_templates`.
+- **Reason:** Period-/inventory-keyed empirical spellings without memory blow-up; CI stays seed-backed; prove recall keeps seed-only targets until entity ids exist.
+
+## 2026-10-19: S6d prove harvest vs seeds (appointment institution)
+
+- **Context:** Locked sample (50 sibling + 50 selected; sibling pool = seed rekenkamer union). Seeds: 14 surfaces; harvest: 43 581 rows / 17 838 unique, year-scoped extract. Sibling `rekenkamer` rate 1.0 both arms (pool bias). Selected `none` 0.82 → 0.80. Harvest introduces 1 selected FP (`session-3812-num-136-resolution-10`, *Generaliteyts Reekenkaamer*); `pass_no_fp_rekenkamer_on_selected` fails on harvest.
+- **Decision:** Keep harvest as default `institution_patterns` loader source. Do **not** use the unfiltered lexicon as the appointment discriminator gate. Next: tighten harvest with `--min-n` (or frequency cut) and re-run `--source compare` before changing prove defaults. Seeds stay the no-FP baseline.
+- **Reason:** Lexicon size alone does not improve sibling discrimination; one OCR-ish rekenkamer surface breaks the FP gate for negligible `none` gain.
+
+## 2026-10-19: STEPT1-period `--family all` + previous-period borrow
+
+- **Context:** Full period-bin run for appointment, `ontfangen_start`, `requeste_start`. Ontfangen stable (diag 0.93–1.0, no recalibrate signals). Requeste early bins fine; **1750–74 n=2 / 1775–99 n=24** under `min_bin_n` and had **no later donor**, so borrow recorded `no_later_donor`.
+- **Decision:** Prefer borrow from nearest **later** self-fit model; if none, fall back to nearest **earlier** (`borrowed_previous_period`). Re-run requeste/all to measure `recall_on_sparse`. Separately, widen requeste seed surfaces (`request_start` etc.) — late collapse is largely a candidate-harvest problem, not only borrow.
+- **Reason:** User’s “use the period after” covers early thin bins; late opening collapse needs the symmetric previous-period donor plus better seeds.
+
+## 2026-10-19: STEPT1a2 — advies formula type (STEPT1a-style)
+
+- **Context:** STEPT1d left bags as fragments; next cheap step is another sharp A family. STEPT0 priors list `advies` first. Datasheet canonic is `"..."`; corpus/ES majority opener is **`geleesen het Advis van`**. Flag `formula_documents.advies` (~35k) is wording only — not gold (ES type ≈995 in 1705–1796).
+- **Decision:** Mirror STEPT1a: `formulation/advies_formula_type.py` + `scripts/eval_advies_formula_type.py`; gold = ES `proposition_type=advies` → `advies_es_gold` (`--refresh-gold`); cue-window slot-cloud + DAG; wording baseline `advi[sz]`; N=500 negatives; provenanced `formula_type_advies_metrics` / `_scores`. Gates: overall recall ≥0.70, FP ≤0.05 judged, cloud accepts ≫0.
+- **Full eval PASS:** recall **0.762** (n=950); FP **0.034** (17/500); cloud **686/895**; cut=4.12; Δ vs wording −0.027. Pre-1731 softer (0.60) noted, no family floor. Accept advies as formula type; next presence-bag refresh or another A / sieve.
+- **Reason:** Same measured A schema as appointment on the next sharp sparse family; independent ES gold avoids circular flag detectors.
+
+## 2026-10-20: Unknown-first doctrine + STEPT1h PASS (1780)
+
+- **Context:** User wants resolution triage by **unknown likeliness**, then content characterisation — up-front classification from incomplete expert knowledge only rediscovers what was brought in. STEPT1g showed residual = filler mass + sparse appointment; next was not another named A from thin reading alone.
+- **Decision:** Lock spine in [`plans/milestones/T1-unknown-first.md`](../plans/milestones/T1-unknown-first.md): known cover → unknown-likeliness → (fingerprints) → content characterisation → task-template promotion. STEPT1h: cover = L1 / R1 / appointment present / advies present∨gold; score `1 − hits/axes`; provenanced `resolution_unknown_*`.
+- **1780 NOTES (PASS):** universe **2796**; high-unknown **2015** (0.721); cover L1 674 / R1 31 / appointment 28 / advies 76. No ≥3-axis hits. Band large because cover is thin — expected. Next = fingerprint or stratified *slice* of high-unknown, not a type from n=2015.
+- **Reason:** Discovery order matches incomplete knowledge; formulas stay production support; templates become SG-task packages only after characterisation.
+
+## 2026-10-20: STEPT1g — decisionful residual structure
+
+- **Context:** User: STEPT1f’s info half remeasured the obvious L1 template; **probability is not typology**; formula types may have hit rates but that does not rank usefulness (ubiquitous = filler / no signal); interesting stuff is sparse; open question = structure inside ontfangen+ \\ L1.
+- **Decision:** `formulation/residual_structure.py` + `scripts/run_residual_structure_probe.py` — pockets + combo catalogue + bags + stratified text sample. Provenanced `residual_structure_metrics` / `_scores` / `_sample`. No subtype ids from rates. Not STEPT1e1.
+- **1780 NOTES (PASS):** residual missive **656**; solo `ontfangen_start` bag **624** (filler star); appointment pocket **26** ≈ R1 (covered); 177 flag-set combos, top-5 share 0.36 (do not mint types from head). Sample shapes: filler receipt→deliberate; creditif/install (accepted A); sparse unexplained nominations + procedural enclosures.
+- **Call:** Next = named **sparse** unexplained shape (lean: provincial nomination under missive) or park Track T. Not e1; not “decisionful missive” from high-n combos.
+- **Reason:** Closes the residual question with inventory + reading; frequency is not a usefulness or typology ranking.
+
+## 2026-10-20: STEPT1f — missive subtype characterisation (circular half noted)
+
+- **Context:** STEPT1-map named missive as not one kind structurally (info/null vs decisionful under ontfangen+). Default lean: characterise those subtypes before any A or e1 sieve.
+- **Decision:** `formulation/missive_subtype_profile.py` + `scripts/run_missive_subtype_profile.py`; reuse STEPT1e scores; kind filter ES missive; subtypes = L1 `info_receipt` vs `decisionful_residual`; length from `resolutions_flat` + flag rates as characteristics. Provenanced `missive_subtype_metrics` / `_scores`. Not formula types; e1 stays parked.
+- **1780 NOTES:** info 641 / decisionful 656; words med **37** vs **188.5**; flag contrast strong. **Caveat:** `info_receipt` = L1 labelled set, whose cues *are* the advertentie/geen_resolutie skeleton — that half is circular remeasurement of the obvious template. The open question was the **decisionful residual**, not L1.
+- **Call (superseded):** Was rekest next; superseded by STEPT1g residual structure probe.
+- **Reason:** Length split and residual focus still useful; do not treat L1 flag rates as typology evidence.
+
+## 2026-10-20: STEPT1-map — typology before classify
+
+- **Context:** Detectors and partitions (appointment, advies, ontfangen±, flags) outran a clear object of typing. User: without typology and characteristics, no classification. STEPT1e1 flag sieve would classify surfaces. Schemes sample is the user’s **hypothetical** sketch — resolutions may not fit fully, should usually fit partially.
+- **Decision:** Docs-only map ([`STEPT1-typology-formula-map.md`](proofs/multi-template-registry/STEPT1-typology-formula-map.md)): keep resolution kind / characteristics / discourse role / formula evidence as distinct layers; schemes×STEPT0×measured crosswalk; inventory (accepted / provisional / scheme-only / overloaded). Schemes = hypothesis, not closed checklist; partial/non-fit revises the sketch. **Park STEPT1e1.** No new A until a characterisation gap from the map is chosen.
+- **Call:** Next = characterisation gap (default lean: missive subtypes under ontfangen+), not flag bucketing. *(Superseded by STEPT1f PASS.)*
+- **Reason:** Formula detectors support kinds/roles; they are not the typology. Map is the gate.
+
+## 2026-10-20: STEPT1e — partition probe (ES + flags on ontfangen±)
+
+- **Context:** STEPT1e0 left typology gaps: ES mix on ontfangen±, flag rates, residual after L1 (~724 ids). Discourse skeleton in play: opening → (expose) → decision → (defer) → (execution).
+- **Decision:** Implement STEPT1e as a focused probe — `formulation/ontfangen_partition.py` + `scripts/run_ontfangen_partition_probe.py`; lean ES `mget` + `formula_documents` join + known-set tags; provenanced `ontfangen_partition_metrics` / `_scores`. Ontfangen stays provisional root/partition.
+- **1780 NOTES (PASS):** P(missive\|ont+) **0.928**, P(ont+\|missive) **0.880**; residual **724** still 91% missive but decision-flag shaped (`gedelibereert`/`goedgevonden`) vs L1 null path (`geen_resolutie`+`advertentie`). Keep **opening/partition** + **decision-stage** axes. Flags = boilerplate surfaces, not outcomes; no ordered discourse spans yet.
+- **Call (superseded by STEPT1-map):** Was STEPT1e1; now park e1 — typology map before classify.
+- **Reason:** Closes e0 gaps with one-year measurement; residual is decisionful under the same opener, but flag sieves wait on kind characterisation.
+
+## 2026-10-20: STEPT1e0 — ontfangen inventory before typology probe
+
+- **Context:** T1d star + concern that formula typology needs attention. Temptation was another sparse A (rapport/…); better first inventory the composition-root population from existing 1780 artifacts.
+- **Decision:** STEPT1e0 NOTES only (no new scorer, no ES): presence counts (ontfangen+ **1397/2796**), solo bags, zone, graph smoke, cheap joins (L1 673/674 under root but only ~48% of ontfangen+; R1 27/31; advies gold ∩ root **0**). Gap list: ES mix on partition, flag rates, residual after L1. **Call: STEPT1e partition probe next; no new A until then.**
+- **Reason:** Half the root is unexplained by L1; datasheet/STEPT0 missive priors are untested against ontfangen±; inventory is cheaper than a wrong A or an unscoped ES join.
+
+## 2026-10-20: STEPT1d — composition graph (co-presence)
+
+- **Context:** T1d order parked (soft constraint only; bags still fragments). Composition should be a **graph**: nodes = types × IDF presence weight; arcs = co-presence directed by `mid_norm`. Not Track S `align_dag`. `ontfangen_start` = composition root/partition, not IDF “noise.”
+- **Decision:** `formulation/formula_type_composition_graph.py` + `scripts/run_formula_type_composition_graph.py`; provenanced `formula_type_composition_graph_metrics` / `_scores`. Cheap gate: 1780 smoke `n_accepted_accepted_edges` + `graph_shape` (`provisional_root_star` vs `accepted_co_presence`). `--period-bins` only if smoke leaves dynamics open. Order CLI kept but not the composition definition.
+- **1780 NOTES (PASS, `--limit 200`):** `n_accepted_accepted_edges=0`, `graph_shape=provisional_root_star` (2 spokes: ontfangen→advies, ontfangen→appointment; no advies↔appointment). **Skip `--period-bins`.** Next: another A family or sieve residual.
+- **Reason:** Co-presence + relative presence is the right composition unit once sequences failed; period matrix is optional cost after the star hypothesis is tested on one year.
+
+## 2026-10-19: STEPT1d — order / composition by start_idx
+
+- **Context:** STEPT1c PASS — zone separates (ontfangen@opening; appointment@close) but bags remain fragments for template composition. STEPT1 §C next cheap probe is **order** (A before B).
+- **Decision:** `formulation/formula_type_order.py` + `scripts/run_formula_type_order.py`: reuse T1c span scoring; per-id sort presents by `start_idx`; provenanced `formula_type_order_scores` / `_metrics` (top ordered sequences vs bags, expected opening→appointment rates, order-vs-bag diversity). Openings still provisional.
+- **1780 NOTES (PASS):** n_multi=26 (0.9%); ontfangen→appointment **26/26**; only one multi bag with **one** distinct order — order does not beat bags/zone. Keep order as a soft constraint on rare multi; **stop** further sequence features. Next: another sharp A family or sieve residual.
+- **Reason:** Cheapest test of sequenced composition without new detectors; T1c spans already paid for; trivial fixed order is not a template inventory.
+
+## 2026-10-19: STEPT1c — position / zone from DAG spans
+
+- **Context:** STEPT1b judged 1780 presence bags as **fragments** (mostly lone `ontfangen_start`); STEPT1 §C asks whether position / zone is required before templates.
+- **Decision:** `formulation/formula_type_position.py` + `scripts/run_formula_type_position.py`: same models/cuts as T1b; record DAG `start_idx`/`end_idx`; `mid_norm` tertiles → `opening` / `body` / `close`; provenanced `formula_type_position_scores` + `_metrics` (per-type zone mix, `frac_in_expected_zone`, zone-tagged bags). Openings still provisional. No ES `evidence` zones in this step.
+- **1780 NOTES (PASS):** ontfangen **99.6%** opening (mid_norm 0.027); appointment **0%** opening / **96%** close (mid_norm 0.90 — prior `body` wrong → set expected to `close`); zone-tagged multi bags ≈ appointment@close + ontfangen@opening (25/26). Position is a **discriminator** worth keeping on registry/scoring; bags remain fragments for template composition → next order/composition or another A family.
+- **Reason:** Cheapest test of `role_depends_on_place` without new detectors; token mid-span reuses Track S alignment already paid for in presence scoring.
+
+## 2026-10-19: STEPT1b — presence scoring + popularity bags
+
+- **Context:** STEPT1a accepted appointment; STEPT1 §B needs corpus presence scores with IDF-style popularity weights and a judgment on whether multi-type bags look like templates.
+- **Decision:** `formulation/formula_type_presence.py` + `scripts/run_formula_type_presence.py`: default POC year **1780**; freeze appointment cut from `formula_type_appointment_metrics` when present; optional provisional `ontfangen_start` / `requeste_start` for bag exploration only; provenanced `formula_type_presence_scores` (id×type, `score_weighted`) + `_metrics` (hit rates, popularity, bag size histogram + top patterns). Openings are **not** accepted types. User runs full year before NOTES judgment (templates vs fragments → STEPT1c).
+- **Reason:** Weighted multi-type bags are the cheapest way to see whether presence alone composes; year POC keeps cost bounded; freezing T1a cut avoids re-litigating the appointment gate.
+
+## 2026-10-19: T1a-fix — welkom cue-window bootstrap (full re-eval PASS)
+
+- **Context:** STEPT1a PASS left welkom cloud at **0/2564** accepts. Root cause: datasheet canonic `wordt hij welkom geheten` ≠ corpus majority `is den selven verwelkomt,`; trailing punct on cue tokens; full texts as “hits”.
+- **Decision:** Empirical canonic `is den selven verwelkomt` + ±6-token cue windows + punct-stripped align tokens + seed inject on `verwelkomt`/`selven`. Full re-eval: welkom **2251/2313** accepts; pre **0.816** / post **0.832** / FP **0**; period appointment diags **0.81–0.90**, no recalibrate signals. **Clear the 0-accept caveat.** Record side-effect: p20 cut rises to **6.0** (perfect welkom); sessie max ≈3 never clears — scoring is welkom-led; overall recall 0.829 trails wording by ~0.12. Optional later: dual-cut / length-normalize scores.
+- **Reason:** Cloud now learns real OCR variants; gates still beat the 0.235 floor; stricter cut is a calibration consequence of a stronger welkom template, not a bootstrap failure.
+
+## 2026-10-19: STEPT1a + STEPT1-period appointment eval (full run)
+
+- **Context:** User ran `eval_appointment_formula_type.py` and `eval_formula_period_bins.py --family appointment` (not fixture).
+- **Decision:** **PASS** STEPT1a gates: pre-1731 model recall 0.861 ≫ 0.235 floor; post-1731 0.937; FP 0.018 on N=500. **PASS** period-bin self-diagonals (0.86–0.95); no adjacent-backward cell under 0.5. Record caveat: welkom cloud bootstrap **accepted 0/2564** hits — live scorer is sessie-led + seed variants; fix windowed/looser welkom bootstrap before claiming welkom-variant learning. Mid-bin soft drift: 1750–74 model on 1725–49 data recall 0.613 (Δ −0.29). `formula_documents_compare` deltas are **not** same-universe (selected vs full matrix); use docs for corpus flag rarity / welkom=0 early, not as a fair bake-off.
+- **Reason:** Measured bars met; caveats are explicit so next work targets welkom bootstrap and optional mid-century subtype, not re-litigating the floor test.
+
+## 2026-10-19: STEPT1-period — family × 25y bins + measured recalibration
+
+- **Context:** Formulas change gradually; opening-only / single-period models miss evolution. User wants independent sub-templates per family and 25-year comparison, with measurements.
+- **Decision:** `formulation/formula_period_bins.py` + `scripts/eval_formula_period_bins.py`: per family (`appointment_installation`, `ontfangen_start`, `requeste_start`), fit slot-cloud/DAG per 25y bin (origin 1700), freeze in-bin p20 cut, write full **cross-bin recall matrix** with `delta_vs_data_self` and `recalibrate_signal` (adjacent backward recall < 0.5). Sparse bins (`0 < n < min_bin_n`) **borrow the nearest later self-fit model** (`borrow_from_next_period`, measured `recall_on_sparse`). Each summary includes **`formula_documents_compare`**: per-bin flag rates on resolution rows (`welkom`/`sessie`, etc.) vs model diagonal recall + deltas. Provenanced `formula_period_bin_metrics` / `_matrix`. Popularity weight from mean diagonal recall. Openings use capped substring candidate pools (seeds, not types).
+- **Reason:** Makes gradual drift an evaluated claim (numbers), not a narrative; keeps families separate so one opening’s drift does not smear another; thin early opening pools still get a recalibration path from the following period; documents matrix is the wording-matcher baseline to beat or explain.
+
+## 2026-10-19: STEPT1a — measured appointment formula type (+ popularity weight)
+
+- **Context:** STEPT1 reframed: define formula types by slot-cloud/DAG (not regex); measure recall vs `aanstelling_selected` pre/post-1731 against wording baselines; explicit N=500 negatives. Ubiquitous formulas (*goedgevonden*, etc.) are uninformative for typology ranking.
+- **Decision:** Ship `scripts/eval_appointment_formula_type.py` + `formulation/appointment_formula_type.py`: welkom+sessie clouds, DAG max score, p20-holdout cut, stratified negatives, provenanced `formula_type_appointment_metrics` / `_scores`. Report IDF-style **popularity** block: ``weight = log(1/clip(p))`` with ``p`` = hit rate on negatives at the cut; ``score_weighted = score * weight``. Single-family acceptance still uses raw cut; weighted scores reserved for multi-type ranking/composition (STEPT1b+). User runs full eval before pass/fail NOTES.
+- **Reason:** Pre-1731 has no `welkom` wording — need measured cloud/DAG vs `sessie` floor; popularity punishment encodes STEPT0 lift insight (near-universal flags mean little) without changing the appointment gate.
+
+## 2026-10-19: STEPT0 — provisional 18c proposition-type structural profile
+
+- **Context:** Scoping surfaced two unused sources: `formula_documents` (309 181-row boolean formula-family flag matrix, 1705–1796, registered at a dead `republic_clean` path — recovered from `notebook-archive`) and the ES `full_resolutions` index's `metadata.proposition_type`/`metadata.resolution_type`/`evidence` fields, none of which `republic_es.py` requested. ES labels only the opening side (no outcome label, by design — avoids a decision-content claim); `formula_documents` carries the closing/outcome flags but stops at 1705. Composition (population proportions) and characterisation (per-type structural detail) are different questions: a strictly proportional sample vanishes the tail (e.g. `paspoort` at 0.1% of a year), so they are computed separately.
+- **Decision:** New Track T (typology), one step (STEPT0): `formulation/typology_sample.py` computes (a) full-population `proposition_type` composition via ES terms agg (no sampling error) and (b) a floored-proportional characterisation sample (`DEFAULT_FLOOR=30`, `DEFAULT_SAMPLE_TOTAL=1000`), joined to `formula_documents` outcome flags on `(session_date, resolution_index)` — the only key present on both sides (ES/`resolutions_flat` key on inventory `num`; `formula_documents` doc_id is date-based with `num` constant at 1). `scripts/run_typology_profile.py` defaults to `POC_YEAR=1780` (shared with STEPS1/Track L) for a first provisional pass; `--full-18c` or explicit `--year-min`/`--year-max` widens. Output: `typology_structural_profile` (per-`proposition_type` label-zone medians/IQR from ES `evidence` offsets, length stats, `formula_documents` flag rates). This is a descriptive profile, not a model, and not a final typology — a provisional one is the explicit goal.
+- **First run (1780, seed 20261019, 14 proposition_type values, 3 134 population resolutions, 1 063 sampled):** confirms the join and pipeline work end-to-end. `missive` (pop 1 489, 47.5%) and `rekest` (pop 761, 24.3%) structurally separate cleanly — e.g. `proposition_body` sits at median normalised offset 1.0 for `missive` vs ~0.40 for `rekest`/`rapport`/`voordracht`/`memorie`. Outcome-join coverage varies sharply by type: 99.8–100% for `missive`/`voordracht`/`memorie`/`advies`/`resolutie`, but only 15.6% for `onbekend` (460 resolutions, 14.7% of the year) — **expected, not a bug to chase:** `onbekend` resolutions were already unclassifiable upstream (that's why ES couldn't assign them a `proposition_type`), so low closing-formula coverage is consistent, not a signal of a join problem. Leave as-is.
+- **Known caveat (flagged by user, not inferred):** `praeside_start`/`praesentibus_start` in `formula_documents` mark presidium/attendance-list openers; their small nonzero rate on resolution rows reflects upstream session-boundary parsing leakage (attendance-list text attached to an adjacent resolution), not real resolution content. Documented in `typology_sample.py`'s module docstring; do not read these two flags as resolution signal.
+- **Bug fixed during this step:** the first implementation's `join_outcome_flags` lost all 31 real `formula_documents` flags after the left-merge — pandas upcasts bool columns to `object` on introduced NaN, and the downstream `dtype == bool` re-detection in `build_profile_records` silently picked up only the unrelated `outcome_joined` marker column instead. Fixed by casting joined flag columns to pandas nullable `boolean` dtype and passing the flag-column list explicitly via `joined.attrs["flag_columns"]` rather than re-deriving it from post-merge dtypes. The CLI's closing preview (`records[0]` only, always `missive` since composition is sorted by population) was also replaced with a compact per-type summary table — the underlying per-type `flag_rates`/`label_zones` were already correct in the saved jsonl; only the console preview was misleading.
+- **Reason:** A provisional typology beats none; cheap single-year-first POC before any wider claim; population composition must never be read off the floored sample.

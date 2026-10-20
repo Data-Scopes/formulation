@@ -1,0 +1,33 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+  "python.analysis.typeCheckingMode": "basic",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "jupyter.notebookFileRoot": "${workspaceFolder}/notebooks",
+  "notebook.kernelPicker.type": "mru",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.venv": true,
+    "**/.uvcache": true,
+    "**/data/*.pkl": true,
+    "**/data/*.npz": true
+  },
+  "search.exclude": {
+    "**/.venv": true,
+    "**/.uvcache": true,
+    "**/data/*.pkl": true,
+    "**/data/*.npz": true,
+    "**/output": true
+  },
+  "cursorpyright.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+  "cursorpyright.analysis.typeCheckingMode": "basic",
+  "git.ignoreLimitWarning": true
+}

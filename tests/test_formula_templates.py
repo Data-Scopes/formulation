@@ -8,11 +8,15 @@ from formulation.boundary.tfidf_windows import (
     DEFAULT_THRESHOLD,
     OPENING_TEMPLATE_18C,
     TEMPLATE_ID_OPENING,
+    default_framing_threshold,
+    default_opening_template,
 )
 from formulation.formula_templates import (
+    DEFAULT_FRAMING_ID,
     LOGICAL_NAME,
     get_template,
     load_templates,
+    resolve_framing_template,
     templates_by_role,
     validate_template,
 )
@@ -27,14 +31,18 @@ def test_manifest_load_and_unique_ids():
     assert LOGICAL_NAME == "formula_templates"
 
 
-def test_opening_requeste_matches_steps1b_constants():
+def test_opening_requeste_drives_boundary_defaults():
     opening = get_template(TEMPLATE_ID_OPENING)
+    resolved = resolve_framing_template(DEFAULT_FRAMING_ID)
+    tid, tokens = default_opening_template()
     assert opening["role"] == "framing"
-    assert opening["tokens"] == list(OPENING_TEMPLATE_18C)
-    assert opening["threshold"] == pytest.approx(DEFAULT_THRESHOLD)
     assert opening["threshold_frozen"] is True
     assert opening["nlp_start_marker"] is False
     assert opening["outcome_signal"] is False
+    assert tid == TEMPLATE_ID_OPENING == DEFAULT_FRAMING_ID
+    assert tokens == list(OPENING_TEMPLATE_18C) == resolved["tokens"]
+    assert default_framing_threshold() == pytest.approx(DEFAULT_THRESHOLD)
+    assert resolved["threshold"] == pytest.approx(0.40)
 
 
 def test_appointment_siblings_use_institution_discriminator():
@@ -64,3 +72,14 @@ def test_validate_rejects_institution_without_targets():
     bad["institution_targets"] = []
     with pytest.raises(ValueError, match="institution_targets"):
         validate_template(bad)
+
+
+def test_resolve_framing_rejects_empty_tokens():
+    rows = load_templates()
+    bad = [dict(r) for r in rows]
+    for row in bad:
+        if row["template_id"] == DEFAULT_FRAMING_ID:
+            row["tokens"] = []
+            break
+    with pytest.raises(ValueError, match="tokens empty"):
+        resolve_framing_template(rows=bad)

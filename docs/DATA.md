@@ -35,6 +35,34 @@ Decouple code from disk layout using `data_manifest.toml` and `data_io`.
 |--------------|-------|--------|
 | `formula_documents` | frozen | republic_clean `documents.parquet`: boolean formula-family flags per `doc_id` (1705–1796); path override in `data_manifest.local.toml` |
 | `formula_templates` | explore | Multi-template registry stub (framing / doc_flag / appointment_subtype / residual) |
+| `institution_patterns` | explore | Period-/inventory-keyed surfaces; scratch harvest from `org_annotations` |
+| `institution_patterns_seeds` | explore | Hand fixture seeds (CI + optional merge) |
+| `institution_patterns_metrics` | semi | ORG harvest summary counts |
+| `org_annotations` | frozen | republic_ner ORG NER (`tag_text`+`inv`); absolute path in `local.toml` |
+| `org_entities` | frozen | Canonical ORG entity register; absolute path in `local.toml` |
+| `inventory_metadata` | frozen | inventory_num → year range; absolute path in `local.toml` |
+| `formula_type_appointment_metrics` | semi | STEPT1a appointment formula-type eval (recall / baselines / FP) |
+| `formula_type_appointment_scores` | explore | STEPT1a per-id align scores (gold + negatives) |
+| `advies_es_gold` | explore | STEPT1a2: ES `proposition_type=advies` + flat text (1705–1796) |
+| `formula_type_advies_metrics` | semi | STEPT1a2 advies formula-type eval (recall / wording / FP) |
+| `formula_type_advies_scores` | explore | STEPT1a2 per-id align scores (gold + negatives) |
+| `formula_period_bin_metrics` | semi | STEPT1-period: family × 25y bin summaries + recalibrate signals |
+| `formula_period_bin_matrix` | semi | STEPT1-period: cross-bin recall matrix |
+| `formula_type_presence_metrics` | semi | STEPT1b: year-slice presence rates + popularity + bags |
+| `formula_type_presence_scores` | explore | STEPT1b: per-id × type score / present / score_weighted |
+| `formula_type_position_metrics` | semi | STEPT1c: zone histograms + zone-tagged bags |
+| `formula_type_position_scores` | explore | STEPT1c: per-id × type span + mid_norm + zone |
+| `formula_type_order_metrics` | semi | STEPT1d order (parked): ordered sequences vs bags + expected-order rates |
+| `formula_type_order_scores` | explore | STEPT1d order (parked): per-id bag + ordered type/zone sequence |
+| `formula_type_composition_graph_metrics` | semi | STEPT1d: composition graph nodes/arcs + `n_accepted_accepted_edges` + `graph_shape` |
+| `formula_type_composition_graph_scores` | explore | STEPT1d: per-id present bags ordered by mid_norm |
+| `ontfangen_partition_metrics` | semi | STEPT1e: ontfangen± ES mix + flags + known sets |
+| `ontfangen_partition_scores` | explore | STEPT1e: per-id partition tags + ES type |
+| `missive_subtype_metrics` | semi | STEPT1f: missive subtypes under ontfangen+ (info vs decisionful) |
+| `missive_subtype_scores` | explore | STEPT1f: per-id subtype + n_words |
+| `residual_structure_metrics` | semi | STEPT1g: residual pockets + combo catalogue + bags |
+| `residual_structure_scores` | explore | STEPT1g: per-id residual + pockets |
+| `residual_structure_sample` | explore | STEPT1g: stratified text sample for NOTES |
 | `resolutions_flat` | frozen | Shared REPUBLIC resolutions; Track R + formula text; often needs absolute path in `local.toml` |
 | `delegates_resolutie_refs` | frozen | rc5 delegate resolutie refs (labels, not full text) |
 

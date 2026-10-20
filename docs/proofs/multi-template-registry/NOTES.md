@@ -6,11 +6,32 @@ Scratch evidence for the prove-first gate. **Registered stub:** logical name `fo
 
 **Notebook (JSON + code sketch):** [`notebooks/proof_formula_schemas.ipynb`](../../../notebooks/proof_formula_schemas.ipynb)
 
-Re-run institution metrics with:
+Re-run institution metrics (surfaces from `institution_patterns`, not template rows). **S6d:** A/B fixture seeds vs ORG harvest on one locked sample (sibling pool always from seeds):
 
 ```bash
-uv run python scripts/prove_appointment_institution.py
+# Side-by-side (default): writes sample_* + metrics_compare.jsonl
+uv run python scripts/prove_appointment_institution.py --source compare
+
+# Single arm (overwrites appointment_institution_{sample,metrics}.jsonl)
+uv run python scripts/prove_appointment_institution.py --source seeds
+uv run python scripts/prove_appointment_institution.py --source harvest
 ```
+
+Compare file: [`appointment_institution_metrics_compare.jsonl`](appointment_institution_metrics_compare.jsonl) — keys `seeds`, `harvest`, `deltas_harvest_minus_seeds`. Sibling `rekenkamer` recall is biased high (pool defined by Rekenkamer mention); watch selected FP, `none` rates, and non-rekenkamer primaries.
+
+### S6d results (locked sample, RNG=0)
+
+| Metric | Seeds (14) | Harvest (43 581 / 17 838 unique) |
+|--------|-----------:|---------------------------------:|
+| Sibling primary = `rekenkamer` | 50/50 | 50/50 |
+| Selected primary = `rekenkamer` (FP) | **0/50** | **1/50** |
+| Sibling `none` | 0.00 | 0.00 |
+| Selected `none` | 0.82 | 0.80 |
+| Gate `pass_no_fp_rekenkamer_on_selected` | true | **false** |
+
+Harvest FP: `session-3812-num-136-resolution-10` (1757) — span *Generaliteyts Reekenkaamer* (seed arm: `none`). Selected `none` only −0.02; HHM primary count unchanged (9/50).
+
+**Call:** keep provenanced harvest as `load_patterns` default for lexicon coverage, but **do not** treat the raw 43k surfaces as a drop-in discriminator — tighten `--min-n` (or equivalent frequency filter) before production gating. Seeds remain the strict no-FP baseline.
 
 ## 1. Registry schema scratch
 

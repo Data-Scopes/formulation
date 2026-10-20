@@ -2,7 +2,7 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-One step per session. **STEPL2 done** (closed gate: holdout recall 0.934 / precision 0.907 / F1 0.920). Track L **parked** — no STEPL3 harvest unless explicitly chosen. Next: wire boundary→registry, or period-keyed `institution_patterns`. F/M1 paused; R1 judged.
+One step per session. **STEPT1h done** — 1780 unknown-likeliness PASS (2796; high-unknown 2015 / 0.72; L1 covers 0.24). Next: fingerprint bridge or stratified characterisation of a *slice* of high-unknown — not a new A from band size. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
 
 Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md). Template **design questions** (north star, not a checklist): [`docs/template-design-questions.md`](docs/template-design-questions.md).
 
@@ -14,6 +14,7 @@ Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundar
 - **Track L (parked after STEPL2):** recover *missive/brief receipt with no substantive resolution*. Labelled + holdout metrics done; L3 harvest not opened.
 - **Track S (judged):** evolve formula work to **exact template span boundaries** — TF-IDF windows → Smith-Waterman (single / slot-cloud) → DAG. See [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). STEPS0–4 + registry stub done (stop; no GysBERT).
 - **Track F (paused):** `formula_detection.FormulaSearch` first slice (M1 STEP2+). Resume when S or L pauses; not the harness for S.
+- **Track T (new, one step done):** provisional multi-class **resolution typology** by `proposition_type` — structural profile (evidence-label zones, length, `formula_documents` outcome-flag rates), composition kept separate from a floored characterisation sample. See [`plans/steps/STEPT0-typology-structural-profile.md`](plans/steps/STEPT0-typology-structural-profile.md).
 
 ## One research thread (tracks are not sidesteps)
 
@@ -27,6 +28,7 @@ Same object: **templated administrative language** in States-General material (f
 | **S1** | token spans | Where does boilerplate end and the variable slot begin? (TF-IDF → SW → DAG) |
 | **M1–M3** | spans / building blocks | FormulaSearch / criteria path (paused while S runs); same typology story |
 | **Presence side plan** | session opening / presentielijst | Where is the presidium block in raw session text, across 1630–1704? (bracket: 1626–30 gold + 18c phrase seeds) |
+| **T0** | whole resolution, by `proposition_type` | How many major resolution types are there, and how does each look structurally? (ES composition + floored sample → evidence zones, length, outcome flags) |
 
 Shared machinery recurs: **character-level tolerance**, **manifest + provenance**, **candidate-then-structure** (TF-IDF or fuzzy recall, then alignment / position / criteria)—not one monolithic pipeline. Side plans stay off the active checklist but feed the same typology and segmentation story as formula work.
 
@@ -43,6 +45,8 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | M1 First runnable slice | [M1-first-slice.md](plans/milestones/M1-first-slice.md) | paused (STEP0–1 done; FormulaSearch STEP2+) |
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
 | M3 Composition + position | [M3-composition-and-position.md](plans/milestones/M3-composition-and-position.md) | not started |
+| T0 Typology structural profile | [STEPT0-typology-structural-profile.md](plans/steps/STEPT0-typology-structural-profile.md) | done (1780 provisional) |
+| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (doctrine locked; STEPT1h PASS) |
 
 ## Progress checklist
 
@@ -77,6 +81,11 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | S3 | [STEPS3-dag-spans.md](plans/steps/STEPS3-dag-spans.md) | Provenanced span output on real data | done |
 | S4 | [STEPS4-residual-or-stop.md](plans/steps/STEPS4-residual-or-stop.md) | Written GysBERT yes/no | done (stop) |
 | S5 | (registry stub — no step guide) | `formula_templates` in manifest + loader; schema smoke | done |
+| S5b | [STEPS5-wire-boundary-registry.md](plans/steps/STEPS5-wire-boundary-registry.md) | STEPS1–3 defaults via `resolve_framing_template` | done |
+| S6 | [STEPS6-institution-patterns.md](plans/steps/STEPS6-institution-patterns.md) | Manifest + fixture + loader for period-keyed patterns (no full ORG harvest) | done (bookkeeping) |
+| S6b | (prove wire-up — no step guide) | Prove script uses `institution_patterns`; templates keep targets only | done |
+| S6c | [STEPS6c-org-pattern-harvest.md](plans/steps/STEPS6c-org-pattern-harvest.md) | Stream-harvest ORG annotations → provenanced `institution_patterns` | done (script; user runs full harvest) |
+| S6d | (prove A/B — no step guide) | Seeds vs harvest on locked sample; compare metrics in proof dir | done (harvest +1 FP; tighten min-n next) |
 
 ### Track F — formulas (M1), paused
 
@@ -89,6 +98,29 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | 4 | [STEP4-tests-and-demo.md](plans/steps/STEP4-tests-and-demo.md) | pytest + demo notebook + README how-to-run | not started |
 
 Survey + dighum shell: done (see pipeline plan). Do not lift the `republic_clean` notebook tree or talk to live Elasticsearch.
+
+### Track T — typology (T0), new
+
+| Step | Guide | Done when | Status |
+|------|-------|-----------|--------|
+| T0 | [STEPT0-typology-structural-profile.md](plans/steps/STEPT0-typology-structural-profile.md) | `typology_structural_profile` registered + written; composition and floored sample kept distinct in output; `data_io.check` clean | done (1780 provisional profile) |
+| T1a | [STEPT1-lift-segmentation-and-formula-types.md](plans/steps/STEPT1-lift-segmentation-and-formula-types.md) | Measured appointment formula-type metrics (recall pre/post-1731, baselines, FP, popularity) | done (PASS; welkom 0-accept caveat) |
+| T1a-fix | (no step guide — follow NOTES) | Welkom cloud learns variants: cue windows + empirical canonic; `n_hits_accepted` ≫ 0; re-measure pre-1731 | **done** (2251/2313; gates hold; cut=6.0 side-effect) |
+| T1-period | [STEPT1-period-bins.md](plans/steps/STEPT1-period-bins.md) | Family × 25y cross-bin matrix + recalibrate signals | done (script; user runs eval) |
+| T1b | [STEPT1b-presence-scoring.md](plans/steps/STEPT1b-presence-scoring.md) | Year-slice presence + popularity weights + bag summary | done (1780; bags=fragments → T1c) |
+| T1b-refresh | [STEPT1b-presence-scoring.md](plans/steps/STEPT1b-presence-scoring.md) | Re-score 1780 with accepted `advies_geleesen` in bags | **done** (PASS; advies 2.7%; bags still fragments) |
+| T1c | [STEPT1c-position-zones.md](plans/steps/STEPT1c-position-zones.md) | DAG mid-span → opening/body/close + zone-tagged bags | done (1780; zone separates; bags still fragments) |
+| T1c-refresh | [STEPT1c-position-zones.md](plans/steps/STEPT1c-position-zones.md) | Re-score 1780 zones with accepted `advies_geleesen` | **done** (PASS; advies mostly opening, soft; still fragments) |
+| T1d order | [STEPT1d-order-composition.md](plans/steps/STEPT1d-order-composition.md) | Ordered sequences by start_idx (soft constraint) | done / **parked** (1780; not the composition definition) |
+| T1d graph | [STEPT1d-composition-graph.md](plans/steps/STEPT1d-composition-graph.md) | Type co-presence graph + 1780 smoke; period matrix only if needed | **done** (PASS; star; skip period bins) |
+| T1e0 | [STEPT1e0-ontfangen-inventory.md](plans/steps/STEPT1e0-ontfangen-inventory.md) | Inventory ontfangen+ from existing metrics + known-set overlaps; typology gaps | **done** (call → STEPT1e probe) |
+| T1e | [STEPT1e-partition-probe.md](plans/steps/STEPT1e-partition-probe.md) | ES type mix + flags on ontfangen±; residual not-L1; typology NOTES | **done** (PASS; discourse-stage call → e1) |
+| T1-map | [STEPT1-typology-formula-map.md](plans/steps/STEPT1-typology-formula-map.md) | Layers + schemes×STEPT0×measured crosswalk + inventory; typology-before-classify call | **done** (docs; e1 parked) |
+| T1e1 | [STEPT1e1-residual-flag-sieve.md](plans/steps/STEPT1e1-residual-flag-sieve.md) | Bucket ontfangen+ by discourse flags (null / decision / defer / other) | **parked** (until map names a kind-gap) |
+| T1a2 | [STEPT1a2-advies-formula-type.md](plans/steps/STEPT1a2-advies-formula-type.md) | Measured advies formula-type vs ES gold (recall / wording / FP / cloud accepts) | **done** (PASS; recall 0.762 / FP 0.034) |
+| T1f | [STEPT1f-missive-subtype-characterisation.md](plans/steps/STEPT1f-missive-subtype-characterisation.md) | Missive subtypes under ontfangen+: info vs decisionful (length + flags) | **done** (PASS w/ circular L1 caveat) |
+| T1g | [STEPT1g-residual-structure-probe.md](plans/steps/STEPT1g-residual-structure-probe.md) | Decisionful residual structure: pockets + catalogue + sample shapes | **done** (PASS; sparse ≠ filler) |
+| T1h | [STEPT1h-unknown-likeliness.md](plans/steps/STEPT1h-unknown-likeliness.md) | Unknown-likeliness under accepted cover; 1780 scores + high-unknown sample | **done** (PASS; high-unk 0.72) |
 
 ## Data paths
 
@@ -116,6 +148,24 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | `missive_receipt_tfidf_holdout` | frozen | STEPL2 20% holdout scores |
 | `missive_receipt_tfidf_metrics` | semi | STEPL2 recall / precision / F1 + settings |
 | `formula_templates` | explore | Multi-template registry stub (framing / doc_flag / appointment / residual) |
+| `formula_type_composition_graph_metrics` | semi | STEPT1d: co-presence graph + shape (1780 or period matrix) |
+| `formula_type_composition_graph_scores` | explore | STEPT1d: per-id bags ordered by mid_norm |
+| `ontfangen_partition_metrics` | semi | STEPT1e: ontfangen± ES mix + flags + known sets |
+| `ontfangen_partition_scores` | explore | STEPT1e: per-id partition tags + ES type |
+| `missive_subtype_metrics` | semi | STEPT1f: missive subtype characterisation (info vs decisionful) |
+| `missive_subtype_scores` | explore | STEPT1f: per-id subtype + n_words |
+| `residual_structure_metrics` | semi | STEPT1g: residual pockets + combo catalogue + bags |
+| `residual_structure_scores` | explore | STEPT1g: per-id residual + pockets |
+| `residual_structure_sample` | explore | STEPT1g: stratified text sample for NOTES |
+| `resolution_unknown_metrics` | semi | STEPT1h: unknown-likeliness band + cover hits |
+| `resolution_unknown_scores` | explore | STEPT1h: per-id cover + unknown_score |
+| `resolution_unknown_sample` | explore | STEPT1h: high-unknown text sample (truncated) |
+| `org_annotations` | frozen | republic_ner ORG NER mentions (`tag_text`+`inv`); path in local.toml → 2TB |
+| `org_entities` | frozen | Canonical ORG ids/names; path in local.toml → republic_ner data.bak |
+| `inventory_metadata` | frozen | inventory_num → year_start/year_end; local.toml → republic_ner data.bak |
+| `institution_patterns_seeds` | explore | Hand fixture seeds (CI + optional merge into harvest) |
+| `institution_patterns` | explore | Period-/inventory-keyed surfaces; scratch harvest from ORG annotations |
+| `institution_patterns_metrics` | semi | Harvest summary counts |
 | `formula_boundary_cases` | explore | Tiny span-gold OCR windows for S1 STEPS0 benchmark |
 | `formula_boundary_benchmark_metrics` | semi | IoU / boundary delta / latency per method (STEPS0) |
 | `formula_tfidf_windows` | explore | STEPS1 candidate windows (cosine vs opening template) |
@@ -149,6 +199,9 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | Missive TF-IDF holdout | `missive_receipt_tfidf_holdout` | scratch parquet |
 | Missive TF-IDF metrics | `missive_receipt_tfidf_metrics` | scratch JSONL |
 | Formula template registry | `formula_templates` | `tests/fixtures/formula_templates.jsonl` |
+| Institution pattern seeds | `institution_patterns_seeds` | `tests/fixtures/institution_patterns.jsonl` |
+| Institution patterns (harvest) | `institution_patterns` | scratch JSONL via `save_semi_structured` |
+| Institution harvest metrics | `institution_patterns_metrics` | scratch JSONL via `save_semi_structured` |
 | Boundary span fixtures | `formula_boundary_cases` | `tests/fixtures/formula_boundary_cases.jsonl` |
 | Boundary benchmark metrics | `formula_boundary_benchmark_metrics` | scratch JSONL via `save_semi_structured` |
 | TF-IDF candidate windows | `formula_tfidf_windows` | scratch JSONL via `save_semi_structured` |
@@ -157,6 +210,8 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | Slot-cloud metrics | `formula_slot_cloud_metrics` | scratch JSONL via `save_semi_structured` |
 | Boundary spans (SW/DAG) | `formula_boundary_spans` | scratch JSONL via `save_semi_structured` |
 | Boundary span metrics | `formula_boundary_span_metrics` | scratch JSONL via `save_semi_structured` |
+| Advies ES gold | `advies_es_gold` | scratch JSONL (`--refresh-gold`) |
+| Advies type metrics / scores | `formula_type_advies_metrics` / `_scores` | scratch JSONL |
 | Formula documents matrix | `formula_documents` | `republic_clean/.../documents.parquet` via `local.toml` |
 | Sample corpus | `sample_resolutions` | `data/warm/datasets/corpus/sample_resolutions.jsonl` |
 | S4 seed fixture | `s4_opening_phrase_candidates` | `data/warm/datasets/seeds/s4_opening_phrase_candidates.jsonl` |

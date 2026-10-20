@@ -1,6 +1,6 @@
 # Steps
 
-Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **STEPL2 done** (Track L parked). Next: registry wiring or institution_patterns. F/M1 paused. R1 judged.
+Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **STEPT1h done** (unknown-likeliness PASS; high-unk 0.72). Next: fingerprints or stratified high-unknown slice. STEPT1e1 **parked**. F/M1 paused; Track L parked. R1 judged.
 
 ## Track R — retrieval (R1)
 
@@ -26,10 +26,33 @@ Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per
 |------|-------|--------|
 | S0 | [STEPS0-boundary-scaffold.md](STEPS0-boundary-scaffold.md) | done |
 | S1 | [STEPS1-tfidf-window-framing.md](STEPS1-tfidf-window-framing.md) | done |
-| S1b | [STEPS1-calibrate-threshold.md](STEPS1-calibrate-threshold.md) | **active** |
+| S1b | [STEPS1-calibrate-threshold.md](STEPS1-calibrate-threshold.md) | done |
 | S2 | [STEPS2-slot-cloud-bootstrap.md](STEPS2-slot-cloud-bootstrap.md) | done |
 | S3 | [STEPS3-dag-spans.md](STEPS3-dag-spans.md) | done |
 | S4 | [STEPS4-residual-or-stop.md](STEPS4-residual-or-stop.md) | done (stop) |
+| S5b | [STEPS5-wire-boundary-registry.md](STEPS5-wire-boundary-registry.md) | done |
+| S6 | [STEPS6-institution-patterns.md](STEPS6-institution-patterns.md) | done (bookkeeping) |
+| S6c | [STEPS6c-org-pattern-harvest.md](STEPS6c-org-pattern-harvest.md) | done (script; user runs full harvest) |
+| S6d | (prove A/B — no step guide) | done (harvest +1 FP; tighten min-n next) |
+
+## Track T — typology
+
+| Step | Guide | Status |
+|------|-------|--------|
+| T0 | [STEPT0-typology-structural-profile.md](STEPT0-typology-structural-profile.md) | done (1780 provisional profile) |
+| T1-period | [STEPT1-period-bins.md](STEPT1-period-bins.md) | done (script; user runs eval) |
+| T1b | [STEPT1b-presence-scoring.md](STEPT1b-presence-scoring.md) | done (1780; bags=fragments → T1c) |
+| T1c | [STEPT1c-position-zones.md](STEPT1c-position-zones.md) | done (1780; zone separates; bags still fragments) |
+| T1d order | [STEPT1d-order-composition.md](STEPT1d-order-composition.md) | done / parked (1780 soft constraint) |
+| T1d graph | [STEPT1d-composition-graph.md](STEPT1d-composition-graph.md) | done (PASS; provisional_root_star; skip bins) |
+| T1e0 | [STEPT1e0-ontfangen-inventory.md](STEPT1e0-ontfangen-inventory.md) | done (call → STEPT1e probe) |
+| T1e | [STEPT1e-partition-probe.md](STEPT1e-partition-probe.md) | done (PASS → map, not e1) |
+| T1-map | [STEPT1-typology-formula-map.md](STEPT1-typology-formula-map.md) | done (docs; e1 parked) |
+| T1e1 | [STEPT1e1-residual-flag-sieve.md](STEPT1e1-residual-flag-sieve.md) | parked |
+| T1a2 | [STEPT1a2-advies-formula-type.md](STEPT1a2-advies-formula-type.md) | done (PASS; recall 0.762 / FP 0.034) |
+| T1f | [STEPT1f-missive-subtype-characterisation.md](STEPT1f-missive-subtype-characterisation.md) | done (PASS w/ circular L1 caveat) |
+| T1g | [STEPT1g-residual-structure-probe.md](STEPT1g-residual-structure-probe.md) | done (PASS; filler mass + sparse appointment) |
+| T1h | [STEPT1h-unknown-likeliness.md](STEPT1h-unknown-likeliness.md) | done (PASS; high-unk 0.72) |
 
 ## Track F — formulas (M1), paused
 

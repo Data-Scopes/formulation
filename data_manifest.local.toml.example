@@ -1,0 +1,49 @@
+# Copy to data_manifest.local.toml (gitignored) for per-machine paths.
+# Committed data_manifest.toml already uses in-repo roots
+# (`.` / `data/warm` / `./output` / `data/cold`). This file is optional
+# except for Track R, which needs the absolute path overrides below.
+
+# Track R — STEPR0. Use absolute paths (dataset paths do not expanduser).
+# Do not remount [tiers.warm]; that would hide in-repo formula samples.
+# [datasets.resolutions_flat]
+# path = "/Volumes/2tb disk/datasets/republic/resolutions/resolutions_flat.parquet"
+#
+# [datasets.delegates_resolutie_refs]
+# path = "/Users/rikhoekstra/develop/republic_delegates_data/1705_1795/consolidated/delegates_1705_1795_v1.0-rc5.xlsx"
+
+# Unique delegates + OCR patterns (for naming harvest candidates)
+# [datasets.delegates_unique_1705_1795]
+# path = "/Users/rikhoekstra/develop/republic_delegates_data/consolidated_release/delegates_1705_1795_unique_20260615.json"
+
+# Attendance-long (date constraints for name matching)
+# [datasets.attendance_long_1705_1795]
+# path = "/Users/rikhoekstra/develop/republic_delegates_data/1705_1795/consolidated/attendance_long_1705_1795_v1.0-rc6.parquet"
+
+# Full S4 opening-phrase file (formula STEP2+; never hardcode this path in Python)
+# [datasets.s4_opening_phrase_candidates]
+# path = "/Users/rikhoekstra/develop/republic_ner_matching/output/s4_opening_phrase_candidates.jsonl"
+
+# STEPS6 / S6c — republic_ner ORG layer (period-keyed institution_patterns)
+# [datasets.org_annotations]
+# path = "/Volumes/2tb disk/datasets/republic/annotations/ORG-annotations.json"
+#
+# [datasets.org_entities]
+# path = "/Users/rikhoekstra/develop/republic_ner_matching/data.bak/ORG-entities.json"
+#
+# [datasets.inventory_metadata]
+# path = "/Users/rikhoekstra/develop/republic_ner_matching/data.bak/inventory_metadata.json"
+
+# republic_clean formula documents matrix (boolean formula types per doc_id)
+# [datasets.formula_documents]
+# path = "/Users/rikhoekstra/develop/republic_clean/notebooks/formulas/documents.parquet"
+
+# Optional: override dated ES indexes (defaults live in committed data_manifest.toml)
+# [elasticsearch]
+# resolutions_index = "full_resolutions-2026-03-25"
+# session_metadata_index = "session_metadata-2026-03-25"
+# session_text_regions_index = "session_text_regions-2026-03-25"
+
+# Later: large corpora on an external volume
+# [tiers.warm]
+# root = "/data/storage1tb/myproject"
+# mount_check = "/data/storage1tb/myproject"

@@ -1,0 +1,62 @@
+# Machine-specific: copy to data_manifest.toml and edit tier roots.
+# LLM agents: add [datasets.<name>] BEFORE referencing logical_name in code.
+
+# -----------------------------------------------------------------------------
+# Policy metadata (optional)
+# -----------------------------------------------------------------------------
+[manifest]
+version = "1.0.0"
+project = "PROJECT_NAME"
+last_updated = "2026-07-07"
+
+# -----------------------------------------------------------------------------
+# Environment base directories (optional)
+# -----------------------------------------------------------------------------
+# If your manifest omits `[tiers.*]`, `data_io` can derive tier roots from
+# `environments.<DATA_ENV>.base_dir`.
+#
+# Switch with:
+#   export DATA_ENV=local
+#   export DATA_ENV=researchcloud
+[environments.local]
+base_dir = "~/develop/PROJECT_NAME/data"
+
+[environments.researchcloud]
+base_dir = "/mnt/shared/data"
+
+[phases]
+explore = "jsonl, pkl, xlsx, ad-hoc notebooks"
+semi = "jsonl, markdown+yaml frontmatter"
+frozen = "parquet (duckdb-queryable)"
+
+[tiers.hot]
+root = "."
+mount_check = ""
+
+[tiers.warm]
+root = "data/warm"
+mount_check = "data/warm"
+
+[tiers.scratch]
+root = "./output"
+mount_check = ""
+
+[tiers.cold]
+root = "data/cold"
+mount_check = "data/cold"
+
+# --- datasets: one block per logical name ---
+
+[datasets.example_input]
+tier = "warm"
+path = "datasets/corpus/raw_input.jsonl"
+phase = "explore"
+description = "Replace with your input dataset"
+parent = ""
+
+[datasets.example_output]
+tier = "scratch"
+path = "example_output.jsonl"
+phase = "semi"
+description = "Replace with your semi-structured output"
+parent = "example_input"

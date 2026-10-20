@@ -1,7 +1,8 @@
 """Formula template registry loader (manifest stub).
 
 Loads `formula_templates` via data_io. Validates schema fields from the
-multi-template prove-first; does not harvest institution_patterns yet.
+multi-template prove-first. Period-keyed surfaces live in
+``institution_patterns`` (see ``formulation.institution_patterns``).
 """
 
 from __future__ import annotations
@@ -12,6 +13,9 @@ from typing import Any
 from data_io import load
 
 LOGICAL_NAME = "formula_templates"
+
+# STEPS1–3 framing default (18c requeste opening). 17c period map deferred.
+DEFAULT_FRAMING_ID = "opening_requeste_18c"
 
 ROLES = frozenset({"framing", "doc_flag", "appointment_subtype", "residual"})
 
@@ -148,3 +152,32 @@ def templates_by_role(
     if role not in ROLES:
         raise ValueError(f"role {role!r} not in {sorted(ROLES)}")
     return [r for r in load_templates(logical_name=logical_name, rows=rows) if r["role"] == role]
+
+
+def resolve_framing_template(
+    template_id: str = DEFAULT_FRAMING_ID,
+    *,
+    logical_name: str = LOGICAL_NAME,
+    rows: Sequence[Mapping[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Boundary STEPS defaults: template_id, tokens, threshold from the registry.
+
+    Framing rows used for TF-IDF / SW / DAG must have non-empty ``tokens`` and a
+    numeric ``threshold``. Does not harvest ``institution_patterns``.
+    """
+    row = get_template(template_id, logical_name=logical_name, rows=rows)
+    tokens = [str(t) for t in row["tokens"]]
+    if not tokens:
+        raise ValueError(f"{template_id}: registry tokens empty; cannot frame")
+    thr = row["threshold"]
+    if thr is None:
+        raise ValueError(f"{template_id}: registry threshold is null; cannot frame")
+    return {
+        "template_id": str(row["template_id"]),
+        "tokens": tokens,
+        "threshold": float(thr),
+        "threshold_frozen": bool(row["threshold_frozen"]),
+        "period": row.get("period"),
+        "year_min": row.get("year_min"),
+        "year_max": row.get("year_max"),
+    }

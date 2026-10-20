@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "formulation"
+version = "0.1.0"
+description = "DH pipeline with manifest-based data paths"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pandas>=3.0",
+    "pyarrow>=24.0",
+    "tomli-w>=1.0",
+    "openpyxl>=3.1.2",
+    "ipykernel",
+    "formula-detection>=0.5.0,<0.6",
+    "scikit-learn>=1.5",
+    "matplotlib>=3.11.2",
+    "rapidfuzz>=3.14.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["data_io", "formulation", "tests"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

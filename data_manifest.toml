@@ -68,7 +68,7 @@ mount_check = "data/cold"
 tier = "hot"
 path = "notebooks/formulas/documents.parquet"
 phase = "frozen"
-description = "Notebook formula matrix (republic_clean): boolean formula-family flags per doc_id; 1705–1796 in current file"
+description = "Notebook formula matrix (republic_clean, recovered from notebook-archive): 31 boolean formula-family flags per doc_id; 309181 rows 1705–1796 (283870 resolution + 25311 attendance_list). doc_id is DATE-based (session-YYYY-MM-DD-num-1-resolution-N) unlike resolutions_flat/ES (session-N-num-M-resolution-K); num is always 1 and carries no information — join on (session_date, resolution_index)"
 parent = ""
 
 [datasets.resolutions_flat]
@@ -229,8 +229,51 @@ parent = "missive_receipt_tfidf_holdout"
 tier = "hot"
 path = "tests/fixtures/formula_templates.jsonl"
 phase = "explore"
-description = "Multi-template registry stub (framing / doc_flag / appointment_subtype / residual); institution_patterns deferred"
+description = "Multi-template registry stub (framing / doc_flag / appointment_subtype / residual); institution_patterns separate dataset"
 parent = ""
+
+# republic_ner ORG layer (STEPS6). Absolute paths in data_manifest.local.toml.
+[datasets.org_annotations]
+tier = "warm"
+path = "datasets/republic/annotations/ORG-annotations.json"
+phase = "frozen"
+description = "Organisation NER annotations (tag_text + inv); shared with republic_ner_matching; local.toml → 2TB"
+parent = ""
+
+[datasets.org_entities]
+tier = "hot"
+path = "ORG-entities.json"
+phase = "frozen"
+description = "Canonical ORG entity register (id, name, labels); local.toml → republic_ner_matching/data.bak"
+parent = ""
+
+[datasets.inventory_metadata]
+tier = "hot"
+path = "inventory_metadata.json"
+phase = "frozen"
+description = "REPUBLIC inventory_num → year_start/year_end (period proxy for ORG inv); local.toml → republic_ner data.bak"
+parent = ""
+
+[datasets.institution_patterns_seeds]
+tier = "hot"
+path = "tests/fixtures/institution_patterns.jsonl"
+phase = "explore"
+description = "Hand fixture seeds for appointment institution surfaces (CI + merge into harvest)"
+parent = ""
+
+[datasets.institution_patterns]
+tier = "scratch"
+path = "institution_patterns.jsonl"
+phase = "explore"
+description = "Period-/inventory-keyed institution surfaces harvested from org_annotations (+ optional seeds)"
+parent = "org_annotations"
+
+[datasets.institution_patterns_metrics]
+tier = "scratch"
+path = "institution_patterns_metrics.jsonl"
+phase = "semi"
+description = "ORG stream-harvest summary counts for institution_patterns"
+parent = "institution_patterns"
 
 [datasets.formula_boundary_cases]
 tier = "hot"
@@ -287,6 +330,188 @@ path = "formula_boundary_span_metrics.jsonl"
 phase = "semi"
 description = "STEPS3 span harvest notes (latency, scores, cloud↔DAG agreement; no threshold freeze)"
 parent = "formula_boundary_spans"
+
+[datasets.typology_structural_profile]
+tier = "scratch"
+path = "typology_structural_profile.jsonl"
+phase = "semi"
+description = "STEPT0: per-proposition_type structural profile on an 18c (1705-1796) floored ES sample — evidence-label zones, length, formula_documents outcome-flag rates; population_n/pct from full-corpus composition, not the floored sample"
+parent = ""
+
+[datasets.formula_type_appointment_metrics]
+tier = "scratch"
+path = "formula_type_appointment_metrics.jsonl"
+phase = "semi"
+description = "STEPT1a: appointment formula-type (slot-cloud+DAG) recall vs aanstelling_selected pre/post-1731, wording baseline deltas, FP on N=500 explicit negatives"
+parent = "aanstelling_selected"
+
+[datasets.formula_type_appointment_scores]
+tier = "scratch"
+path = "formula_type_appointment_scores.jsonl"
+phase = "explore"
+description = "STEPT1a: per-id align scores for gold + negative sample (no full resolution text)"
+parent = "formula_type_appointment_metrics"
+
+[datasets.advies_es_gold]
+tier = "scratch"
+path = "advies_es_gold.jsonl"
+phase = "explore"
+description = "STEPT1a2: ES proposition_type=advies ids (1705–1796) joined to resolutions_flat text; frozen gold for advies formula-type eval"
+parent = "resolutions_flat"
+
+[datasets.formula_type_advies_metrics]
+tier = "scratch"
+path = "formula_type_advies_metrics.jsonl"
+phase = "semi"
+description = "STEPT1a2: advies formula-type (slot-cloud+DAG) recall vs ES gold, wording baseline delta, FP on N=500 negatives"
+parent = "advies_es_gold"
+
+[datasets.formula_type_advies_scores]
+tier = "scratch"
+path = "formula_type_advies_scores.jsonl"
+phase = "explore"
+description = "STEPT1a2: per-id align scores for advies gold + negative sample (no full resolution text)"
+parent = "formula_type_advies_metrics"
+
+[datasets.formula_period_bin_metrics]
+tier = "scratch"
+path = "formula_period_bin_metrics.jsonl"
+phase = "semi"
+description = "STEPT1-period: per-family 25y-bin summaries (diagonal recall, cuts, recalibrate signals, popularity)"
+parent = "aanstelling_selected"
+
+[datasets.formula_period_bin_matrix]
+tier = "scratch"
+path = "formula_period_bin_matrix.jsonl"
+phase = "semi"
+description = "STEPT1-period: cross-bin recall matrix (model_bin × data_bin) with delta_vs_data_self"
+parent = "formula_period_bin_metrics"
+
+[datasets.formula_type_presence_metrics]
+tier = "scratch"
+path = "formula_type_presence_metrics.jsonl"
+phase = "semi"
+description = "STEPT1b: year-slice presence rates + popularity bags (appointment + advies accepted; openings provisional)"
+parent = "aanstelling_selected"
+
+[datasets.formula_type_presence_scores]
+tier = "scratch"
+path = "formula_type_presence_scores.jsonl"
+phase = "explore"
+description = "STEPT1b: per-id × formula_type align score, present flag, score_weighted (no full text; includes advies_geleesen)"
+parent = "formula_type_presence_metrics"
+
+[datasets.formula_type_position_metrics]
+tier = "scratch"
+path = "formula_type_position_metrics.jsonl"
+phase = "semi"
+description = "STEPT1c: year-slice zone histograms + zone-tagged co-occurrence bags (DAG mid-span)"
+parent = "aanstelling_selected"
+
+[datasets.formula_type_position_scores]
+tier = "scratch"
+path = "formula_type_position_scores.jsonl"
+phase = "explore"
+description = "STEPT1c: per-id × formula_type score, present, start/end idx, mid_norm, zone (no full text)"
+parent = "formula_type_position_metrics"
+
+[datasets.formula_type_order_metrics]
+tier = "scratch"
+path = "formula_type_order_metrics.jsonl"
+phase = "semi"
+description = "STEPT1d: ordered formula-type sequences vs bags + expected-order rates"
+parent = "aanstelling_selected"
+
+[datasets.formula_type_order_scores]
+tier = "scratch"
+path = "formula_type_order_scores.jsonl"
+phase = "explore"
+description = "STEPT1d: per-id bag + ordered type/zone sequence (no full text)"
+parent = "formula_type_order_metrics"
+
+[datasets.formula_type_composition_graph_metrics]
+tier = "scratch"
+path = "formula_type_composition_graph_metrics.jsonl"
+phase = "semi"
+description = "STEPT1d: composition graph nodes/arcs + n_accepted_accepted_edges + graph_shape (1780 smoke or period matrix)"
+parent = "aanstelling_selected"
+
+[datasets.formula_type_composition_graph_scores]
+tier = "scratch"
+path = "formula_type_composition_graph_scores.jsonl"
+phase = "explore"
+description = "STEPT1d: per-id present bags ordered by mid_norm (no full text)"
+parent = "formula_type_composition_graph_metrics"
+
+[datasets.ontfangen_partition_metrics]
+tier = "scratch"
+path = "ontfangen_partition_metrics.jsonl"
+phase = "semi"
+description = "STEPT1e: ontfangen± ES proposition_type mix + formula_documents flag rates + known-set tags (1780 presence universe)"
+parent = "formula_type_presence_scores"
+
+[datasets.ontfangen_partition_scores]
+tier = "scratch"
+path = "ontfangen_partition_scores.jsonl"
+phase = "explore"
+description = "STEPT1e: per-id ontfangen present + ES type + R1/L1/advies tags (no full text)"
+parent = "ontfangen_partition_metrics"
+
+[datasets.missive_subtype_metrics]
+tier = "scratch"
+path = "missive_subtype_metrics.jsonl"
+phase = "semi"
+description = "STEPT1f: missive subtype characterisation under ontfangen+ (info_receipt vs decisionful_residual; length + flags)"
+parent = "ontfangen_partition_scores"
+
+[datasets.missive_subtype_scores]
+tier = "scratch"
+path = "missive_subtype_scores.jsonl"
+phase = "explore"
+description = "STEPT1f: per-id missive subtype + n_words (no full text)"
+parent = "missive_subtype_metrics"
+
+[datasets.residual_structure_metrics]
+tier = "scratch"
+path = "residual_structure_metrics.jsonl"
+phase = "semi"
+description = "STEPT1g: missive residual pockets + flag-combo catalogue + bags (inventory; not subtypes)"
+parent = "ontfangen_partition_scores"
+
+[datasets.residual_structure_scores]
+tier = "scratch"
+path = "residual_structure_scores.jsonl"
+phase = "explore"
+description = "STEPT1g: per-id missive residual + appointment/advies pockets (no full text)"
+parent = "residual_structure_metrics"
+
+[datasets.residual_structure_sample]
+tier = "scratch"
+path = "residual_structure_sample.jsonl"
+phase = "explore"
+description = "STEPT1g: stratified residual text sample for NOTES reading (truncated)"
+parent = "residual_structure_metrics"
+
+[datasets.resolution_unknown_metrics]
+tier = "scratch"
+path = "resolution_unknown_metrics.jsonl"
+phase = "semi"
+description = "STEPT1h: unknown-likeliness band size + accepted cover axis hits (1780 presence universe)"
+parent = "formula_type_presence_scores"
+
+[datasets.resolution_unknown_scores]
+tier = "scratch"
+path = "resolution_unknown_scores.jsonl"
+phase = "explore"
+description = "STEPT1h: per-id cover flags + unknown_score (no full text)"
+parent = "resolution_unknown_metrics"
+
+[datasets.resolution_unknown_sample]
+tier = "scratch"
+path = "resolution_unknown_sample.jsonl"
+phase = "explore"
+description = "STEPT1h: high-unknown stratified text sample for later characterisation (truncated)"
+parent = "resolution_unknown_metrics"
 
 [datasets.example_input]
 tier = "warm"
