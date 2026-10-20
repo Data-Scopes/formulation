@@ -25,6 +25,7 @@ from formulation.content_fingerprint import (
 )
 from formulation.formula_type_composition_graph import COMPOSITION_ROOT
 from formulation.ontfangen_partition import load_presence_universe
+from formulation.requeste_formula_type import FORMULA_TYPE_ID as REQUESTE_ID
 
 DEFAULT_YEAR = POC_YEAR
 DEFAULT_MIN_SUPPORT = 5
@@ -32,7 +33,10 @@ DEFAULT_SAMPLE_SEED = 20261020
 DEFAULT_SAMPLE_PER_STRATUM = 5
 DEFAULT_EXEMPLAR_CAP = 40
 
-ACCEPTED_TYPE_IDS = frozenset({APPOINTMENT_ID, ADVIES_ID})
+# STEPT1m: requeste_geleesen (STEPT1k, frozen cut 4.5) joins the accepted
+# core alongside appointment_installation / advies_geleesen. Only the
+# opener — STEPT1l's routing subtypes stay characteristics, not core types.
+ACCEPTED_TYPE_IDS = frozenset({APPOINTMENT_ID, ADVIES_ID, REQUESTE_ID})
 
 MOTIF_FILLER = "filler_star"
 MOTIF_KNOWN = "known_sparse"

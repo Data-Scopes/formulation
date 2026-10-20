@@ -2,7 +2,7 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-One step per session. **STEPT1k done** — requeste opener accepted (A) on recall (0.898); FP (0.206) accepted as a known decision-type confound, not fixed (see proof NOTES). **STEPT1k2 done** — hand-read settled the open "is the gate reachable?" question: corrected FP 0.121 (CI 0.084–0.153), gate not rescued even crediting ES label gaps. **STEPT1l done** — requeste+ routing subtypes (referred 0.194 / granted_direct 0.709 / routing_unclear 0.050) separate structurally (length +93 words referred vs granted); stop, no new A. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
+One step per session. **STEPT1k done** — requeste opener accepted (A) on recall (0.898); FP (0.206) accepted as a known decision-type confound, not fixed (see proof NOTES). **STEPT1k2 done** — hand-read settled the open "is the gate reachable?" question: corrected FP 0.121 (CI 0.084–0.153), gate not rescued even crediting ES label gaps. **STEPT1l done** — requeste+ routing subtypes (referred 0.194 / granted_direct 0.709 / routing_unclear 0.050) separate structurally (length +93 words referred vs granted); stop, no new A. **STEPT1m done** — requeste wired into the accepted core; 3-way composition-unknown re-run on 1780 drops undecided 0.475→0.140, low-noise; `appointment_installation`/`advies_geleesen`/`requeste_geleesen` promoted to `role: "blueprint"` in `formula_templates`. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
 
 Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md). Template **design questions** (north star, not a checklist): [`docs/template-design-questions.md`](docs/template-design-questions.md).
 
@@ -46,7 +46,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
 | M3 Composition + position | [M3-composition-and-position.md](plans/milestones/M3-composition-and-position.md) | not started |
 | T0 Typology structural profile | [STEPT0-typology-structural-profile.md](plans/steps/STEPT0-typology-structural-profile.md) | done (1780 provisional) |
-| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m opened: blueprint promotion not started) |
+| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m done: three openers promoted to blueprint) |
 
 ## Progress checklist
 
@@ -127,7 +127,7 @@ Survey + dighum shell: done (see pipeline plan). Do not lift the `republic_clean
 | T1k | [STEPT1k-requeste-formula-type.md](plans/steps/STEPT1k-requeste-formula-type.md) | Measured requeste opener vs ES rekest (recall / wording / FP / cloud) | **done** (A accepted; recall 0.898 PASS, FP 0.206 accepted not fixed — decision-type confound) |
 | T1k2 | (proof addendum, no separate step guide) | Hand-read FP adjudication xlsx: is the 0.05 FP gate reachable against ES gold at all? | **done** (not_rescued; corrected FP 0.121, CI 0.084–0.153) |
 | T1l | [STEPT1l-requeste-subtype-characterisation.md](plans/steps/STEPT1l-requeste-subtype-characterisation.md) | Subtypes under requeste+ (mirror STEPT1f) | **done** (PASS; referred 0.194 / granted_direct 0.709 / routing_unclear 0.050; length +93 words referred vs granted) |
-| T1m | [STEPT1m-blueprint-promotion.md](plans/steps/STEPT1m-blueprint-promotion.md) | Requeste joins accepted core; 3-way composition-unknown re-run; promote if low-noise | **not started** |
+| T1m | [STEPT1m-blueprint-promotion.md](plans/steps/STEPT1m-blueprint-promotion.md) | Requeste joins accepted core; 3-way composition-unknown re-run; promote if low-noise | **done** (PASS; undecided 0.475→0.140 on 1780; 3 openers promoted to `role: "blueprint"`) |
 
 ## Data paths
 

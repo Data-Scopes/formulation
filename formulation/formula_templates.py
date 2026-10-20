@@ -17,7 +17,9 @@ LOGICAL_NAME = "formula_templates"
 # STEPS1–3 framing default (18c requeste opening). 17c period map deferred.
 DEFAULT_FRAMING_ID = "opening_requeste_18c"
 
-ROLES = frozenset({"framing", "doc_flag", "appointment_subtype", "residual"})
+ROLES = frozenset(
+    {"framing", "doc_flag", "appointment_subtype", "residual", "blueprint"}
+)
 
 REQUIRED_KEYS = (
     "template_id",

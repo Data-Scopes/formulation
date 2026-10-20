@@ -1,6 +1,6 @@
 # T1 — Unknown-first typology (Track T spine)
 
-**Status:** active (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m opened: blueprint promotion)  
+**Status:** active (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m done: three openers promoted to blueprint)  
 **Steps:** [STEPT1h](../steps/STEPT1h-unknown-likeliness.md) → [STEPT1i](../steps/STEPT1i-composition-unknown.md) → [STEPT1j](../steps/STEPT1j-empty-band-characterisation.md) → [STEPT1k](../steps/STEPT1k-requeste-formula-type.md) → [STEPT1l](../steps/STEPT1l-requeste-subtype-characterisation.md) → [STEPT1m](../steps/STEPT1m-blueprint-promotion.md) blueprint promotion  
 **Supersedes as driver:** up-front closed inventories; formula multiclass heads; flag sieves (STEPT1e1 parked); NER ALIGNED_TO fingerprint as typology instrument.
 
@@ -61,7 +61,7 @@ L1 / R1 / appointment / advies gold-or-present. Useful triage crosstab; **not** 
 | **T1j2** | [STEPT1j2-empty-band-retrieval-probe.md](../steps/STEPT1j2-empty-band-retrieval-probe.md) | **done** (PASS; R1/L1 ~low on empty; contrast ≠ cluster) |
 | **T1k** | [STEPT1k-requeste-formula-type.md](../steps/STEPT1k-requeste-formula-type.md) | **done** (A accepted; recall 0.898 PASS, FP 0.206 accepted not fixed) |
 | **T1l** | [STEPT1l-requeste-subtype-characterisation.md](../steps/STEPT1l-requeste-subtype-characterisation.md) | **done** (PASS; referred 0.194 / granted_direct 0.709 / routing_unclear 0.050; length separates) |
-| **T1m** | [STEPT1m-blueprint-promotion.md](../steps/STEPT1m-blueprint-promotion.md) | **not started** — wire requeste into accepted core, re-run STEPT1i 3-way, promote if low-noise |
+| **T1m** | [STEPT1m-blueprint-promotion.md](../steps/STEPT1m-blueprint-promotion.md) | **done** (PASS; undecided 0.475→0.140 on 1780 comparison year; `appointment_installation`/`advies_geleesen`/`requeste_geleesen` promoted to `role: "blueprint"`) |
 
 ## Out of scope here
 

@@ -1,8 +1,8 @@
 """STEPT1b: score a year slice for formula-type presence + popularity weights.
 
-Runs accepted appointment + advies models (frozen STEPT1a / STEPT1a2 cuts when
-available) and optional provisional opening families so co-occurrence bags can
-be inspected.
+Runs accepted appointment + advies + requeste models (frozen STEPT1a /
+STEPT1a2 / STEPT1k cuts when available) and optional provisional opening
+families so co-occurrence bags can be inspected.
 """
 
 from __future__ import annotations
@@ -44,10 +44,17 @@ from formulation.formula_period_bins import (
     score_single_cloud,
     year_bin,
 )
+from formulation.requeste_formula_type import (
+    FORMULA_TYPE_ID as REQUESTE_ID,
+    build_requeste_cloud,
+    load_rekest_gold_18c,
+    score_text as score_requeste_text,
+)
 
 DEFAULT_YEAR = POC_YEAR
 APPOINTMENT_CUT_FALLBACK = FALLBACK_CUT
 ADVIES_CUT_FALLBACK = FALLBACK_CUT
+REQUESTE_CUT_FALLBACK = FALLBACK_CUT
 
 
 def load_year_slice(
@@ -97,6 +104,11 @@ def load_frozen_appointment_cut() -> float | None:
 def load_frozen_advies_cut() -> float | None:
     """Read ``operating_cut`` from STEPT1a2 metrics when present on disk."""
     return _load_frozen_cut("formula_type_advies_metrics")
+
+
+def load_frozen_requeste_cut() -> float | None:
+    """Read ``operating_cut`` from STEPT1k metrics when present on disk."""
+    return _load_frozen_cut("formula_type_requeste_metrics")
 
 
 def fit_appointment_presence_model(
@@ -186,6 +198,49 @@ def fit_advies_presence_model(
     }
 
 
+def fit_requeste_presence_model(
+    *,
+    random_state: int = RNG,
+    cut: float | None = None,
+) -> dict[str, Any]:
+    """Bootstrap requeste cloud from ES rekest gold; freeze cut from T1k or recalibrate."""
+    gold = load_rekest_gold_18c()
+    boot, hold = split_bootstrap_holdout(
+        gold, holdout_frac=HOLDOUT_FRAC, random_state=random_state
+    )
+    cloud, notes = build_requeste_cloud(
+        boot["resolutions_text"].astype(str).tolist(),
+        year_min=YEAR_MIN,
+        year_max=YEAR_MAX,
+    )
+    frozen = load_frozen_requeste_cut() if cut is None else None
+    if cut is not None:
+        operating_cut = float(cut)
+        cut_rule = "cli_override"
+    elif frozen is not None:
+        operating_cut = float(frozen)
+        cut_rule = "frozen_stept1k_metrics"
+    else:
+        hold_scores = [
+            score_requeste_text(t, cloud)["score"]
+            for t in hold["resolutions_text"].astype(str).tolist()
+        ]
+        operating_cut = float(calibrate_cut(hold_scores, fallback=REQUESTE_CUT_FALLBACK))
+        cut_rule = "p20_holdout_positive_scores"
+    return {
+        "formula_type_id": REQUESTE_ID,
+        "role": "requeste",
+        "provisional": False,
+        "cloud": cloud,
+        "notes": notes,
+        "operating_cut": operating_cut,
+        "operating_cut_rule": cut_rule,
+        "score_fn": "requeste",
+        "n_bootstrap": int(len(boot)),
+        "n_holdout": int(len(hold)),
+    }
+
+
 def fit_opening_presence_model(
     family: str,
     year: int,
@@ -243,6 +298,8 @@ def score_with_presence_model(text: str, model: dict[str, Any]) -> float:
         )
     if score_fn == "advies":
         return float(score_advies_text(text, model["cloud"])["score"])
+    if score_fn == "requeste":
+        return float(score_requeste_text(text, model["cloud"])["score"])
     return float(score_single_cloud(text, model["cloud"]))
 
 
@@ -389,6 +446,10 @@ def summarize_presence(
             m.get("formula_type_id") == ADVIES_ID and not m.get("provisional")
             for m in models
         ),
+        "requeste_accepted": any(
+            m.get("formula_type_id") == REQUESTE_ID and not m.get("provisional")
+            for m in models
+        ),
         "openings_provisional": any(bool(m.get("provisional")) for m in models),
         "types": types_out,
         "bags": {
@@ -493,7 +554,23 @@ def fixture_presence_models() -> list[dict[str, Any]]:
         "operating_cut_rule": "fixture",
         "score_fn": "advies",
     }
-    models = [appt, advies]
+    req_texts = [
+        frame.iloc[3]["resolutions_text"],
+        "IS ter Vergaderinge geleesen de Requeste van",
+        "is ter vergaderinge gelesen het rekest van",
+    ]
+    req_cloud, req_notes = build_requeste_cloud(req_texts)
+    requeste = {
+        "formula_type_id": REQUESTE_ID,
+        "role": "requeste",
+        "provisional": False,
+        "cloud": req_cloud,
+        "notes": req_notes,
+        "operating_cut": 2.0,
+        "operating_cut_rule": "fixture",
+        "score_fn": "requeste",
+    }
+    models = [appt, advies, requeste]
     for family, text_idx in (("ontfangen_start", 2), ("requeste_start", 3)):
         meta = OPENING_FAMILIES[family]
         texts = [frame.iloc[text_idx]["resolutions_text"], meta["canonic"]]

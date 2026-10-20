@@ -6,3 +6,4 @@ data_manifest.local.toml
 output/*
 !output/README.md
 .pytest_cache/
+formulator-project-docs/formulator-project-docs.tar.gz

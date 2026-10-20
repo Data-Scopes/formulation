@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """STEPT1b: score a year slice for formula-type presence + popularity bags.
 
-Includes accepted appointment + advies (frozen T1a / T1a2 cuts) and optional
-provisional openings.
+Includes accepted appointment + advies + requeste (frozen T1a / T1a2 / T1k
+cuts) and optional provisional openings.
 
     uv run python scripts/run_formula_type_presence.py --fixture-only
     uv run python scripts/run_formula_type_presence.py
     uv run python scripts/run_formula_type_presence.py --no-openings
     uv run python scripts/run_formula_type_presence.py --no-advies
+    uv run python scripts/run_formula_type_presence.py --no-requeste
     uv run python scripts/run_formula_type_presence.py --limit 200
 """
 
@@ -27,12 +28,14 @@ from formulation.formula_type_presence import (
     fit_advies_presence_model,
     fit_appointment_presence_model,
     fit_opening_presence_model,
+    fit_requeste_presence_model,
     fixture_presence_frames,
     fixture_presence_models,
     load_year_slice,
     score_presence_frame,
     summarize_presence,
 )
+from formulation.requeste_formula_type import FORMULA_TYPE_ID as REQUESTE_ID
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -59,6 +62,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Skip accepted advies (appointment + openings only)",
     )
     p.add_argument(
+        "--no-requeste",
+        action="store_true",
+        help="Skip accepted requeste opener (STEPT1k)",
+    )
+    p.add_argument(
         "--limit",
         type=int,
         default=None,
@@ -75,6 +83,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=float,
         default=None,
         help="Override advies operating cut (default: frozen STEPT1a2)",
+    )
+    p.add_argument(
+        "--requeste-cut",
+        type=float,
+        default=None,
+        help="Override requeste operating cut (default: frozen STEPT1k)",
     )
     p.add_argument(
         "--candidate-cap",
@@ -96,6 +110,8 @@ def _build_models(args: argparse.Namespace) -> list[dict[str, Any]]:
         models = fixture_presence_models()
         if args.no_advies:
             models = [m for m in models if m["formula_type_id"] != ADVIES_ID]
+        if args.no_requeste:
+            models = [m for m in models if m["formula_type_id"] != REQUESTE_ID]
         if args.no_openings:
             models = [m for m in models if not m.get("provisional")]
         return models
@@ -111,6 +127,13 @@ def _build_models(args: argparse.Namespace) -> list[dict[str, Any]]:
             fit_advies_presence_model(
                 random_state=int(args.random_state),
                 cut=args.advies_cut,
+            )
+        )
+    if not args.no_requeste:
+        models.append(
+            fit_requeste_presence_model(
+                random_state=int(args.random_state),
+                cut=args.requeste_cut,
             )
         )
     if not args.no_openings:
@@ -154,6 +177,8 @@ def main(argv: list[str] | None = None) -> None:
     parents = ["resolutions_flat", "aanstelling_selected"]
     if any(m["formula_type_id"] == ADVIES_ID for m in models):
         parents.extend(["advies_es_gold", "formula_type_advies_metrics"])
+    if any(m["formula_type_id"] == REQUESTE_ID for m in models):
+        parents.extend(["rekest_es_gold", "formula_type_requeste_metrics"])
 
     save_semi_structured(
         [metrics],
@@ -163,7 +188,8 @@ def main(argv: list[str] | None = None) -> None:
         description=(
             f"STEPT1b presence metrics year={year} "
             f"n={metrics.get('n_resolutions')} types={metrics.get('n_types')} "
-            f"advies={metrics.get('advies_accepted')}"
+            f"advies={metrics.get('advies_accepted')} "
+            f"requeste={metrics.get('requeste_accepted')}"
         ),
     )
     save_semi_structured(
@@ -183,7 +209,8 @@ def main(argv: list[str] | None = None) -> None:
         f"wrote formula_type_presence_metrics / "
         f"formula_type_presence_scores ({len(score_rows)} score rows); "
         f"frac_zero={bags.get('frac_zero')} frac_multi={bags.get('frac_multi')}; "
-        f"advies_accepted={metrics.get('advies_accepted')}"
+        f"advies_accepted={metrics.get('advies_accepted')} "
+        f"requeste_accepted={metrics.get('requeste_accepted')}"
     )
 
 

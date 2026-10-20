@@ -67,6 +67,15 @@ def test_roles_partition():
     assert any(r["template_id"] == "unknown_residual" for r in residual)
 
 
+def test_blueprint_role_has_three_accepted_opener_types():
+    blueprints = templates_by_role("blueprint")
+    ids = {r["template_id"] for r in blueprints}
+    assert ids == {"appointment_installation", "advies_geleesen", "requeste_geleesen"}
+    for row in blueprints:
+        assert row["threshold_frozen"] is True
+        assert row["threshold"] is not None
+
+
 def test_validate_rejects_institution_without_targets():
     bad = dict(get_template("appointment_rekenkamer"))
     bad["institution_targets"] = []
