@@ -1,0 +1,62 @@
+"""Unit smoke for STEPT1k requeste opener formula-type scoring (no ES / parquet)."""
+
+from __future__ import annotations
+
+from formulation.requeste_formula_type import (
+    REQUESTE_CANONIC,
+    build_requeste_cloud,
+    calibrate_cut,
+    fixture_smoke_frames,
+    requeste_bootstrap_texts,
+    score_text,
+    wording_flags,
+)
+
+
+def test_wording_flags_and_canonic():
+    assert "Requeste" in REQUESTE_CANONIC
+    assert wording_flags("geleesen de Requeste van")["requeste_wording"]
+    assert wording_flags("op het rekest van den suppliant")["requeste_wording"]
+    assert wording_flags("Opte reqte. van")["requeste_wording"]
+    assert not wording_flags("Ontfangen een missive")["requeste_wording"]
+
+
+def test_cue_windows_around_requeste():
+    text = "IS ter Vergaderinge geleesen de Requeste van den suppliant"
+    wins, meta = requeste_bootstrap_texts([text], pad=3)
+    assert meta["mode"] == "cue_windows"
+    assert wins
+    assert "requeste" in wins[0].casefold()
+
+
+def test_cloud_accepts_empirical_windows():
+    texts = [
+        "IS ter Vergaderinge geleesen de Requeste van den suppliant",
+        "is ter Vergaderinge gelesen de requeste van den coopman",
+        "IS ter Vergaderinge geleesen de Requeste van Jan Jansen",
+    ]
+    cloud, notes = build_requeste_cloud(texts)
+    assert notes["n_hits_accepted"] >= 2
+    assert notes["bootstrap_input"]["mode"] == "cue_windows"
+    requeste_slot = next(
+        s
+        for s in cloud["slots"]
+        if str(s["canonical"]).casefold() in {"requeste", "rekest", "request"}
+    )
+    learned = {
+        v["token"] for v in requeste_slot["variants"] if int(v.get("count") or 0) > 0
+    }
+    assert learned
+
+
+def test_cloud_scores_fixture_positive_above_negative():
+    gold, neg = fixture_smoke_frames()
+    cloud, _notes = build_requeste_cloud(gold["resolutions_text"].tolist())
+    pos = score_text(gold.iloc[0]["resolutions_text"], cloud)
+    neg_s = score_text(neg.iloc[0]["resolutions_text"], cloud)
+    assert pos["score"] > neg_s["score"]
+    assert pos["score"] > 0
+
+
+def test_calibrate_cut_fallback():
+    assert calibrate_cut([]) == 2.0

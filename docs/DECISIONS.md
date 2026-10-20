@@ -10,6 +10,12 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Decision:** What did we decide?
 - **Reason:** Why is this the right tradeoff now?
 
+## 2026-10-20: STEPT1k — requeste opener as A family (then requeste+ subtypes)
+
+- **Context:** STEPT1j empty band is rekest-headed (~half); provisional `requeste_start` presence only ~0.19 on that mass; STEPT1j2 confirmed empty ≠ R1/L1. User asked to measure/accept the requeste opener (A), then subtype characterisation under requeste+.
+- **Decision:** STEPT1k mirrors STEPT1a2: gold = ES `proposition_type=rekest` + flat text; formula type `requeste_geleesen` with empirical canonic `IS ter Vergaderinge geleesen de Requeste`; cue-window slot-cloud + DAG; wording baseline `requeste`/`rekest`/`reqte` for deltas only. Provenanced `rekest_es_gold` / `formula_type_requeste_*`. Do **not** accept via `formula_documents` flags or provisional presence. After gates PASS, next = STEPT1l subtype characterisation under requeste+ (STEPT1f mirror) — not blueprint minting, not 17c period map.
+- **Reason:** Closes the largest unexplained empty skeleton with the same acceptance bar as advies/appointment; keeps opener acceptance separate from later kind-shape characterisation.
+
 ## 2026-09-21: Two tracks; retrieval first
 
 - **Context:** Formula M1 (STEP0–1) is wired, but the next useful inventory work is recovering missing whole aanstellingsresoluties, not formula spans.

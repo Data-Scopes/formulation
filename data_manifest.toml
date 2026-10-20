@@ -373,6 +373,27 @@ phase = "explore"
 description = "STEPT1a2: per-id align scores for advies gold + negative sample (no full resolution text)"
 parent = "formula_type_advies_metrics"
 
+[datasets.rekest_es_gold]
+tier = "scratch"
+path = "rekest_es_gold.jsonl"
+phase = "explore"
+description = "STEPT1k: ES proposition_type=rekest ids (1705–1796) joined to resolutions_flat text; frozen gold for requeste opener formula-type eval"
+parent = "resolutions_flat"
+
+[datasets.formula_type_requeste_metrics]
+tier = "scratch"
+path = "formula_type_requeste_metrics.jsonl"
+phase = "semi"
+description = "STEPT1k: requeste opener (slot-cloud+DAG) recall vs ES rekest gold, wording baseline delta, FP on N=500 negatives"
+parent = "rekest_es_gold"
+
+[datasets.formula_type_requeste_scores]
+tier = "scratch"
+path = "formula_type_requeste_scores.jsonl"
+phase = "explore"
+description = "STEPT1k: per-id align scores for rekest gold + negative sample (no full resolution text)"
+parent = "formula_type_requeste_metrics"
+
 [datasets.formula_period_bin_metrics]
 tier = "scratch"
 path = "formula_period_bin_metrics.jsonl"

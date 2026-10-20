@@ -8,6 +8,6 @@
 | [M1-first-slice.md](M1-first-slice.md) | paused (STEP0–1 done) |
 | [M2-building-blocks.md](M2-building-blocks.md) | not started |
 | [M3-composition-and-position.md](M3-composition-and-position.md) | not started |
-| [T1-unknown-first.md](T1-unknown-first.md) | active (doctrine locked; STEPT1h POC) |
+| [T1-unknown-first.md](T1-unknown-first.md) | active (STEPT1k: requeste opener A; then requeste+ subtypes) |
 
 Linked from root [`PLAN.md`](../../PLAN.md).

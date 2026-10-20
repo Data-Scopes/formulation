@@ -1,6 +1,6 @@
 # Steps
 
-Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **STEPT1h done** (unknown-likeliness PASS; high-unk 0.72). Next: fingerprints or stratified high-unknown slice. STEPT1e1 **parked**. F/M1 paused; Track L parked. R1 judged.
+Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per session. **STEPT1k active** (requeste opener A). Next after PASS: STEPT1l requeste+ subtypes. STEPT1e1 **parked**. F/M1 paused; Track L parked. R1 judged.
 
 ## Track R — retrieval (R1)
 
@@ -53,6 +53,8 @@ Linked from the progress tables in root [`PLAN.md`](../../PLAN.md). One step per
 | T1f | [STEPT1f-missive-subtype-characterisation.md](STEPT1f-missive-subtype-characterisation.md) | done (PASS w/ circular L1 caveat) |
 | T1g | [STEPT1g-residual-structure-probe.md](STEPT1g-residual-structure-probe.md) | done (PASS; filler mass + sparse appointment) |
 | T1h | [STEPT1h-unknown-likeliness.md](STEPT1h-unknown-likeliness.md) | done (PASS; high-unk 0.72) |
+| T1k | [STEPT1k-requeste-formula-type.md](STEPT1k-requeste-formula-type.md) | **active** (requeste opener vs ES rekest) |
+| T1l | (requeste+ subtype — TBD) | next |
 
 ## Track F — formulas (M1), paused
 

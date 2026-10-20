@@ -1,7 +1,7 @@
 # T1 — Unknown-first typology (Track T spine)
 
-**Status:** active (doctrine locked; STEPT1h PASS — 1780 high-unknown 0.72)  
-**Steps:** [STEPT1h](../steps/STEPT1h-unknown-likeliness.md) → fingerprints bridge → content characterisation → task-template promotion  
+**Status:** active (STEPT1k — measure/accept requeste opener A; then STEPT1l subtype under requeste+)  
+**Steps:** [STEPT1h](../steps/STEPT1h-unknown-likeliness.md) → [STEPT1k](../steps/STEPT1k-requeste-formula-type.md) → requeste+ subtypes → task-template promotion  
 **Supersedes as driver:** up-front closed inventories from expert knowledge; formula multiclass heads; flag sieves as typology (STEPT1e1 parked).
 
 ## Goal
@@ -65,7 +65,8 @@ flowchart LR
 | **T1h** | [STEPT1h-unknown-likeliness.md](../steps/STEPT1h-unknown-likeliness.md) | **done** (PASS; 2796 / high-unk 2015; L1 frac 0.24) |
 | T1i | (fingerprints bridge — TBD) | Read-only fingerprint handles registered via `local.toml` |
 | T1j | (characterise high-unknown — TBD) | NOTES shapes on high-unknown band; ≤1 sparse promotion if clear |
-| T1k | (kind-support A — TBD) | Only for a named template that cleared characterisation |
+| **T1k** | [STEPT1k-requeste-formula-type.md](../steps/STEPT1k-requeste-formula-type.md) | **active** — accept requeste opener vs ES rekest |
+| T1l | (requeste+ subtype characterisation — TBD) | Subtypes under requeste+ (mirror STEPT1f) |
 
 ## Out of scope here
 
