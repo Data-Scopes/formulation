@@ -2,7 +2,7 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-One step per session. **STEPT1k active** — measure/accept requeste opener (A) vs ES rekest; then STEPT1l subtype under requeste+. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
+One step per session. **STEPT1k done** — requeste opener accepted (A) on recall (0.898); FP (0.206) accepted as a known decision-type confound, not fixed (see proof NOTES). **STEPT1l next** — subtype under requeste+. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
 
 Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md). Template **design questions** (north star, not a checklist): [`docs/template-design-questions.md`](docs/template-design-questions.md).
 
@@ -46,7 +46,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
 | M3 Composition + position | [M3-composition-and-position.md](plans/milestones/M3-composition-and-position.md) | not started |
 | T0 Typology structural profile | [STEPT0-typology-structural-profile.md](plans/steps/STEPT0-typology-structural-profile.md) | done (1780 provisional) |
-| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (STEPT1k: requeste opener A; then subtype under requeste+) |
+| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (STEPT1k done: requeste opener A; STEPT1l subtype under requeste+ next) |
 
 ## Progress checklist
 
@@ -121,8 +121,11 @@ Survey + dighum shell: done (see pipeline plan). Do not lift the `republic_clean
 | T1f | [STEPT1f-missive-subtype-characterisation.md](plans/steps/STEPT1f-missive-subtype-characterisation.md) | Missive subtypes under ontfangen+: info vs decisionful (length + flags) | **done** (PASS w/ circular L1 caveat) |
 | T1g | [STEPT1g-residual-structure-probe.md](plans/steps/STEPT1g-residual-structure-probe.md) | Decisionful residual structure: pockets + catalogue + sample shapes | **done** (PASS; sparse ≠ filler) |
 | T1h | [STEPT1h-unknown-likeliness.md](plans/steps/STEPT1h-unknown-likeliness.md) | Unknown-likeliness under accepted cover; 1780 scores + high-unknown sample | **done** (PASS; high-unk 0.72) |
-| T1k | [STEPT1k-requeste-formula-type.md](plans/steps/STEPT1k-requeste-formula-type.md) | Measured requeste opener vs ES rekest (recall / wording / FP / cloud) | **active** |
-| T1l | (requeste+ subtype characterisation — TBD) | Subtypes under requeste+ (mirror STEPT1f) | next |
+| T1i | [STEPT1i-composition-unknown.md](plans/steps/STEPT1i-composition-unknown.md) | Proto-blueprints / derivatives / undecided + fingerprints | **done** (PASS; empty=1329; fp one mass) |
+| T1j | [STEPT1j-empty-band-characterisation.md](plans/steps/STEPT1j-empty-band-characterisation.md) | Empty-band type/length/flags + fp_cut sweep + sample | **done** (PASS; rekest-headed; fp@0.45 sample-only) |
+| T1j2 | [STEPT1j2-empty-band-retrieval-probe.md](plans/steps/STEPT1j2-empty-band-retrieval-probe.md) | Empty × frozen R1/L1 P-bands × ES type | **done** (PASS; both ~low; L1 soft on empty missive grey) |
+| T1k | [STEPT1k-requeste-formula-type.md](plans/steps/STEPT1k-requeste-formula-type.md) | Measured requeste opener vs ES rekest (recall / wording / FP / cloud) | **done** (A accepted; recall 0.898 PASS, FP 0.206 accepted not fixed — decision-type confound) |
+| T1l | (requeste+ subtype characterisation — TBD) | Subtypes under requeste+ (mirror STEPT1f) | **active** |
 
 ## Data paths
 
@@ -162,6 +165,14 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | `resolution_unknown_metrics` | semi | STEPT1h: unknown-likeliness band + cover hits |
 | `resolution_unknown_scores` | explore | STEPT1h: per-id cover + unknown_score |
 | `resolution_unknown_sample` | explore | STEPT1h: high-unknown text sample (truncated) |
+| `composition_unknown_metrics` | semi | STEPT1i: proto-blueprints + motif fracs + fingerprint summary |
+| `composition_unknown_scores` | explore | STEPT1i: per-id bag/core/motif (+ fp fields) |
+| `composition_unknown_sample` | explore | STEPT1i: undecided stratified sample (truncated) |
+| `empty_band_metrics` | semi | STEPT1j: empty type/length/flags + fp_cut sweep |
+| `empty_band_scores` | explore | STEPT1j: per-id empty characterisation (+ fp cluster) |
+| `empty_band_sample` | explore | STEPT1j: stratified empty text sample (truncated) |
+| `empty_band_retrieval_metrics` | semi | STEPT1j2: empty R1/L1 P-bands × ES type |
+| `empty_band_retrieval_scores` | explore | STEPT1j2: per-id empty R1/L1 proba+bucket |
 | `rekest_es_gold` | explore | STEPT1k: ES rekest ids + flat text |
 | `formula_type_requeste_metrics` | semi | STEPT1k: requeste opener recall / FP / cloud |
 | `formula_type_requeste_scores` | explore | STEPT1k: per-id align scores |

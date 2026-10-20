@@ -239,6 +239,38 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Full eval PASS:** recall **0.762** (n=950); FP **0.034** (17/500); cloud **686/895**; cut=4.12; Δ vs wording −0.027. Pre-1731 softer (0.60) noted, no family floor. Accept advies as formula type; next presence-bag refresh or another A / sieve.
 - **Reason:** Same measured A schema as appointment on the next sharp sparse family; independent ES gold avoids circular flag detectors.
 
+## 2026-10-20: STEPT1k — requeste opener accepted (A); FP gate questioned
+
+- **Context:** STEPT1j left requeste as the largest unexplained skeleton in the empty band. Measure the opener as a formula type on ES `rekest` gold, same schema as STEPT1a2 advies.
+- **Decision:** Accept `requeste_geleesen` as **A** on the slot-cloud/DAG baseline (method parity with appointment/advies). Recall **0.8983** (n=74205) PASS; cloud accepts 37,939 PASS; FP **0.206** (103/500) FAIL — accepted as a diagnosed limitation, not fixed, and not grounds for swapping method for one type.
+- **FP diagnosis (scratch):** not calibration (no cut clears both gates; FP 0.042 only at recall 0.631). Not generic slots (single-slot ablation raised recall *and* FP: 0.880/0.136 vs 0.645/0.076). Not length (length-only barely separates; proba–length corr ~0 on random sample). Not day-order (only testable 1626–30, no overlap with 1705–1796). **Is** decision-type: FP 0.340 for negatives carrying `goedgevonden`-family markers vs 0.117 without; 66% of FPs from the 40% that have them.
+- **Method-comparison caveat:** TF-IDF+LR got nearer both gates (0.79/0.054 @0.8) but answers a *different question* — order-blind document topic (≈ re-deriving the ES label) vs. ordered span presence. Both score the full document, so this is not a "more text wins" result. Treat as an upper bound on class separability, not evidence against the opener definition.
+- **Net-then-sieve refuted for this signal pair:** TF-IDF-net + DAG-sieve, 7×6 cut grid — no pair clears both gates and the sieve adds nothing (TF-IDF@0.8 alone 0.791/0.054 → +DAG@4.5 0.787/0.054). Stages are redundant (same vocabulary, ordered vs. order-blind), not complementary. `candidate-then-structure` only pays when the two stages see different evidence.
+- **Call:** Next = STEPT1l subtype under requeste+. **Open first:** is ≤0.05 FP reachable against ES gold at all? Four signals floor at 0.04–0.05 only below the 0.70 recall gate — the pattern expected if some "negatives" are requeste-bearing resolutions ES never typed. Cheapest test is hand-reading ~20–30 FPs, not more compute.
+- **Reason:** Negatives are defined solely by ES label absence, and `proposition_type` was an administrative construction unevenly maintained; a gate built on it may measure label completeness as much as model error.
+
+## 2026-10-20: STEPT1j2 — empty-band R1/L1 retrieval probe
+
+- **Context:** User: prior TF-IDF type searches (R1/L1) should inform empty fingerprints. Hypothesis: contrastive vectors triage empty better than within-band clustering.
+- **Decision:** `formulation/empty_band_retrieval.py` + `scripts/run_empty_band_retrieval_probe.py` — join frozen R1 harvest; L1 `fit_on_all_labelled` + score empty; P-bands × ES type. Provenanced `empty_band_retrieval_*`. Not L3; not new types.
+- **1780 NOTES (PASS):** R1 **99.7% low** (med 0.022); L1 **3 high** (all missive) / 45 grey / 1281 low; empty missive soft grey (p90 0.63) but not high flood; rekest low on both. Confirms empty ≠ aanstelling/L1; fingerprints were the wrong instrument for that question.
+- **Call:** Next = **requeste/rekest seeded** contrast or presence — not tighter fp clustering, not L3.
+- **Reason:** Same lesson as R1/L1 design: named class needs seeds + overig, not residue clustering.
+
+## 2026-10-20: STEPT1j — empty-band characterisation (+ fp_cut sweep)
+
+- **Context:** STEPT1i left undecided = empty (1329); `fp_cut=0.15` one mass. Need structural characterisation before any blueprint mint; optional tighter fingerprint cuts.
+- **Decision:** `formulation/empty_band.py` + `scripts/run_empty_band_characterisation.py` — join STEPT1e partition (no ES remget); type mix / length / flag catalogue; fingerprint similarity fit once, re-cluster at cuts `0.15/0.30/0.45/0.60` (operating labels @0.45); provenanced `empty_band_*`. No blueprint promotion.
+- **1780 NOTES (PASS):** empty **1329**; **rekest 700** (0.53) + missive/voordracht/rapport/conclusie pockets; ontfangen_present 0; `goedgevonden`/`gedelibereert` high on rekest; conclusie sharp (`handen` 0.70). fp: 0.15 one mass; **0.45** share_largest 0.068 but 587 singletons — sample strata only. Next = **requeste/rekest opener** presence probe (or conclusie+handen) — not mint from empty n / clusters.
+- **Reason:** Empty is multi-pocket, not one type; fingerprints triage sampling; largest unexplained skeleton is requeste.
+
+## 2026-10-20: STEPT1i — formula-graph blueprints / derivatives / fingerprints
+
+- **Context:** Unknown formulas are invisible until named; templates are combinations. Exact bags proliferate. User: object = resolution formula-graph patterns; fingerprints for variation vs different structure / derivative vs novel once blueprints exist. NER ALIGNED_TO fingerprint is the wrong instrument.
+- **Decision:** STEPT1i measures (1) `accepted_core` proto-blueprints + within-core derivative mass + undecided (`empty`∪`novel_tail`); (2) content fingerprints on undecided (NN/clusters + max_sim to proto exemplars). STEPT1h cover-unknown stays auxiliary. No blueprint promotion.
+- **1780 NOTES (PASS):** proto-blueprints **2** (advies 74 / appointment 28; dominant bag ~0.92); filler 1365; **empty 1329**; novel_tail **0**; only 6 exact bags. Fingerprint `fp_cut=0.15` → **one mass** (share 0.999); derivative_score p50 0.18. Next = characterise empty (T1j) and/or tighter fp cut — not mint blueprints.
+- **Reason:** Thin presence inventory → no novel combinations yet; empty is the real undecided pool; loose fp cut does not split structure vs variation.
+
 ## 2026-10-20: Unknown-first doctrine + STEPT1h PASS (1780)
 
 - **Context:** User wants resolution triage by **unknown likeliness**, then content characterisation — up-front classification from incomplete expert knowledge only rediscovers what was brought in. STEPT1g showed residual = filler mass + sparse appointment; next was not another named A from thin reading alone.

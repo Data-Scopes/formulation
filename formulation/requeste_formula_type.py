@@ -327,9 +327,12 @@ def load_rekest_gold_18c() -> pd.DataFrame:
     return out.reset_index(drop=True)
 
 
-def score_frame(frame: pd.DataFrame, cloud: dict[str, Any], *, role: str) -> pd.DataFrame:
+def score_frame(
+    frame: pd.DataFrame, cloud: dict[str, Any], *, role: str, progress_every: int = 2000
+) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
-    for rec in frame.to_dict(orient="records"):
+    total = len(frame)
+    for i, rec in enumerate(frame.to_dict(orient="records"), start=1):
         text = str(rec.get("resolutions_text") or "")
         scored = score_text(text, cloud)
         flags = wording_flags(text)
@@ -343,6 +346,8 @@ def score_frame(frame: pd.DataFrame, cloud: dict[str, Any], *, role: str) -> pd.
                 **flags,
             }
         )
+        if progress_every and i % progress_every == 0:
+            print(f"  score_frame[{role}]: {i}/{total}", flush=True)
     return pd.DataFrame(rows)
 
 

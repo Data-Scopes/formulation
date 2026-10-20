@@ -534,6 +534,62 @@ phase = "explore"
 description = "STEPT1h: high-unknown stratified text sample for later characterisation (truncated)"
 parent = "resolution_unknown_metrics"
 
+[datasets.composition_unknown_metrics]
+tier = "scratch"
+path = "composition_unknown_metrics.jsonl"
+phase = "semi"
+description = "STEPT1i: proto-blueprints + motif fracs + undecided + fingerprint summary (1780)"
+parent = "formula_type_presence_scores"
+
+[datasets.composition_unknown_scores]
+tier = "scratch"
+path = "composition_unknown_scores.jsonl"
+phase = "explore"
+description = "STEPT1i: per-id bag/core/motif_class (+ fingerprint fields; no full text)"
+parent = "composition_unknown_metrics"
+
+[datasets.composition_unknown_sample]
+tier = "scratch"
+path = "composition_unknown_sample.jsonl"
+phase = "explore"
+description = "STEPT1i: undecided stratified text sample (truncated; optional fp_cluster_id)"
+parent = "composition_unknown_metrics"
+
+[datasets.empty_band_metrics]
+tier = "scratch"
+path = "empty_band_metrics.jsonl"
+phase = "semi"
+description = "STEPT1j: empty-band type/length/flags + fingerprint fp_cut sweep (1780)"
+parent = "composition_unknown_scores"
+
+[datasets.empty_band_scores]
+tier = "scratch"
+path = "empty_band_scores.jsonl"
+phase = "explore"
+description = "STEPT1j: per-id empty characterisation (+ operating fp_cluster; no full text)"
+parent = "empty_band_metrics"
+
+[datasets.empty_band_sample]
+tier = "scratch"
+path = "empty_band_sample.jsonl"
+phase = "explore"
+description = "STEPT1j: stratified empty text sample for NOTES reading (truncated)"
+parent = "empty_band_metrics"
+
+[datasets.empty_band_retrieval_metrics]
+tier = "scratch"
+path = "empty_band_retrieval_metrics.jsonl"
+phase = "semi"
+description = "STEPT1j2: empty-band R1 harvest + L1 refit P-bands × ES type (diagnostic)"
+parent = "empty_band_scores"
+
+[datasets.empty_band_retrieval_scores]
+tier = "scratch"
+path = "empty_band_retrieval_scores.jsonl"
+phase = "explore"
+description = "STEPT1j2: per-id empty R1/L1 proba + high/grey/low (no full text)"
+parent = "empty_band_retrieval_metrics"
+
 [datasets.example_input]
 tier = "warm"
 path = "datasets/corpus/raw_input.jsonl"
