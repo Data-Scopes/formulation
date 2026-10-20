@@ -394,6 +394,41 @@ phase = "explore"
 description = "STEPT1k: per-id align scores for rekest gold + negative sample (no full resolution text)"
 parent = "formula_type_requeste_metrics"
 
+[datasets.requeste_fp_review_xlsx]
+tier = "scratch"
+path = "requeste_fp_review.xlsx"
+phase = "explore"
+description = "STEPT1k2: human scoring workbook — 30-case stratified priority sample of the 103 requeste-opener false positives (to_score sheet) + 6 known-gold calibration rows (calibration sheet); judges whether ES gold is label-incomplete, not model error"
+parent = "formula_type_requeste_scores"
+
+[datasets.requeste_fp_review_meta]
+tier = "scratch"
+path = "requeste_fp_review_meta.jsonl"
+phase = "semi"
+description = "STEPT1k2: build stats for requeste FP review workbook (to_score / calibration row counts)"
+parent = "requeste_fp_review_xlsx"
+
+[datasets.requeste_fp_verdicts]
+tier = "scratch"
+path = "requeste_fp_verdicts.jsonl"
+phase = "semi"
+description = "STEPT1k2: human verdicts (bearing/mention/unrelated/ambiguous) ingested from requeste_fp_review_xlsx to_score sheet + corrected-FP-rate summary; decides whether the <=0.05 FP gate measures model error or ES label completeness"
+parent = "requeste_fp_review_xlsx"
+
+[datasets.requeste_subtype_metrics]
+tier = "scratch"
+path = "requeste_subtype_metrics.jsonl"
+phase = "semi"
+description = "STEPT1l: requeste+ routing subtype characterisation (referred / granted_direct / routing_unclear) over model-detected requeste+ (STEPT1k pred==True on ES rekest gold)"
+parent = "formula_type_requeste_scores"
+
+[datasets.requeste_subtype_scores]
+tier = "scratch"
+path = "requeste_subtype_scores.jsonl"
+phase = "semi"
+description = "STEPT1l: per-id requeste+ routing subtype + routing flags (no full resolution text)"
+parent = "formula_type_requeste_scores"
+
 [datasets.formula_period_bin_metrics]
 tier = "scratch"
 path = "formula_period_bin_metrics.jsonl"

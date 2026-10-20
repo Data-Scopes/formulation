@@ -1,7 +1,7 @@
 # T1 — Unknown-first typology (Track T spine)
 
-**Status:** active (STEPT1k — measure/accept requeste opener A; then STEPT1l subtype under requeste+)  
-**Steps:** [STEPT1h](../steps/STEPT1h-unknown-likeliness.md) → [STEPT1i](../steps/STEPT1i-composition-unknown.md) → [STEPT1j](../steps/STEPT1j-empty-band-characterisation.md) → [STEPT1k](../steps/STEPT1k-requeste-formula-type.md) → requeste+ subtypes → task-template / blueprint promotion  
+**Status:** active (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m opened: blueprint promotion)  
+**Steps:** [STEPT1h](../steps/STEPT1h-unknown-likeliness.md) → [STEPT1i](../steps/STEPT1i-composition-unknown.md) → [STEPT1j](../steps/STEPT1j-empty-band-characterisation.md) → [STEPT1k](../steps/STEPT1k-requeste-formula-type.md) → [STEPT1l](../steps/STEPT1l-requeste-subtype-characterisation.md) → [STEPT1m](../steps/STEPT1m-blueprint-promotion.md) blueprint promotion  
 **Supersedes as driver:** up-front closed inventories; formula multiclass heads; flag sieves (STEPT1e1 parked); NER ALIGNED_TO fingerprint as typology instrument.
 
 ## Research object
@@ -59,8 +59,9 @@ L1 / R1 / appointment / advies gold-or-present. Useful triage crosstab; **not** 
 | **T1i** | [STEPT1i-composition-unknown.md](../steps/STEPT1i-composition-unknown.md) | **done** (PASS; proto=2; empty=1329; fp one mass @0.15) |
 | **T1j** | [STEPT1j-empty-band-characterisation.md](../steps/STEPT1j-empty-band-characterisation.md) | **done** (PASS; rekest-headed multi-pocket; fp@0.45 sample-only) |
 | **T1j2** | [STEPT1j2-empty-band-retrieval-probe.md](../steps/STEPT1j2-empty-band-retrieval-probe.md) | **done** (PASS; R1/L1 ~low on empty; contrast ≠ cluster) |
-| **T1k** | [STEPT1k-requeste-formula-type.md](../steps/STEPT1k-requeste-formula-type.md) | **active** — accept requeste opener vs ES rekest |
-| T1l | (requeste+ subtype characterisation — TBD) | Subtypes under requeste+ (mirror STEPT1f) |
+| **T1k** | [STEPT1k-requeste-formula-type.md](../steps/STEPT1k-requeste-formula-type.md) | **done** (A accepted; recall 0.898 PASS, FP 0.206 accepted not fixed) |
+| **T1l** | [STEPT1l-requeste-subtype-characterisation.md](../steps/STEPT1l-requeste-subtype-characterisation.md) | **done** (PASS; referred 0.194 / granted_direct 0.709 / routing_unclear 0.050; length separates) |
+| **T1m** | [STEPT1m-blueprint-promotion.md](../steps/STEPT1m-blueprint-promotion.md) | **not started** — wire requeste into accepted core, re-run STEPT1i 3-way, promote if low-noise |
 
 ## Out of scope here
 

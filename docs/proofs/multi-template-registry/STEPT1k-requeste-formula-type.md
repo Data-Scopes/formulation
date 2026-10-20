@@ -36,6 +36,50 @@ Operating cut = 4.5 (p20 holdout positive scores). n_gold=74205 (n_bootstrap=593
 - **Open question this raises (sharper than the design question it replaces):** is the ≤0.05 FP gate reachable *at all* against ES-derived gold? Four independent signals (slot-cloud DAG, wording substring, document TF-IDF+LR, and every combination tried) hit a floor near 0.04–0.05 FP only by pushing recall below the 0.70 floor. That is the pattern expected if some share of the 500 "negatives" are genuinely requeste-opener-bearing resolutions that ES did not type as `rekest` — negatives are defined solely by ES label absence, and the proposition_type scheme was an administrative construction not always cleanly maintained. If so the gate measures label completeness as much as model error, and the ≤0.05 target may be unreachable in principle for any formula type measured this way. Worth settling before another type is gated on it.
 - **Carries forward:** (1) the decision-type-vs-proposition_type tension applies beyond requeste (Track T0 typology is keyed to `proposition_type`); (2) the FP-gate-vs-label-completeness question above. Both belong to T1l / later typology work, not re-litigating per step.
 
+## STEPT1k2 addendum (2026-10-20) — the open question, settled by hand-read
+
+The open question above ("is the ≤0.05 FP gate reachable at all against ES-derived
+gold?") was settled by hand-reading, not more compute.
+
+**Method:** `scripts/build_requeste_fp_review_xlsx.py` wrote a workbook with a
+30-case `to_score` sheet — stratified by score band × `goedgevonden` marker from
+the 103 FPs — plus a 6-case `calibration` sheet of known ES-rekest gold positives
+(unmarked, self-check only). Human read each case's opener and full text and
+verdicted: `bearing` (genuinely opens with a read-requeste clause → ES gold is
+incomplete here), `mention` (requeste named later, not the opener), `unrelated`
+(alignment noise), `ambiguous`. `scripts/ingest_requeste_fp_review_xlsx.py` reads
+the filled workbook, reports calibration accuracy, and computes the FP rate
+corrected for the share judged `bearing`, with a Wilson 95% CI.
+
+**Result:**
+
+| Check | Result |
+|---|---|
+| Calibration (6 known gold, expect `bearing`) | **6/6 (100%)** — reviewer judgment is reliable |
+| to_score judged | 29/30 (17 `unrelated`, 12 `bearing`) |
+| Corrected FP rate | **0.121**, 95% CI **0.084–0.153** |
+| vs measured 0.206 / gate 0.05 | **not_rescued** — even the CI lower bound (0.084) clears the 0.05 gate by a wide margin |
+
+**Decision:** The ≤0.05 FP gate is **not reachable** for `requeste_geleesen` by
+crediting ES label gaps. Of the FPs sampled, the majority (17/29, 59%) are
+genuine alignment noise — the opener-shaped slot cloud firing on structurally
+similar but requeste-unrelated text — not resolutions ES mislabeled. A real but
+minority share (12/29, 41%) are ES gold gaps, which lowers the *true* FP rate
+from 0.206 to roughly 0.12, but that correction does not get close to 0.05 even
+at its most favorable CI bound. **Keep the STEPT1k judgment as-is** (A accepted
+on recall; FP recorded as a known, diagnosed limitation) — this addendum
+confirms the FP is predominantly real model imprecision on the decision-type
+confound (see root cause above), not primarily a label-completeness artifact.
+Do not fold the 0.121 corrected figure into pipeline metrics — it is a 29-case
+hand-read estimate, not a recomputed gate.
+
+**Carries forward:** the ≤0.05 FP gate, as currently defined (N=500 negatives
+from label-absence alone), is a demonstrably strict bar even after correcting
+for gold-label incompleteness — future formula types hitting a similar FP floor
+should not default to "probably unmeasurable because of ES gaps" without a
+hand-read check like this one; the gap share can be real (41% here) without
+being the dominant explanation.
+
 ## Next
 
 - **STEPT1l** — subtype characterisation under requeste+ (mirror STEPT1f).

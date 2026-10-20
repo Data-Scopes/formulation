@@ -2,7 +2,7 @@
 
 Headlines only. Keep this file short. Full plans, milestones, and step guides live under [`plans/`](plans/) — see dighum_template wisdom [cost-sensitive-agent-workflow](../../wisdom/topics/cost-sensitive-agent-workflow.md).
 
-One step per session. **STEPT1k done** — requeste opener accepted (A) on recall (0.898); FP (0.206) accepted as a known decision-type confound, not fixed (see proof NOTES). **STEPT1l next** — subtype under requeste+. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
+One step per session. **STEPT1k done** — requeste opener accepted (A) on recall (0.898); FP (0.206) accepted as a known decision-type confound, not fixed (see proof NOTES). **STEPT1k2 done** — hand-read settled the open "is the gate reachable?" question: corrected FP 0.121 (CI 0.084–0.153), gate not rescued even crediting ES label gaps. **STEPT1l done** — requeste+ routing subtypes (referred 0.194 / granted_direct 0.709 / routing_unclear 0.050) separate structurally (length +93 words referred vs granted); stop, no new A. STEPT1e1 parked. Track L **parked**. F/M1 paused; R1 judged.
 
 Cross-cutting: [`plans/formula-pipeline.md`](plans/formula-pipeline.md). Boundary evolution: [`plans/milestones/S1-formula-boundary-evolution.md`](plans/milestones/S1-formula-boundary-evolution.md), [`docs/formula-boundary-evolution.md`](docs/formula-boundary-evolution.md). Retrieval: [`plans/milestones/R1-aanstelling-retrieval.md`](plans/milestones/R1-aanstelling-retrieval.md), [`plans/milestones/L1-missive-receipt-retrieval.md`](plans/milestones/L1-missive-receipt-retrieval.md). Research notions: [`docs/formula-conceptual-overview.md`](docs/formula-conceptual-overview.md). Template **design questions** (north star, not a checklist): [`docs/template-design-questions.md`](docs/template-design-questions.md).
 
@@ -46,7 +46,7 @@ Shared machinery recurs: **character-level tolerance**, **manifest + provenance*
 | M2 Building-block criteria | [M2-building-blocks.md](plans/milestones/M2-building-blocks.md) | not started |
 | M3 Composition + position | [M3-composition-and-position.md](plans/milestones/M3-composition-and-position.md) | not started |
 | T0 Typology structural profile | [STEPT0-typology-structural-profile.md](plans/steps/STEPT0-typology-structural-profile.md) | done (1780 provisional) |
-| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (STEPT1k done: requeste opener A; STEPT1l subtype under requeste+ next) |
+| T1 Unknown-first typology | [T1-unknown-first.md](plans/milestones/T1-unknown-first.md) | **active** (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m opened: blueprint promotion not started) |
 
 ## Progress checklist
 
@@ -125,7 +125,9 @@ Survey + dighum shell: done (see pipeline plan). Do not lift the `republic_clean
 | T1j | [STEPT1j-empty-band-characterisation.md](plans/steps/STEPT1j-empty-band-characterisation.md) | Empty-band type/length/flags + fp_cut sweep + sample | **done** (PASS; rekest-headed; fp@0.45 sample-only) |
 | T1j2 | [STEPT1j2-empty-band-retrieval-probe.md](plans/steps/STEPT1j2-empty-band-retrieval-probe.md) | Empty × frozen R1/L1 P-bands × ES type | **done** (PASS; both ~low; L1 soft on empty missive grey) |
 | T1k | [STEPT1k-requeste-formula-type.md](plans/steps/STEPT1k-requeste-formula-type.md) | Measured requeste opener vs ES rekest (recall / wording / FP / cloud) | **done** (A accepted; recall 0.898 PASS, FP 0.206 accepted not fixed — decision-type confound) |
-| T1l | (requeste+ subtype characterisation — TBD) | Subtypes under requeste+ (mirror STEPT1f) | **active** |
+| T1k2 | (proof addendum, no separate step guide) | Hand-read FP adjudication xlsx: is the 0.05 FP gate reachable against ES gold at all? | **done** (not_rescued; corrected FP 0.121, CI 0.084–0.153) |
+| T1l | [STEPT1l-requeste-subtype-characterisation.md](plans/steps/STEPT1l-requeste-subtype-characterisation.md) | Subtypes under requeste+ (mirror STEPT1f) | **done** (PASS; referred 0.194 / granted_direct 0.709 / routing_unclear 0.050; length +93 words referred vs granted) |
+| T1m | [STEPT1m-blueprint-promotion.md](plans/steps/STEPT1m-blueprint-promotion.md) | Requeste joins accepted core; 3-way composition-unknown re-run; promote if low-noise | **not started** |
 
 ## Data paths
 
@@ -176,6 +178,11 @@ Logical names live in [`data_manifest.toml`](data_manifest.toml). Verify with `u
 | `rekest_es_gold` | explore | STEPT1k: ES rekest ids + flat text |
 | `formula_type_requeste_metrics` | semi | STEPT1k: requeste opener recall / FP / cloud |
 | `formula_type_requeste_scores` | explore | STEPT1k: per-id align scores |
+| `requeste_fp_review_xlsx` | explore | STEPT1k2: hand-read workbook (30 FP + 6 calibration) |
+| `requeste_fp_review_meta` | semi | STEPT1k2: build stats for the review workbook |
+| `requeste_fp_verdicts` | semi | STEPT1k2: ingested verdicts + corrected-FP-rate summary |
+| `requeste_subtype_metrics` | semi | STEPT1l: requeste+ routing subtype characterisation |
+| `requeste_subtype_scores` | semi | STEPT1l: per-id requeste+ routing subtype + flags |
 | `org_annotations` | frozen | republic_ner ORG NER mentions (`tag_text`+`inv`); path in local.toml → 2TB |
 | `org_entities` | frozen | Canonical ORG ids/names; path in local.toml → republic_ner data.bak |
 | `inventory_metadata` | frozen | inventory_num → year_start/year_end; local.toml → republic_ner data.bak |
