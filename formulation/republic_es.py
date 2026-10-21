@@ -68,7 +68,10 @@ class ElasticsearchConfig:
     scheme: str = "https"
     port: int = 443
     url_prefix: str = "elasticsearch"
-    resolutions_index: str = "full_resolutions-2026-03-25"
+    # Must match the generation `resolutions_flat` is, or id-keyed label joins
+    # silently attach labels to the wrong text (~31% at 2026-03-25). See the
+    # note in data_manifest.toml [elasticsearch].
+    resolutions_index: str = "full_resolutions-2025-02-20"
     session_metadata_index: str = "session_metadata-2026-03-25"
     session_text_regions_index: str = "session_text_regions-2026-03-25"
     timeout: int = DEFAULT_TIMEOUT
@@ -99,7 +102,7 @@ def load_elasticsearch_config() -> ElasticsearchConfig:
         port=int(raw.get("port") or 443),
         url_prefix=str(raw.get("url_prefix") or "elasticsearch"),
         resolutions_index=str(
-            raw.get("resolutions_index") or "full_resolutions-2026-03-25"
+            raw.get("resolutions_index") or "full_resolutions-2025-02-20"
         ),
         session_metadata_index=str(
             raw.get("session_metadata_index") or "session_metadata-2026-03-25"

@@ -27,6 +27,7 @@ from formulation.formula_type_presence import (
     DEFAULT_YEAR,
     fit_advies_presence_model,
     fit_appointment_presence_model,
+    fit_missive_presence_model,
     fit_opening_presence_model,
     fit_requeste_presence_model,
     fixture_presence_frames,
@@ -35,6 +36,7 @@ from formulation.formula_type_presence import (
     score_presence_frame,
     summarize_presence,
 )
+from formulation.missive_formula_type import FORMULA_TYPE_ID as MISSIVE_ID
 from formulation.requeste_formula_type import FORMULA_TYPE_ID as REQUESTE_ID
 
 
@@ -67,6 +69,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Skip accepted requeste opener (STEPT1k)",
     )
     p.add_argument(
+        "--no-missive",
+        action="store_true",
+        help="Skip accepted missive opener (STEPT1n)",
+    )
+    p.add_argument(
         "--limit",
         type=int,
         default=None,
@@ -91,6 +98,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Override requeste operating cut (default: frozen STEPT1k)",
     )
     p.add_argument(
+        "--missive-cut",
+        type=float,
+        default=None,
+        help="Override missive operating cut (default: frozen STEPT1n)",
+    )
+    p.add_argument(
         "--candidate-cap",
         type=int,
         default=CANDIDATE_CAP_PER_BIN,
@@ -112,6 +125,8 @@ def _build_models(args: argparse.Namespace) -> list[dict[str, Any]]:
             models = [m for m in models if m["formula_type_id"] != ADVIES_ID]
         if args.no_requeste:
             models = [m for m in models if m["formula_type_id"] != REQUESTE_ID]
+        if args.no_missive:
+            models = [m for m in models if m["formula_type_id"] != MISSIVE_ID]
         if args.no_openings:
             models = [m for m in models if not m.get("provisional")]
         return models
@@ -134,6 +149,13 @@ def _build_models(args: argparse.Namespace) -> list[dict[str, Any]]:
             fit_requeste_presence_model(
                 random_state=int(args.random_state),
                 cut=args.requeste_cut,
+            )
+        )
+    if not args.no_missive:
+        models.append(
+            fit_missive_presence_model(
+                random_state=int(args.random_state),
+                cut=args.missive_cut,
             )
         )
     if not args.no_openings:
@@ -179,6 +201,8 @@ def main(argv: list[str] | None = None) -> None:
         parents.extend(["advies_es_gold", "formula_type_advies_metrics"])
     if any(m["formula_type_id"] == REQUESTE_ID for m in models):
         parents.extend(["rekest_es_gold", "formula_type_requeste_metrics"])
+    if any(m["formula_type_id"] == MISSIVE_ID for m in models):
+        parents.extend(["missive_es_gold", "formula_type_missive_metrics"])
 
     save_semi_structured(
         [metrics],
@@ -189,7 +213,8 @@ def main(argv: list[str] | None = None) -> None:
             f"STEPT1b presence metrics year={year} "
             f"n={metrics.get('n_resolutions')} types={metrics.get('n_types')} "
             f"advies={metrics.get('advies_accepted')} "
-            f"requeste={metrics.get('requeste_accepted')}"
+            f"requeste={metrics.get('requeste_accepted')} "
+            f"missive={metrics.get('missive_accepted')}"
         ),
     )
     save_semi_structured(

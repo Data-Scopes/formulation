@@ -44,6 +44,12 @@ from formulation.formula_period_bins import (
     score_single_cloud,
     year_bin,
 )
+from formulation.missive_formula_type import (
+    FORMULA_TYPE_ID as MISSIVE_ID,
+    build_missive_cloud,
+    load_missive_gold_18c,
+    score_text as score_missive_text,
+)
 from formulation.requeste_formula_type import (
     FORMULA_TYPE_ID as REQUESTE_ID,
     build_requeste_cloud,
@@ -55,6 +61,7 @@ DEFAULT_YEAR = POC_YEAR
 APPOINTMENT_CUT_FALLBACK = FALLBACK_CUT
 ADVIES_CUT_FALLBACK = FALLBACK_CUT
 REQUESTE_CUT_FALLBACK = FALLBACK_CUT
+MISSIVE_CUT_FALLBACK = FALLBACK_CUT
 
 
 def load_year_slice(
@@ -109,6 +116,11 @@ def load_frozen_advies_cut() -> float | None:
 def load_frozen_requeste_cut() -> float | None:
     """Read ``operating_cut`` from STEPT1k metrics when present on disk."""
     return _load_frozen_cut("formula_type_requeste_metrics")
+
+
+def load_frozen_missive_cut() -> float | None:
+    """Read ``operating_cut`` from STEPT1n metrics when present on disk."""
+    return _load_frozen_cut("formula_type_missive_metrics")
 
 
 def fit_appointment_presence_model(
@@ -241,6 +253,49 @@ def fit_requeste_presence_model(
     }
 
 
+def fit_missive_presence_model(
+    *,
+    random_state: int = RNG,
+    cut: float | None = None,
+) -> dict[str, Any]:
+    """Bootstrap missive cloud from ES missive gold; freeze cut from T1n or recalibrate."""
+    gold = load_missive_gold_18c()
+    boot, hold = split_bootstrap_holdout(
+        gold, holdout_frac=HOLDOUT_FRAC, random_state=random_state
+    )
+    cloud, notes = build_missive_cloud(
+        boot["resolutions_text"].astype(str).tolist(),
+        year_min=YEAR_MIN,
+        year_max=YEAR_MAX,
+    )
+    frozen = load_frozen_missive_cut() if cut is None else None
+    if cut is not None:
+        operating_cut = float(cut)
+        cut_rule = "cli_override"
+    elif frozen is not None:
+        operating_cut = float(frozen)
+        cut_rule = "frozen_stept1n_metrics"
+    else:
+        hold_scores = [
+            score_missive_text(t, cloud)["score"]
+            for t in hold["resolutions_text"].astype(str).tolist()
+        ]
+        operating_cut = float(calibrate_cut(hold_scores, fallback=MISSIVE_CUT_FALLBACK))
+        cut_rule = "p20_holdout_positive_scores"
+    return {
+        "formula_type_id": MISSIVE_ID,
+        "role": "missive",
+        "provisional": False,
+        "cloud": cloud,
+        "notes": notes,
+        "operating_cut": operating_cut,
+        "operating_cut_rule": cut_rule,
+        "score_fn": "missive",
+        "n_bootstrap": int(len(boot)),
+        "n_holdout": int(len(hold)),
+    }
+
+
 def fit_opening_presence_model(
     family: str,
     year: int,
@@ -300,6 +355,8 @@ def score_with_presence_model(text: str, model: dict[str, Any]) -> float:
         return float(score_advies_text(text, model["cloud"])["score"])
     if score_fn == "requeste":
         return float(score_requeste_text(text, model["cloud"])["score"])
+    if score_fn == "missive":
+        return float(score_missive_text(text, model["cloud"])["score"])
     return float(score_single_cloud(text, model["cloud"]))
 
 
@@ -450,6 +507,10 @@ def summarize_presence(
             m.get("formula_type_id") == REQUESTE_ID and not m.get("provisional")
             for m in models
         ),
+        "missive_accepted": any(
+            m.get("formula_type_id") == MISSIVE_ID and not m.get("provisional")
+            for m in models
+        ),
         "openings_provisional": any(bool(m.get("provisional")) for m in models),
         "types": types_out,
         "bags": {
@@ -570,7 +631,23 @@ def fixture_presence_models() -> list[dict[str, Any]]:
         "operating_cut_rule": "fixture",
         "score_fn": "requeste",
     }
-    models = [appt, advies, requeste]
+    mis_texts = [
+        frame.iloc[2]["resolutions_text"],
+        "Ontfangen een missive van den Resident tot Hamburg",
+        "ontfangen eene missive van den Gouverneur",
+    ]
+    mis_cloud, mis_notes = build_missive_cloud(mis_texts)
+    missive = {
+        "formula_type_id": MISSIVE_ID,
+        "role": "missive",
+        "provisional": False,
+        "cloud": mis_cloud,
+        "notes": mis_notes,
+        "operating_cut": 2.0,
+        "operating_cut_rule": "fixture",
+        "score_fn": "missive",
+    }
+    models = [appt, advies, requeste, missive]
     for family, text_idx in (("ontfangen_start", 2), ("requeste_start", 3)):
         meta = OPENING_FAMILIES[family]
         texts = [frame.iloc[text_idx]["resolutions_text"], meta["canonic"]]

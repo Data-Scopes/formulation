@@ -36,7 +36,14 @@ host = "annotation.republic-caf.diginfra.org"
 scheme = "https"
 port = 443
 url_prefix = "elasticsearch"
-resolutions_index = "full_resolutions-2026-03-25"
+# Pinned to the generation `resolutions_flat` actually is. Resolution ids are
+# NOT stable across index generations: the same session-N-num-N-resolution-N id
+# carries different text in different builds. Measured on 150 random 1780 ids,
+# flat text matches 2025-02-20 at 150/150 (100%) but 2026-03-25 at only
+# 101/146 (69%), with 4 ids absent. Querying a newer index and joining labels
+# to flat by id therefore mislabels ~31% of gold rows. Do not bump this
+# without re-checking the match rate and re-fetching every *_es_gold dataset.
+resolutions_index = "full_resolutions-2025-02-20"
 session_metadata_index = "session_metadata-2026-03-25"
 session_text_regions_index = "session_text_regions-2026-03-25"
 timeout = 60
@@ -393,6 +400,76 @@ path = "formula_type_requeste_scores.jsonl"
 phase = "explore"
 description = "STEPT1k: per-id align scores for rekest gold + negative sample (no full resolution text)"
 parent = "formula_type_requeste_metrics"
+
+[datasets.es_gold_recheck_metrics]
+tier = "scratch"
+path = "es_gold_recheck_metrics.jsonl"
+phase = "semi"
+description = "Clean stratified re-measurement (recall/FP + Wilson CI) of accepted formula types after the 2026-10-21 ES index re-pin; compares against the stale cross-generation metrics"
+parent = "resolutions_flat"
+
+[datasets.formula_retrieval_arms_metrics]
+tier = "scratch"
+path = "formula_retrieval_arms_metrics.jsonl"
+phase = "semi"
+description = "STEPT1q: per-arm recall/FP (+ Wilson CI) for substring / TF-IDF window / slot-cloud+DAG on one formula, measured on clean post-re-pin stratified gold; arm deltas, inter-arm span IoU, FP overlap"
+parent = "resolutions_flat"
+
+[datasets.formula_retrieval_arms_scores]
+tier = "scratch"
+path = "formula_retrieval_arms_scores.jsonl"
+phase = "explore"
+description = "STEPT1q: per-row fire flag + span token indices for each retrieval arm (no full resolution text)"
+parent = "formula_retrieval_arms_metrics"
+
+[datasets.formula_span_review_xlsx]
+tier = "scratch"
+path = "formula_span_review.xlsx"
+phase = "explore"
+description = "STEPT1q2: human span-scoring workbook — rows stratified by inter-arm agreement, each arm's span rendered inline for hand-read span accuracy"
+parent = "formula_retrieval_arms_scores"
+
+[datasets.formula_span_review_meta]
+tier = "scratch"
+path = "formula_span_review_meta.jsonl"
+phase = "semi"
+description = "STEPT1q2: build stats for formula_span_review_xlsx (strata, n per stratum, seed, arm cuts)"
+parent = "formula_span_review_xlsx"
+
+[datasets.clause_chain_metrics]
+tier = "scratch"
+path = "clause_chain_metrics.jsonl"
+phase = "semi"
+description = "STEPT1p: clause-chain vs coarse-bag metrics (collapse factor, order stability, appointment welkom/sessie decollapse); form-only vocabulary"
+parent = "resolutions_flat"
+
+[datasets.clause_chain_scores]
+tier = "scratch"
+path = "clause_chain_scores.jsonl"
+phase = "explore"
+description = "STEPT1p: per-resolution ordered clause chain + unordered bag (no full resolution text)"
+parent = "clause_chain_metrics"
+
+[datasets.missive_es_gold]
+tier = "scratch"
+path = "missive_es_gold.jsonl"
+phase = "explore"
+description = "STEPT1n: ES proposition_type=missive ids (1705–1796) joined to resolutions_flat text; frozen gold for missive opener formula-type eval"
+parent = "resolutions_flat"
+
+[datasets.formula_type_missive_metrics]
+tier = "scratch"
+path = "formula_type_missive_metrics.jsonl"
+phase = "semi"
+description = "STEPT1n: missive opener (slot-cloud+DAG) recall vs ES missive gold, wording baseline delta, FP on N=500 negatives"
+parent = "missive_es_gold"
+
+[datasets.formula_type_missive_scores]
+tier = "scratch"
+path = "formula_type_missive_scores.jsonl"
+phase = "explore"
+description = "STEPT1n: per-id align scores for missive gold + negative sample (no full resolution text)"
+parent = "formula_type_missive_metrics"
 
 [datasets.requeste_fp_review_xlsx]
 tier = "scratch"

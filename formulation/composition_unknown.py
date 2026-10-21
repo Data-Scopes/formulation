@@ -24,6 +24,7 @@ from formulation.content_fingerprint import (
     nearest_neighbor_sims,
 )
 from formulation.formula_type_composition_graph import COMPOSITION_ROOT
+from formulation.missive_formula_type import FORMULA_TYPE_ID as MISSIVE_ID
 from formulation.ontfangen_partition import load_presence_universe
 from formulation.requeste_formula_type import FORMULA_TYPE_ID as REQUESTE_ID
 
@@ -36,7 +37,9 @@ DEFAULT_EXEMPLAR_CAP = 40
 # STEPT1m: requeste_geleesen (STEPT1k, frozen cut 4.5) joins the accepted
 # core alongside appointment_installation / advies_geleesen. Only the
 # opener — STEPT1l's routing subtypes stay characteristics, not core types.
-ACCEPTED_TYPE_IDS = frozenset({APPOINTMENT_ID, ADVIES_ID, REQUESTE_ID})
+# STEPT1n: missive_ontfangen (STEPT1k-style eval vs ES proposition_type
+# missive) joins the same way.
+ACCEPTED_TYPE_IDS = frozenset({APPOINTMENT_ID, ADVIES_ID, REQUESTE_ID, MISSIVE_ID})
 
 MOTIF_FILLER = "filler_star"
 MOTIF_KNOWN = "known_sparse"
