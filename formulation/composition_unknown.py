@@ -27,6 +27,10 @@ from formulation.formula_type_composition_graph import COMPOSITION_ROOT
 from formulation.missive_formula_type import FORMULA_TYPE_ID as MISSIVE_ID
 from formulation.ontfangen_partition import load_presence_universe
 from formulation.requeste_formula_type import FORMULA_TYPE_ID as REQUESTE_ID
+from formulation.rapport_formula_type import FORMULA_TYPE_ID as RAPPORT_ID
+from formulation.requeste_op_de_formula_type import (
+    FORMULA_TYPE_ID as REQUESTE_OP_DE_ID,
+)
 
 DEFAULT_YEAR = POC_YEAR
 DEFAULT_MIN_SUPPORT = 5
@@ -39,7 +43,20 @@ DEFAULT_EXEMPLAR_CAP = 40
 # opener — STEPT1l's routing subtypes stay characteristics, not core types.
 # STEPT1n: missive_ontfangen (STEPT1k-style eval vs ES proposition_type
 # missive) joins the same way.
-ACCEPTED_TYPE_IDS = frozenset({APPOINTMENT_ID, ADVIES_ID, REQUESTE_ID, MISSIVE_ID})
+# STEPT1t: requeste_op_de (STEPT1s short opener, frozen cut 4.5) joins as a
+# sibling of requeste_geleesen — dual-opener presence bag, not a merge.
+# STEPT1x: rapport_gehoord (STEPT1w, frozen cut 7.5) joins — STEPT1u residual
+# empty-band skeleton; empty shrink is the interesting gate vs STEPT1t.
+ACCEPTED_TYPE_IDS = frozenset(
+    {
+        APPOINTMENT_ID,
+        ADVIES_ID,
+        REQUESTE_ID,
+        MISSIVE_ID,
+        REQUESTE_OP_DE_ID,
+        RAPPORT_ID,
+    }
+)
 
 MOTIF_FILLER = "filler_star"
 MOTIF_KNOWN = "known_sparse"

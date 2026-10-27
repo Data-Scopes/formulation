@@ -1,8 +1,9 @@
 """STEPT1b: score a year slice for formula-type presence + popularity weights.
 
-Runs accepted appointment + advies + requeste models (frozen STEPT1a /
-STEPT1a2 / STEPT1k cuts when available) and optional provisional opening
-families so co-occurrence bags can be inspected.
+Runs accepted appointment + advies + requeste (+ short opener) + missive +
+rapport models (frozen STEPT1a / STEPT1a2 / STEPT1k / STEPT1s / STEPT1n /
+STEPT1w cuts when available) and optional provisional opening families so
+co-occurrence bags can be inspected.
 """
 
 from __future__ import annotations
@@ -56,12 +57,26 @@ from formulation.requeste_formula_type import (
     load_rekest_gold_18c,
     score_text as score_requeste_text,
 )
+from formulation.rapport_formula_type import (
+    FORMULA_TYPE_ID as RAPPORT_ID,
+    build_rapport_cloud,
+    load_rapport_gold_18c,
+    score_text as score_rapport_text,
+)
+from formulation.requeste_op_de_formula_type import (
+    FORMULA_TYPE_ID as REQUESTE_OP_DE_ID,
+    build_requeste_op_de_cloud,
+    load_short_requeste_gold_18c,
+    score_text as score_requeste_op_de_text,
+)
 
 DEFAULT_YEAR = POC_YEAR
 APPOINTMENT_CUT_FALLBACK = FALLBACK_CUT
 ADVIES_CUT_FALLBACK = FALLBACK_CUT
 REQUESTE_CUT_FALLBACK = FALLBACK_CUT
+REQUESTE_OP_DE_CUT_FALLBACK = FALLBACK_CUT
 MISSIVE_CUT_FALLBACK = FALLBACK_CUT
+RAPPORT_CUT_FALLBACK = FALLBACK_CUT
 
 
 def load_year_slice(
@@ -121,6 +136,16 @@ def load_frozen_requeste_cut() -> float | None:
 def load_frozen_missive_cut() -> float | None:
     """Read ``operating_cut`` from STEPT1n metrics when present on disk."""
     return _load_frozen_cut("formula_type_missive_metrics")
+
+
+def load_frozen_requeste_op_de_cut() -> float | None:
+    """Read ``operating_cut`` from STEPT1s metrics when present on disk."""
+    return _load_frozen_cut("formula_type_requeste_op_de_metrics")
+
+
+def load_frozen_rapport_cut() -> float | None:
+    """Read ``operating_cut`` from STEPT1w metrics when present on disk."""
+    return _load_frozen_cut("formula_type_rapport_metrics")
 
 
 def fit_appointment_presence_model(
@@ -296,6 +321,96 @@ def fit_missive_presence_model(
     }
 
 
+def fit_requeste_op_de_presence_model(
+    *,
+    random_state: int = RNG,
+    cut: float | None = None,
+) -> dict[str, Any]:
+    """Bootstrap short requeste cloud from head-filtered rekest; freeze T1s cut."""
+    gold = load_short_requeste_gold_18c()
+    boot, hold = split_bootstrap_holdout(
+        gold, holdout_frac=HOLDOUT_FRAC, random_state=random_state
+    )
+    cloud, notes = build_requeste_op_de_cloud(
+        boot["resolutions_text"].astype(str).tolist(),
+        year_min=YEAR_MIN,
+        year_max=YEAR_MAX,
+    )
+    frozen = load_frozen_requeste_op_de_cut() if cut is None else None
+    if cut is not None:
+        operating_cut = float(cut)
+        cut_rule = "cli_override"
+    elif frozen is not None:
+        operating_cut = float(frozen)
+        cut_rule = "frozen_stept1s_metrics"
+    else:
+        hold_scores = [
+            score_requeste_op_de_text(t, cloud)["score"]
+            for t in hold["resolutions_text"].astype(str).tolist()
+        ]
+        operating_cut = float(
+            calibrate_cut(hold_scores, fallback=REQUESTE_OP_DE_CUT_FALLBACK)
+        )
+        cut_rule = "p20_holdout_positive_scores"
+    return {
+        "formula_type_id": REQUESTE_OP_DE_ID,
+        "role": "requeste_op_de",
+        "provisional": False,
+        "cloud": cloud,
+        "notes": notes,
+        "operating_cut": operating_cut,
+        "operating_cut_rule": cut_rule,
+        "score_fn": "requeste_op_de",
+        "n_bootstrap": int(len(boot)),
+        "n_holdout": int(len(hold)),
+    }
+
+
+def fit_rapport_presence_model(
+    *,
+    random_state: int = RNG,
+    cut: float | None = None,
+) -> dict[str, Any]:
+    """Bootstrap rapport cloud from ES rapport gold; freeze T1w cut."""
+    gold = load_rapport_gold_18c()
+    boot, hold = split_bootstrap_holdout(
+        gold, holdout_frac=HOLDOUT_FRAC, random_state=random_state
+    )
+    cloud, notes = build_rapport_cloud(
+        boot["resolutions_text"].astype(str).tolist(),
+        year_min=YEAR_MIN,
+        year_max=YEAR_MAX,
+    )
+    frozen = load_frozen_rapport_cut() if cut is None else None
+    if cut is not None:
+        operating_cut = float(cut)
+        cut_rule = "cli_override"
+    elif frozen is not None:
+        operating_cut = float(frozen)
+        cut_rule = "frozen_stept1w_metrics"
+    else:
+        hold_scores = [
+            score_rapport_text(t, cloud)["score"]
+            for t in hold["resolutions_text"].astype(str).tolist()
+        ]
+        operating_cut = float(
+            calibrate_cut(hold_scores, fallback=RAPPORT_CUT_FALLBACK)
+        )
+        cut_rule = "p20_holdout_positive_scores"
+    return {
+        "formula_type_id": RAPPORT_ID,
+        "role": "rapport",
+        "provisional": False,
+        "cloud": cloud,
+        "notes": notes,
+        "operating_cut": operating_cut,
+        "operating_cut_rule": cut_rule,
+        "score_fn": "rapport",
+        "n_bootstrap": int(len(boot)),
+        "n_holdout": int(len(hold)),
+    }
+
+
 def fit_opening_presence_model(
     family: str,
     year: int,
@@ -355,8 +470,12 @@ def score_with_presence_model(text: str, model: dict[str, Any]) -> float:
         return float(score_advies_text(text, model["cloud"])["score"])
     if score_fn == "requeste":
         return float(score_requeste_text(text, model["cloud"])["score"])
+    if score_fn == "requeste_op_de":
+        return float(score_requeste_op_de_text(text, model["cloud"])["score"])
     if score_fn == "missive":
         return float(score_missive_text(text, model["cloud"])["score"])
+    if score_fn == "rapport":
+        return float(score_rapport_text(text, model["cloud"])["score"])
     return float(score_single_cloud(text, model["cloud"]))
 
 
@@ -511,6 +630,14 @@ def summarize_presence(
             m.get("formula_type_id") == MISSIVE_ID and not m.get("provisional")
             for m in models
         ),
+        "requeste_op_de_accepted": any(
+            m.get("formula_type_id") == REQUESTE_OP_DE_ID and not m.get("provisional")
+            for m in models
+        ),
+        "rapport_accepted": any(
+            m.get("formula_type_id") == RAPPORT_ID and not m.get("provisional")
+            for m in models
+        ),
         "openings_provisional": any(bool(m.get("provisional")) for m in models),
         "types": types_out,
         "bags": {
@@ -571,6 +698,19 @@ def fixture_presence_frames() -> pd.DataFrame:
                 "resolutions_text": "Is ter Vergaderinge gelesen de requeste van",
             },
             {
+                "id": "fix-req-op-de-1",
+                "year": 1780,
+                "resolutions_text": "Op de Requeste van den suppliant is goedgevonden",
+            },
+            {
+                "id": "fix-rapport-1",
+                "year": 1780,
+                "resolutions_text": (
+                    "IS gehoord het rapport van de Heeren Gedeputeerden "
+                    "van Holland"
+                ),
+            },
+            {
                 "id": "fix-plain-1",
                 "year": 1780,
                 "resolutions_text": "Goedgevonden ende verstaen dat men zal",
@@ -580,7 +720,7 @@ def fixture_presence_frames() -> pd.DataFrame:
 
 
 def fixture_presence_models() -> list[dict[str, Any]]:
-    """Appointment + advies + two openings from fixture texts (no parquet)."""
+    """Appointment + advies + requeste siblings + missive + rapport + openings."""
     frame = fixture_presence_frames()
     appt_texts = [
         frame.iloc[0]["resolutions_text"],
@@ -631,6 +771,22 @@ def fixture_presence_models() -> list[dict[str, Any]]:
         "operating_cut_rule": "fixture",
         "score_fn": "requeste",
     }
+    req_op_texts = [
+        frame.iloc[4]["resolutions_text"],
+        "Op de Requeste van de weduwe is goedgevonden",
+        "OP de rekest van den suppliant",
+    ]
+    req_op_cloud, req_op_notes = build_requeste_op_de_cloud(req_op_texts)
+    requeste_op_de = {
+        "formula_type_id": REQUESTE_OP_DE_ID,
+        "role": "requeste_op_de",
+        "provisional": False,
+        "cloud": req_op_cloud,
+        "notes": req_op_notes,
+        "operating_cut": 2.0,
+        "operating_cut_rule": "fixture",
+        "score_fn": "requeste_op_de",
+    }
     mis_texts = [
         frame.iloc[2]["resolutions_text"],
         "Ontfangen een missive van den Resident tot Hamburg",
@@ -647,7 +803,23 @@ def fixture_presence_models() -> list[dict[str, Any]]:
         "operating_cut_rule": "fixture",
         "score_fn": "missive",
     }
-    models = [appt, advies, requeste, missive]
+    rap_texts = [
+        frame.iloc[5]["resolutions_text"],
+        "is gehoort het rapport van de gecommitteerden rakende de saeck",
+        "IS gehoord het rapport van de Heeren Gedeputeerden van Zeeland",
+    ]
+    rap_cloud, rap_notes = build_rapport_cloud(rap_texts)
+    rapport = {
+        "formula_type_id": RAPPORT_ID,
+        "role": "rapport",
+        "provisional": False,
+        "cloud": rap_cloud,
+        "notes": rap_notes,
+        "operating_cut": 2.0,
+        "operating_cut_rule": "fixture",
+        "score_fn": "rapport",
+    }
+    models = [appt, advies, requeste, requeste_op_de, missive, rapport]
     for family, text_idx in (("ontfangen_start", 2), ("requeste_start", 3)):
         meta = OPENING_FAMILIES[family]
         texts = [frame.iloc[text_idx]["resolutions_text"], meta["canonic"]]

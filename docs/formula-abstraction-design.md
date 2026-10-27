@@ -1,6 +1,6 @@
 # Formula abstraction (Doc B: finding and telling apart one formula)
 
-**Status:** design note, rev. 2 (2026-10-21). Companion: [`resolution-graph-design.md`](resolution-graph-design.md) (Doc A). Experiment: **STEPT1q** — single-formula retrieval + discrimination; guide at [`plans/steps/STEPT1q-formula-retrieval.md`](../plans/steps/STEPT1q-formula-retrieval.md), code landed (`formulation/formula_retrieval_arms.py`), **measurement runs pending**, to be judged in `docs/proofs/multi-template-registry/STEPT1q-formula-retrieval.md`.
+**Status:** design note, rev. 2 (2026-10-21) + scaffolding/carriers note (2026-10-22) + L2 ablation note (2026-10-23) + hard-drop result (2026-10-23). Companion: [`resolution-graph-design.md`](resolution-graph-design.md) (Doc A). Experiment: **STEPT1v** soft optional = no-op; **STEPT1v2** hard-drop PASS ([`NOTES`](proofs/multi-template-registry/STEPT1v2-formula-reduction-hard-drop.md)) — no recall hinge; **Requeste** is the FP/specificity hinge; other five slots singly ablatable for recall.
 
 **Rev 2 narrows the scope, because rev 1 overreached.** Rev 1 used formula abstraction to discriminate **resolution types** — TF-IDF over the 31-flag profile, k=12 clustering of 309k resolutions. That is the *combination* question (what a resolution's mix of formulas implies), which is a different and later problem. This doc is now about the prior question only:
 
@@ -32,6 +32,20 @@ Rev 1 treated TF-IDF's IDF premise (rare ⇒ discriminative) as the organising i
 
 These are not in conflict: "rare ⇒ discriminative" answers *which* formula; "frequent ⇒ formulaic" answers *whether* it is one.
 
+### Scaffolding vs type-deciding formulas (composition layer)
+
+Resolution **templates** are mostly built from **standard** opening and decision formulas (high corpus rate: ontfangen / requeste / missive frames, `goedgevonden`-like closes). Those are necessary scaffolding — they do **not** decide the task type. The **less frequent** mid-body / specialised formulas usually carry the type signal.
+
+Consequence (not a contradiction of the table above):
+
+| Layer | Frequent openers/decisions | Rarer type-carriers |
+|-------|----------------------------|---------------------|
+| Catalogue risk | Statistical irrelevance if promoted as *the* type | Variant dissipation if every surface gets an id |
+| Detection | Cover mass; low IDF weight by design | Often **easier to localise** once named (sparse, sharper hinge) |
+| Period | Drift still hits both; period-/inventory-keyed variants, not new ids per decade | Same — wording drift ≠ new type without distributional evidence |
+
+Human naming (ground truth) is required before a rare carrier becomes a `template_id`. Measurements propose; they do not name.
+
 ## The abstraction ladder (at formula level)
 
 | Level | Representation of one formula | Scales? |
@@ -42,7 +56,7 @@ These are not in conflict: "rare ⇒ discriminative" answers *which* formula; "f
 | L3 | **Recurrence-validated skeleton** — a reduced skeleton confirmed by its document frequency across the corpus | Target |
 | L4 | Filler classes induced from context rather than listed | Later |
 
-**Formula reduction (L1→L2) is the core proposal.** Ablate one slot at a time (make it optional via `align_dag(optional_slots=...)`), recalibrate each configuration at its own p20 (`calibrate_cut`, as `clause_chain.build_appointment_clause_specs(per_clause_cuts=True)` already does), and keep the minimal subset that retains localisation. This measures directly how much of a formula's identity rests on one token — the hinge-word question in its proper place, at the formula rather than the resolution level.
+**Formula reduction (L1→L2) is the core proposal.** Ablate one slot at a time, recalibrate each configuration at its own p20 (`calibrate_cut`), and keep the minimal subset that retains localisation. **STEPT1v lesson:** making a slot *optional* via `align_dag(optional_slots=...)` is **not** ablation when the text still matches the full canonic — the DAG prefers the full path and metrics do not move. Real L1→L2 = **hard drop** (remove the slot from the cloud / score a reduced canonic), then recalibrate. Soft optional remains useful for period/OCR skip hypotheses, not for hinge discovery. **STEPT1v2 on `requeste_geleesen`:** hard-drop works (cuts/IoU move); no single-slot recall hinge (phrase is redundant for FN); **Requeste** is a specificity hinge (drop → FP 0.022→0.054, recall rises). Hinge ≠ “required for gold localisation” — distinguish FN-carriers from FP-carriers.
 
 **L2→L3 is where frequency enters as the criterion:** a reduced skeleton is validated if it recurs at high document frequency with stable wording. That also gives a route to formulas nobody has written down yet, since it ranks candidates by recurrence rather than matching a known list. `formula_detection.FormulaSearch` (Track F dependency, STEP1 wired, STEP2+ paused) exists for exactly this.
 

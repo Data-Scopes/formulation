@@ -8,6 +8,31 @@ In REPUBLIC (Resolutions of the Dutch States General), **formulas** are recurrin
 
 They vary in spelling and in variable slots (names, places, dates) while keeping a recognisable skeleton. The research problem is: **find, group, and type those skeletons** across a large historical corpus despite orthographic variation and nested document structure.
 
+### Formula-in-effect (operational — locked 2026-10-26)
+
+A stretch counts as a formula only if **all** hold:
+
+1. **Recurrence** — formulaicity *is* repetition (hapax ≠ formula); see Doc B frequency roles in [`formula-abstraction-design.md`](formula-abstraction-design.md).
+2. **Skeleton** — a reduced hinge under orthographic/OCR drift; fillers do not define the type.
+3. **Function** — a recognisable procedural/discourse move (open, refer, decide, resume, …), not topic content.
+4. **Composition / gaps** — may be a short building block or a longer composition; need not be one contiguous n-gram.
+5. **Position interprets** — same skeleton can mean different things by zone; place does not invent formulaicity alone.
+
+**Ontology (what is real):**
+
+| Real | Role |
+|------|------|
+| **Hinge** | Minimal recurring skeleton with a discourse function |
+| **Composition** | Ordered co-occurrence of hinges (sometimes gappy: F1a…F1b) |
+| **Named formula / template** | Human claim that a hinge (rarely a frozen composition) is a catalogue type |
+| **Variant / surface** | Spelling, slot filler, period inventory — not a new type |
+
+**Harvest rows are witnesses; they are not almost-formulas.** 5-gram dumps, fold families, overlap edges, and sequence-matrix nodes attest recurrence, straddles, or chains — they do not mint types. See [`DECISIONS.md`](DECISIONS.md) 2026-10-26 redesign pause.
+
+**Working catalogue band (18c procedural):** ~15–30 hinges; ~25–50 human-named types. Six opener blueprints is too few (missing decision scaffolding); hundreds of named ids almost certainly oversplit variants; ~10³ fold families are archaeology, not the target count.
+
+**Too wide / too small:** a witness that covers more than one move → split at function boundaries and keep the long string as composition evidence; a witness shorter than a move → glue, tail, or name (or F1b of an existing hinge), not a formula. Adjudicate witnesses **post hoc** against proposed hinge-sized archetypes (prefer char n-gram TF-IDF soft membership: near / mid / far) — archetypes first, phrases second; mid scores do not auto-mint.
+
 ## Core research notions
 
 ### Formulas have building-block sub-formulas
@@ -154,6 +179,6 @@ flowchart LR
 
 ## Implication for this project
 
-**Shell is ready; domain layer is the work.** First useful slice: sample tokenized text → `FormulaSearch` → provenanced candidates — without Elasticsearch — but the *target conceptual model* is richer than flat phrase lists: **criteria-governed building blocks, gappy composition, and position-sensitive interpretation**, seeded by notebook gold and S4 opening candidates.
+**Shell is ready; domain layer is the work.** The locked target model is **hinges + compositions + human-named types**, with harvest as witness evidence only (see Formula-in-effect above). Flat phrase lists and family folds are archaeology. Track F `FormulaSearch` remains a possible later instrument for recurrence-validated skeletons (L3), not a substitute for the ontology.
 
-**Design questions** (how far templates get us; discrimination; formulas↔templates; harvest speed; detection feasibility): [`template-design-questions.md`](template-design-questions.md). Prefer small empirical probes over new track ladders.
+**Design questions** (how far templates get us; discrimination; formulas↔templates; harvest speed; detection feasibility): [`template-design-questions.md`](template-design-questions.md). Prefer small empirical probes that cite the locked ontology over new harvest patch ladders.

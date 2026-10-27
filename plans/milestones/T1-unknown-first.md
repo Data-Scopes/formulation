@@ -1,8 +1,9 @@
 # T1 — Unknown-first typology (Track T spine)
 
-**Status:** active (STEPT1k done: requeste opener A; STEPT1l done: routing subtypes separate, stop; STEPT1m done: three openers promoted to blueprint; STEPT1n done: missive opener A; STEPT1o done: four openers promoted to blueprint)  
-**Steps:** [STEPT1h](../steps/STEPT1h-unknown-likeliness.md) → [STEPT1i](../steps/STEPT1i-composition-unknown.md) → [STEPT1j](../steps/STEPT1j-empty-band-characterisation.md) → [STEPT1k](../steps/STEPT1k-requeste-formula-type.md) → [STEPT1l](../steps/STEPT1l-requeste-subtype-characterisation.md) → [STEPT1m](../steps/STEPT1m-blueprint-promotion.md) blueprint promotion → [STEPT1n](../steps/STEPT1n-missive-formula-type.md) missive opener → [STEPT1o](../steps/STEPT1o-missive-blueprint-promotion.md) blueprint promotion  
-**Supersedes as driver:** up-front closed inventories; formula multiclass heads; flag sieves (STEPT1e1 parked); NER ALIGNED_TO fingerprint as typology instrument.
+**Status:** active — **growth edge = bubble-up** (limited cliff-medoid POC next). Hand hinge catalogue / STEPT1aj skim = later comparison only. STEPT1aa–ag = archaeology; full EM/DAG parked.
+**Steps:** … → T1aa–ag **parked** → [STEPT1ah](../steps/STEPT1ah-hinge-archetype-seed.md) **done** → [STEPT1ai](../steps/STEPT1ai-hinge-witness-adjudicate.md) **done** → [STEPT1aj](../steps/STEPT1aj-hinge-witness-skim.md) **emit done**
+
+**Supersedes as driver:** up-front closed inventories; formula multiclass heads; flag sieves (STEPT1e1 parked); NER ALIGNED_TO fingerprint as typology instrument; **5-gram family fold / residual patch ladder as typology growth**.
 
 ## Research object
 
@@ -66,7 +67,23 @@ L1 / R1 / appointment / advies gold-or-present. Useful triage crosstab; **not** 
 | **T1o** | [STEPT1o-missive-blueprint-promotion.md](../steps/STEPT1o-missive-blueprint-promotion.md) | **done** (PASS, cleaner than T1m; empty 0.140→0.122; `filler_star` 0.425→0.000 — bare `ontfangen_start` mass resolves to a real type; `missive_ontfangen` promoted to `role: "blueprint"`) |
 | **T1p** | [STEPT1p-clause-chain-probe.md](../steps/STEPT1p-clause-chain-probe.md) | **done** (G1 FAIL / G2 PASS — appointment clause order is rigid, so chains ≡ bags; chain gain needs order variation, multiplicity, or position variation) |
 | **T1q** | [STEPT1q-formula-retrieval.md](../steps/STEPT1q-formula-retrieval.md) | **done** (PASS; G1: substring loses to DAG on missive, 0.985/0.031 vs best substring 0.995/0.133 — Doc B's "substring may win" rested on a recall-only, 31%-mislabelled comparison; requeste's 0.182 FP is a cut artifact over a bimodal gold population (512/1380 short-form, median 69 words), not model imprecision — cut 6.3 gives FP 0.036 at 0.625 recall, user accepted 4.5/0.18 as the operating point; G3 PASS both types; G5 sampling-robustness check and STEPT1q2 span hand-read still owed) |
-| **T1r** | (no step guide yet) | **open** — characterise the requeste low-score band (512/1380, median 69 words, peaks 0.52 in the 1760s) before any L2 slot reduction: is it a distinguishable short-form sub-type, or weak-cut noise on long text? Splitting the type would get high recall *and* low FP instead of trading them. |
+| **T1r** | [STEPT1r-requeste-low-band.md](../steps/STEPT1r-requeste-low-band.md) | **done** — split confirmed (`op_de_requeste` / `requeste_op_de`); letter/missive short-opener parallel parked; L2 still later |
+| **T1s** | [STEPT1s-requeste-op-de-formula-type.md](../steps/STEPT1s-requeste-op-de-formula-type.md) | **done** — A accepted (cut 4.5; FP 0.064 accepted; cross-fire 0.02) |
+| **T1t** | [STEPT1t-requeste-op-de-blueprint-promotion.md](../steps/STEPT1t-requeste-op-de-blueprint-promotion.md) | **done** — promoted; empty unchanged 0.122; dual-opener cores 188/109/7 (dominant 1.0); no solo short core |
+| **T1u** | [STEPT1u-empty-band-5core.md](../steps/STEPT1u-empty-band-5core.md) | **done** — empty n=342; rekest head gone; voordracht/rapport/conclusie pockets; opener treadmill declined |
+| **T1v** | [STEPT1v-formula-reduction-l2.md](../steps/STEPT1v-formula-reduction-l2.md) | **done** — soft optional ablation no-op (identical R/FP/cut) |
+| **T1v2** | [STEPT1v2-formula-reduction-hard-drop.md](../steps/STEPT1v2-formula-reduction-hard-drop.md) | **done** — hard-drop moves metrics; Requeste = FP/specificity hinge; five scaffolding slots; leave-k skipped |
+| **T1w** | [STEPT1w-rapport-formula-type.md](../steps/STEPT1w-rapport-formula-type.md) | **done** — A accepted (R 0.895 / FP 0.006); promote separate |
+| **T1x** | [STEPT1x-rapport-blueprint-promotion.md](../steps/STEPT1x-rapport-blueprint-promotion.md) | **done** — promoted; empty 0.122→0.107; solo rapport 42 @ 1.0 |
+| **T1y** | [STEPT1y-opener-candidates-driver.md](../steps/STEPT1y-opener-candidates-driver.md) | **done** — queue seeded; driver write-back gates PASS; no voordracht mint |
+| **T1z** | [STEPT1z-formula-sequence-matrix.md](../steps/STEPT1z-formula-sequence-matrix.md) | **done** — row-stochastic P(next\|current) + harvest; nested-surface caveat |
+| **T1aa** | [STEPT1aa-phrases-5gram-profile.md](../steps/STEPT1aa-phrases-5gram-profile.md) | **done** — Pass A freq + rare/protected sidecar (1780); **archaeology** |
+| **T1ab** | [STEPT1ab-formula-family-fold.md](../steps/STEPT1ab-formula-family-fold.md) | **done** — nest + variant fold → 1978 families; **archaeology** |
+| **T1ac** | [STEPT1ac-sequence-matrix-family-impact.md](../steps/STEPT1ac-sequence-matrix-family-impact.md) | **done** (catalog) — exemplar harvest + soft containment 0.54 vs STEPT1z; **archaeology** |
+| **T1ad–ag** | overlap prove/wire, type-from-place, residual sweep | **done** (code) — **parked**; not catalogue growth |
+| **T1ah** | [STEPT1ah-hinge-archetype-seed.md](../steps/STEPT1ah-hinge-archetype-seed.md) | **done** — `formula_hinge_candidates` n=20 (+ 4 decision polarity pockets, null canonic) |
+| **T1ai** | [STEPT1ai-hinge-witness-adjudicate.md](../steps/STEPT1ai-hinge-witness-adjudicate.md) | **done** — char TF-IDF soft membership; 1261 witnesses → near 20 / mid 72 / far 1169 |
+| **T1aj** | [STEPT1aj-hinge-witness-skim.md](../steps/STEPT1aj-hinge-witness-skim.md) | **emit done** — near+mid xlsx (92); human fill → ingest owed |
 
 ## Out of scope here
 

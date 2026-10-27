@@ -67,7 +67,7 @@ def test_roles_partition():
     assert any(r["template_id"] == "unknown_residual" for r in residual)
 
 
-def test_blueprint_role_has_four_accepted_opener_types():
+def test_blueprint_role_has_six_accepted_opener_types():
     blueprints = templates_by_role("blueprint")
     ids = {r["template_id"] for r in blueprints}
     assert ids == {
@@ -75,6 +75,8 @@ def test_blueprint_role_has_four_accepted_opener_types():
         "advies_geleesen",
         "requeste_geleesen",
         "missive_ontfangen",
+        "requeste_op_de",
+        "rapport_gehoord",
     }
     for row in blueprints:
         assert row["threshold_frozen"] is True

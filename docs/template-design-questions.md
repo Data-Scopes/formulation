@@ -57,12 +57,15 @@ Design questions:
 - Is **template detection** feasible at corpus scale, or only on candidate windows / known families?
 - What latency / quality tradeoff for framing vs alignment vs (later) neural residual?
 - How much human review is needed before trusting a new `template_id`?
+  - **Working answer (2026-10-22):** a new `template_id` / blueprint name is a **human ground-truth decision** after characterisation (sample read + NOTES call). Metrics and clusters propose candidates; they do not mint names. Same bar as STEPT1k2 hand-read and STEPT1m/o promotion.
 
 ## Coverage and ontology
 
 - How many templates are we missing vs over-splitting OCR/period surface variants?
 - When is something a new template vs a variant of an existing id?
 - Where does `unknown_residual` stop being a bin and require new catalogue rows?
+- **Scaffolding vs type-carriers:** standard opening/decision formulas dominate bags but rarely decide the task type; less frequent specialised formulas do — and once named are often easier to find. Do not promote scaffolding by hit rate; do not ignore rare carriers because they are sparse (see Doc B + `DECISIONS.md` 2026-10-22).
+- **Wording drift:** period-/inventory-keyed variants and slot clouds absorb drift; drift alone is not a new `template_id` without distributional evidence (zone, co-occurrence, independent frequency).
 
 ## Position and discourse
 

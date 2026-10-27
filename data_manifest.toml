@@ -506,6 +506,76 @@ phase = "semi"
 description = "STEPT1l: per-id requeste+ routing subtype + routing flags (no full resolution text)"
 parent = "formula_type_requeste_scores"
 
+[datasets.requeste_low_band_profile_metrics]
+tier = "scratch"
+path = "requeste_low_band_profile.jsonl"
+phase = "semi"
+description = "STEPT1r part A: quantitative profile of the requeste dag_frozen_score low band (<=4.6, bimodal split found in STEPT1q) joining formula_retrieval_arms_scores (clean 1380-row gold) and requeste_subtype_scores (66,657-row predicted-positive population) by id; band vs routing subtype, lexical flags (esp. gedelibereert_start), length, decade. No resolutions_flat / ES."
+parent = "formula_retrieval_arms_scores"
+
+[datasets.formula_type_requeste_op_de_metrics]
+tier = "scratch"
+path = "formula_type_requeste_op_de_metrics.jsonl"
+phase = "semi"
+description = "STEPT1s: short requeste opener Op de Requeste (slot-cloud+DAG) recall vs head-filtered ES rekest gold, wording baseline delta, FP on N=500 negatives, cross-fire on long-head rekest sample"
+parent = "rekest_es_gold"
+
+[datasets.formula_type_requeste_op_de_scores]
+tier = "scratch"
+path = "formula_type_requeste_op_de_scores.jsonl"
+phase = "explore"
+description = "STEPT1s: per-id align scores for short-form rekest gold + negative sample (no full resolution text)"
+parent = "formula_type_requeste_op_de_metrics"
+
+[datasets.formula_reduction_l2_metrics]
+tier = "scratch"
+path = "formula_reduction_l2_metrics.jsonl"
+phase = "semi"
+description = "STEPT1v: Doc B L1→L2 slot ablation on requeste_geleesen (long-head rekest gold); per-config p20 cut, recall/FP, hinge vs safe slots"
+parent = "rekest_es_gold"
+
+[datasets.formula_reduction_l2_scores]
+tier = "scratch"
+path = "formula_reduction_l2_scores.jsonl"
+phase = "explore"
+description = "STEPT1v: per-id × config DAG score/pred/span for formula reduction (no full resolution text)"
+parent = "formula_reduction_l2_metrics"
+
+[datasets.formula_reduction_hard_drop_metrics]
+tier = "scratch"
+path = "formula_reduction_hard_drop_metrics.jsonl"
+phase = "semi"
+description = "STEPT1v2: Doc B L1→L2 hard-drop on requeste_geleesen (long-head); per-config p20 cut, recall/FP, hinge vs safe slots"
+parent = "rekest_es_gold"
+
+[datasets.formula_reduction_hard_drop_scores]
+tier = "scratch"
+path = "formula_reduction_hard_drop_scores.jsonl"
+phase = "explore"
+description = "STEPT1v2: per-id × config hard-drop DAG score/pred/span (no full resolution text)"
+parent = "formula_reduction_hard_drop_metrics"
+
+[datasets.rapport_es_gold]
+tier = "scratch"
+path = "rapport_es_gold.jsonl"
+phase = "explore"
+description = "STEPT1w: ES proposition_type=rapport ids (1705–1796) joined to resolutions_flat text; frozen gold for rapport opener formula-type eval"
+parent = "resolutions_flat"
+
+[datasets.formula_type_rapport_metrics]
+tier = "scratch"
+path = "formula_type_rapport_metrics.jsonl"
+phase = "semi"
+description = "STEPT1w: rapport opener (slot-cloud+DAG) recall vs ES rapport gold, wording baseline delta, FP on N=500 negatives"
+parent = "rapport_es_gold"
+
+[datasets.formula_type_rapport_scores]
+tier = "scratch"
+path = "formula_type_rapport_scores.jsonl"
+phase = "explore"
+description = "STEPT1w: per-id align scores for rapport gold + negative sample (no full resolution text)"
+parent = "formula_type_rapport_metrics"
+
 [datasets.formula_period_bin_metrics]
 tier = "scratch"
 path = "formula_period_bin_metrics.jsonl"
@@ -701,6 +771,216 @@ path = "empty_band_retrieval_scores.jsonl"
 phase = "explore"
 description = "STEPT1j2: per-id empty R1/L1 proba + high/grey/low (no full text)"
 parent = "empty_band_retrieval_metrics"
+
+[datasets.opener_candidates]
+tier = "scratch"
+path = "opener_candidates.jsonl"
+phase = "explore"
+description = "STEPT1y: human-judged opener candidate queue (status + verdicts + driver evidence write-back); seed from tests/fixtures/opener_candidates.jsonl"
+parent = ""
+
+[datasets.formula_sequence_matrix_metrics]
+tier = "scratch"
+path = "formula_sequence_matrix_metrics.jsonl"
+phase = "semi"
+description = "STEPT1z: probabilistic sequence matrix summary (row-stochastic P_adjacent + row_sums + top cells)"
+parent = "formula_type_presence_scores"
+
+[datasets.formula_sequence_matrix]
+tier = "scratch"
+path = "formula_sequence_matrix.jsonl"
+phase = "semi"
+description = "STEPT1z: directed edge table — p_adjacent (primary) + n companion + optional precedes/gap"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.formula_sequence_nodes]
+tier = "scratch"
+path = "formula_sequence_nodes.jsonl"
+phase = "explore"
+description = "STEPT1z: matrix nodes (blueprint / harvest / sentinel) with n_from"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.formula_sequence_scores]
+tier = "scratch"
+path = "formula_sequence_scores.jsonl"
+phase = "explore"
+description = "STEPT1z: per-resolution ordered formula ids (no full text)"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.formula_sequence_harvest]
+tier = "scratch"
+path = "formula_sequence_harvest.jsonl"
+phase = "explore"
+description = "STEPT1z: harvest shortlist from formula_schemes_sample + STEPT1u pockets (not auto-named)"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.formula_sequence_matrix_xlsx]
+tier = "scratch"
+path = "formula_sequence_matrix.xlsx"
+phase = "explore"
+description = "STEPT1z/z2: human workbook — P_adjacent + N + edges/nodes/harvest/examples/edge_examples"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.formula_sequence_examples]
+tier = "scratch"
+path = "formula_sequence_examples.jsonl"
+phase = "explore"
+description = "STEPT1z2: archetypal truncated snippets per node/edge (shortest_hit); illustrative, not completeness"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.phrases_5gram_18th]
+tier = "hot"
+path = "phrases-5_gram-18th_century.tsv.gz"
+phase = "frozen"
+description = "Marijn Koolen 5-gram occurrence dump (phrase × doc × span): ~26.7M rows; columns phrase,doc_id,doc_len,pos_start,rel_pos_start,pos_end,rel_pos_end,phrase_freq,length_bin. Do not load whole into memory — stream + phrase_freq gate. Absolute path override in data_manifest.local.toml (Extreme SSD staten_generaal/)."
+parent = ""
+
+[datasets.phrases_5gram_profile_metrics]
+tier = "scratch"
+path = "phrases_5gram_profile_metrics.jsonl"
+phase = "semi"
+description = "STEPT1aa: stream profile summary (rows scanned/kept, MIN_FREQ, n_high_freq, n_protected_below_gate, zone×lcats)"
+parent = "phrases_5gram_18th"
+
+[datasets.phrases_5gram_high_freq]
+tier = "scratch"
+path = "phrases_5gram_high_freq.jsonl"
+phase = "explore"
+description = "STEPT1aa: unique phrases with phrase_freq ≥ MIN_FREQ (+ zone/lcats/role tags); skim-sized"
+parent = "phrases_5gram_profile_metrics"
+
+[datasets.phrases_5gram_rare_sidecar]
+tier = "scratch"
+path = "phrases_5gram_rare_sidecar.jsonl"
+phase = "explore"
+description = "STEPT1aa: protected seeds below gate + optional mid-body low-freq top-N (carrier recovery)"
+parent = "phrases_5gram_profile_metrics"
+
+[datasets.formula_family_metrics]
+tier = "scratch"
+path = "formula_family_metrics.jsonl"
+phase = "semi"
+description = "STEPT1ab: fold summary (n_input, n_families, nest collapses, variant merges)"
+parent = "phrases_5gram_profile_metrics"
+
+[datasets.formula_family_candidates]
+tier = "scratch"
+path = "formula_family_candidates.jsonl"
+phase = "explore"
+description = "STEPT1ab: folded family candidates (exemplar + member variants + zone×lcats + suggested_role; human_role empty)"
+parent = "formula_family_metrics"
+
+[datasets.formula_family_skim_xlsx]
+tier = "scratch"
+path = "formula_family_skim.xlsx"
+phase = "explore"
+description = "STEPT1ac: human skim of families — blank keep / human_role / variant_of (do science on canonical exemplar)"
+parent = "formula_family_candidates"
+
+[datasets.formula_sequence_family_harvest]
+tier = "scratch"
+path = "formula_sequence_family_harvest.jsonl"
+phase = "explore"
+description = "STEPT1ac: harvest nodes from family exemplars (+ STEPT1u pockets); canonical join key"
+parent = "formula_family_candidates"
+
+[datasets.formula_sequence_family_impact_metrics]
+tier = "scratch"
+path = "formula_sequence_family_impact_metrics.jsonl"
+phase = "semi"
+description = "STEPT1ac: STEPT1z vs family-exemplar harvest — hard deltas + soft containment"
+parent = "formula_sequence_matrix_metrics"
+
+[datasets.phrases_5gram_overlap]
+tier = "hot"
+path = "overlap-5_gram-18th_century.tsv.gz"
+phase = "frozen"
+description = "Marijn Koolen adjacent overlapping 5-gram edges (phrase1, phrase2, freqs, mutual fracs); ~7M rows. Stream only — do not load whole. Absolute path override in data_manifest.local.toml."
+parent = "phrases_5gram_18th"
+
+[datasets.overlap_cue_prove_phrases]
+tier = "hot"
+path = "tests/fixtures/overlap_cue_prove_phrases.jsonl"
+phase = "explore"
+description = "STEPT1ad fixture phrases for overlap-cue prove scenarios"
+parent = ""
+
+[datasets.overlap_cue_prove_edges]
+tier = "hot"
+path = "tests/fixtures/overlap_cue_prove_edges.jsonl"
+phase = "explore"
+description = "STEPT1ad fixture overlap edges for prove scenarios"
+parent = "overlap_cue_prove_phrases"
+
+[datasets.formula_family_residual_metrics]
+tier = "scratch"
+path = "formula_family_residual_metrics.jsonl"
+phase = "semi"
+description = "STEPT1ag: residual sweep summary (trivial counts + review cap)"
+parent = "formula_family_candidates"
+
+[datasets.formula_family_residual_trivial]
+tier = "scratch"
+path = "formula_family_residual_trivial.jsonl"
+phase = "explore"
+description = "STEPT1ag: parked trivial thin families (not skimmed)"
+parent = "formula_family_residual_metrics"
+
+[datasets.formula_family_residual_review]
+tier = "scratch"
+path = "formula_family_residual_review.jsonl"
+phase = "explore"
+description = "STEPT1ag: capped absorb/truncate review shortlist (human_keep blank)"
+parent = "formula_family_residual_metrics"
+
+[datasets.formula_hinge_candidates]
+tier = "scratch"
+path = "formula_hinge_candidates.jsonl"
+phase = "explore"
+description = "STEPT1ah: hinge archetype ledger (scaffolding + blueprint L2 + pockets); seed from tests/fixtures/formula_hinge_candidates.jsonl"
+parent = ""
+
+[datasets.formula_hinge_metrics]
+tier = "scratch"
+path = "formula_hinge_metrics.jsonl"
+phase = "semi"
+description = "STEPT1ah: hinge ledger seed counts by layer/status/place"
+parent = "formula_hinge_candidates"
+
+[datasets.formula_hinge_witness_adjudication]
+tier = "scratch"
+path = "formula_hinge_witness_adjudication.jsonl"
+phase = "explore"
+description = "STEPT1ai: family-exemplar witnesses scored vs hinge canonics (char_wb TF-IDF near/mid/far); human fields blank"
+parent = "formula_hinge_candidates"
+
+[datasets.formula_hinge_witness_metrics]
+tier = "scratch"
+path = "formula_hinge_witness_metrics.jsonl"
+phase = "semi"
+description = "STEPT1ai: band counts + cuts + vectorizer settings for hinge witness adjudication"
+parent = "formula_hinge_witness_adjudication"
+
+[datasets.formula_hinge_witness_skim_xlsx]
+tier = "scratch"
+path = "formula_hinge_witness_skim.xlsx"
+phase = "explore"
+description = "STEPT1aj: human skim of near+mid hinge witnesses — blank human_keep / human_note (variant|split|composition|reject)"
+parent = "formula_hinge_witness_adjudication"
+
+[datasets.formula_hinge_witness_verdicts]
+tier = "scratch"
+path = "formula_hinge_witness_verdicts.jsonl"
+phase = "semi"
+description = "STEPT1aj: human near+mid skim verdicts ingested from formula_hinge_witness_skim_xlsx (filled human_keep only)"
+parent = "formula_hinge_witness_skim_xlsx"
+
+[datasets.formula_hinge_witness_skim_metrics]
+tier = "scratch"
+path = "formula_hinge_witness_skim_metrics.jsonl"
+phase = "semi"
+description = "STEPT1aj: near+mid skim emit or ingest summary (far parked; no auto-mint)"
+parent = "formula_hinge_witness_adjudication"
 
 [datasets.example_input]
 tier = "warm"

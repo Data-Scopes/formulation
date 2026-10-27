@@ -1,0 +1,8 @@
+{"witness_id": "wit_near_goedgevonden", "witness_text": "is goedgevonden en verstaan", "witness_norm": "is goedgevonden en verstaan", "phrase_freq": 120, "source": "fixture"}
+{"witness_id": "wit_near_requeste", "witness_text": "Requeste", "witness_norm": "requeste", "phrase_freq": 80, "source": "fixture"}
+{"witness_id": "wit_near_geen", "witness_text": "geen resolutie", "witness_norm": "geen resolutie", "phrase_freq": 40, "source": "fixture"}
+{"witness_id": "wit_mid_geen_tail", "witness_text": "geen resolutie gevallen", "witness_norm": "geen resolutie gevallen", "phrase_freq": 35, "source": "fixture"}
+{"witness_id": "wit_mid_handen", "witness_text": "gesteld in handen", "witness_norm": "gesteld in handen", "phrase_freq": 25, "source": "fixture"}
+{"witness_id": "wit_near_missive_long", "witness_text": "Ontfangen een missive van den heer", "witness_norm": "ontfangen een missive van den heer", "phrase_freq": 15, "source": "fixture"}
+{"witness_id": "wit_far_person", "witness_text": "Johan de Witt tot den Briel", "witness_norm": "johan de witt tot den briel", "phrase_freq": 3, "source": "fixture"}
+{"witness_id": "wit_far_office", "witness_text": "raadpensionaris van Holland", "witness_norm": "raadpensionaris van holland", "phrase_freq": 2, "source": "fixture"}

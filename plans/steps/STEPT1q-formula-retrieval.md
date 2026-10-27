@@ -142,8 +142,8 @@ Register in `data_manifest.toml`, then `uv run python -m data_io.check`, **befor
 
 Mark STEPT1q in `PLAN.md` + Doc B status line. Then:
 
-- **STEPT1q2** — ingest the hand-read span verdicts → honest span accuracy per arm (mirrors STEPT1k2's build/ingest pattern). Required if G3 fails.
-- **STEPT1r** — formula reduction L1→L2: ablate one slot at a time via `align_dag(optional_slots=...)`, recalibrate each configuration at its own p20 (`calibrate_cut`, as `clause_chain.build_appointment_clause_specs(per_clause_cuts=True)` already does), keep the minimal localising subset. Only meaningful if G1 says structure earns its place.
-- If G1 says substring wins outright, Doc B's abstraction ladder needs a rev 3 before STEPT1r: L2 reduction is pointless if L0 is already sufficient.
+- **STEPT1q2** — ingest the hand-read span verdicts → honest span accuracy per arm (mirrors STEPT1k2's build/ingest pattern). Required if G3 fails; still optional/owed.
+- **STEPT1r** — characterise the requeste low-score band before L2 ([`STEPT1r-requeste-low-band.md`](STEPT1r-requeste-low-band.md)). Doc B L2 reduction is a **later** step after the human band call — not STEPT1r.
+- If G1 had said substring wins outright, Doc B's abstraction ladder would need a rev 3 before L2; G1 PASS means structure still earns a place.
 
 Clear the chat before the next step.

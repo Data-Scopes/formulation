@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """STEPT1b: score a year slice for formula-type presence + popularity bags.
 
-Includes accepted appointment + advies + requeste (frozen T1a / T1a2 / T1k
-cuts) and optional provisional openings.
+Includes accepted appointment + advies + requeste (+ short opener) + missive +
+rapport (frozen T1a / T1a2 / T1k / T1s / T1n / T1w cuts) and optional
+provisional openings.
 
     uv run python scripts/run_formula_type_presence.py --fixture-only
     uv run python scripts/run_formula_type_presence.py
     uv run python scripts/run_formula_type_presence.py --no-openings
     uv run python scripts/run_formula_type_presence.py --no-advies
     uv run python scripts/run_formula_type_presence.py --no-requeste
+    uv run python scripts/run_formula_type_presence.py --no-requeste-op-de
+    uv run python scripts/run_formula_type_presence.py --no-rapport
     uv run python scripts/run_formula_type_presence.py --limit 200
 """
 
@@ -29,6 +32,8 @@ from formulation.formula_type_presence import (
     fit_appointment_presence_model,
     fit_missive_presence_model,
     fit_opening_presence_model,
+    fit_rapport_presence_model,
+    fit_requeste_op_de_presence_model,
     fit_requeste_presence_model,
     fixture_presence_frames,
     fixture_presence_models,
@@ -37,7 +42,11 @@ from formulation.formula_type_presence import (
     summarize_presence,
 )
 from formulation.missive_formula_type import FORMULA_TYPE_ID as MISSIVE_ID
+from formulation.rapport_formula_type import FORMULA_TYPE_ID as RAPPORT_ID
 from formulation.requeste_formula_type import FORMULA_TYPE_ID as REQUESTE_ID
+from formulation.requeste_op_de_formula_type import (
+    FORMULA_TYPE_ID as REQUESTE_OP_DE_ID,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -74,6 +83,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Skip accepted missive opener (STEPT1n)",
     )
     p.add_argument(
+        "--no-requeste-op-de",
+        action="store_true",
+        help="Skip accepted short requeste opener (STEPT1s)",
+    )
+    p.add_argument(
+        "--no-rapport",
+        action="store_true",
+        help="Skip accepted rapport opener (STEPT1w)",
+    )
+    p.add_argument(
         "--limit",
         type=int,
         default=None,
@@ -104,6 +123,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Override missive operating cut (default: frozen STEPT1n)",
     )
     p.add_argument(
+        "--requeste-op-de-cut",
+        type=float,
+        default=None,
+        help="Override short requeste operating cut (default: frozen STEPT1s)",
+    )
+    p.add_argument(
+        "--rapport-cut",
+        type=float,
+        default=None,
+        help="Override rapport operating cut (default: frozen STEPT1w)",
+    )
+    p.add_argument(
         "--candidate-cap",
         type=int,
         default=CANDIDATE_CAP_PER_BIN,
@@ -125,8 +156,12 @@ def _build_models(args: argparse.Namespace) -> list[dict[str, Any]]:
             models = [m for m in models if m["formula_type_id"] != ADVIES_ID]
         if args.no_requeste:
             models = [m for m in models if m["formula_type_id"] != REQUESTE_ID]
+        if args.no_requeste_op_de:
+            models = [m for m in models if m["formula_type_id"] != REQUESTE_OP_DE_ID]
         if args.no_missive:
             models = [m for m in models if m["formula_type_id"] != MISSIVE_ID]
+        if args.no_rapport:
+            models = [m for m in models if m["formula_type_id"] != RAPPORT_ID]
         if args.no_openings:
             models = [m for m in models if not m.get("provisional")]
         return models
@@ -151,11 +186,25 @@ def _build_models(args: argparse.Namespace) -> list[dict[str, Any]]:
                 cut=args.requeste_cut,
             )
         )
+    if not args.no_requeste_op_de:
+        models.append(
+            fit_requeste_op_de_presence_model(
+                random_state=int(args.random_state),
+                cut=args.requeste_op_de_cut,
+            )
+        )
     if not args.no_missive:
         models.append(
             fit_missive_presence_model(
                 random_state=int(args.random_state),
                 cut=args.missive_cut,
+            )
+        )
+    if not args.no_rapport:
+        models.append(
+            fit_rapport_presence_model(
+                random_state=int(args.random_state),
+                cut=args.rapport_cut,
             )
         )
     if not args.no_openings:
@@ -201,8 +250,12 @@ def main(argv: list[str] | None = None) -> None:
         parents.extend(["advies_es_gold", "formula_type_advies_metrics"])
     if any(m["formula_type_id"] == REQUESTE_ID for m in models):
         parents.extend(["rekest_es_gold", "formula_type_requeste_metrics"])
+    if any(m["formula_type_id"] == REQUESTE_OP_DE_ID for m in models):
+        parents.extend(["rekest_es_gold", "formula_type_requeste_op_de_metrics"])
     if any(m["formula_type_id"] == MISSIVE_ID for m in models):
         parents.extend(["missive_es_gold", "formula_type_missive_metrics"])
+    if any(m["formula_type_id"] == RAPPORT_ID for m in models):
+        parents.extend(["rapport_es_gold", "formula_type_rapport_metrics"])
 
     save_semi_structured(
         [metrics],
@@ -214,7 +267,9 @@ def main(argv: list[str] | None = None) -> None:
             f"n={metrics.get('n_resolutions')} types={metrics.get('n_types')} "
             f"advies={metrics.get('advies_accepted')} "
             f"requeste={metrics.get('requeste_accepted')} "
-            f"missive={metrics.get('missive_accepted')}"
+            f"requeste_op_de={metrics.get('requeste_op_de_accepted')} "
+            f"missive={metrics.get('missive_accepted')} "
+            f"rapport={metrics.get('rapport_accepted')}"
         ),
     )
     save_semi_structured(
@@ -235,7 +290,9 @@ def main(argv: list[str] | None = None) -> None:
         f"formula_type_presence_scores ({len(score_rows)} score rows); "
         f"frac_zero={bags.get('frac_zero')} frac_multi={bags.get('frac_multi')}; "
         f"advies_accepted={metrics.get('advies_accepted')} "
-        f"requeste_accepted={metrics.get('requeste_accepted')}"
+        f"requeste_accepted={metrics.get('requeste_accepted')} "
+        f"requeste_op_de_accepted={metrics.get('requeste_op_de_accepted')} "
+        f"rapport_accepted={metrics.get('rapport_accepted')}"
     )
 
 

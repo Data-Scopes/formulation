@@ -37,6 +37,14 @@
 # [datasets.formula_documents]
 # path = "/Users/rikhoekstra/develop/republic_clean/notebooks/formulas/documents.parquet"
 
+# STEPT1aa — 5-gram occurrence dump (do not load whole; stream in profile script)
+# [datasets.phrases_5gram_18th]
+# path = "/Volumes/Extreme SSD/staten_generaal/phrases-5_gram-18th_century.tsv.gz"
+#
+# STEPT1ad — adjacent overlap edges (stream only; prove / later fold wire)
+# [datasets.phrases_5gram_overlap]
+# path = "/Users/YOU/Downloads/overlap-5_gram-18th_century.tsv.gz"
+
 # Optional: override dated ES indexes (defaults live in committed data_manifest.toml)
 # [elasticsearch]
 # resolutions_index = "full_resolutions-2026-03-25"

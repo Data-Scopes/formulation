@@ -1,0 +1,7 @@
+{"phrase1": "WAAR op gedelibereert zynde is", "phrase2": "op gedelibereert zynde is goedgevonden", "overlap_freq": 62000, "phrase1_frac": 0.85, "phrase2_frac": 0.88}
+{"phrase1": "op gedelibereert zynde is goedgevonden", "phrase2": "gedelibereert zynde is goedgevonden en", "overlap_freq": 58000, "phrase1_frac": 0.82, "phrase2_frac": 0.90}
+{"phrase1": "gedelibereert zynde is goedgevonden en", "phrase2": "zynde is goedgevonden en verstaan", "overlap_freq": 51000, "phrase1_frac": 0.80, "phrase2_frac": 0.87}
+{"phrase1": "advertentie WAAR op geen", "phrase2": "WAAR op geen resolutie is", "overlap_freq": 9000, "phrase1_frac": 0.75, "phrase2_frac": 0.71}
+{"phrase1": "ontfangen een missive van", "phrase2": "houdende dat", "overlap_freq": 120, "phrase1_frac": 0.05, "phrase2_frac": 0.40}
+{"phrase1": "na voorgaande deliberatie goedgevonden", "phrase2": "voorgaande deliberatie goedgevonden en", "overlap_freq": 8000, "phrase1_frac": 0.78, "phrase2_frac": 0.81}
+{"phrase1": "voorgaande deliberatie goedgevonden en", "phrase2": "deliberatie goedgevonden en verstaan", "overlap_freq": 7500, "phrase1_frac": 0.76, "phrase2_frac": 0.84}

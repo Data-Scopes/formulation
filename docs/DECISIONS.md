@@ -10,6 +10,200 @@ Record durable methodological and architectural decisions here. Keep entries sho
 - **Decision:** What did we decide?
 - **Reason:** Why is this the right tradeoff now?
 
+## 2026-10-27: Growth edge = bubble-up (cliff-medoid); hand catalogue = later comparison
+
+- **Context:** User dissatisfied with seed-anchored skim: word leak / one-word variants treated as different types; indicative hinge list was never meant to *define* the catalogue. Confirmed after NER-side Gemini residue handoff.
+- **Decision:**
+  1. **Discovery growth edge** = scoped grams → `char_wb` TF-IDF → cluster → **medoids** → **relative-gap / cliff sieve** → human steer/name. Limited **POC first** (steer before full stack).
+  2. Hand hinge ledger / polarity cues / STEPT1aj skim = **comparison anchors later**, not normative types.
+  3. No auto-promote to blueprints; catalogue-size band (~15–30 hinges / ~25–50 named) still a sanity check after emergence.
+  4. Full EM → transition → `[SLOT]` → formula-DAG still **parked** until POC steers.
+  5. Matching-only stay out (PINNED_TO, underparse axis, etc.).
+- **Reason:** Surfaces must merge before typing; human names what bubbles, rather than scoring everything against a prior list.
+
+## 2026-10-27: Gemini emergent-centroid stack — residue from `republic_ner_matching` detour
+
+- **Context:** Accidental Gemini-style work in `republic_ner_matching` (underparse/seam inventory on n=9 flats).
+- **Decision:** Accept method residue (cliff sieve, scoped windows, medoids, phrase/boundary gates). Superseded as growth-edge call by **2026-10-27 bubble-up** above. Matching helpers stay out of formulation.
+- **Reason:** Controls are useful; archetypes-first-as-catalogue is not.
+
+## 2026-10-26: STEPT1aj — near+mid hinge-witness skim (emit)
+
+- **Context:** STEPT1ai left near (20) + mid (72) as the human triage queue; far parked.
+- **Decision:** Ship **STEPT1aj** emit — `formula_hinge_witness_skim_xlsx` (blank `human_keep` ∈ {variant, split, composition, reject}) + ingest path to `formula_hinge_witness_verdicts`. No auto-mint; polarity/referral watchwords in guide only.
+- **Reason:** Soft membership named the queue; typology growth still needs human band labels before ledger/template changes.
+
+## 2026-10-26: STEPT1ai — witness adjudicate vs hinge archetypes
+
+- **Context:** STEPT1ah seeded 20 hinges (14 with canonic); archaeology `formula_family_candidates` remain witnesses, not types.
+- **Decision:** Ship **STEPT1ai** — char_wb 3–5 TF-IDF cosine soft membership → near (≥0.80) / mid (≥0.50) / far. Full run: 1261 exemplars → near 20 / mid 72 / far 1169. Mid does not auto-mint or auto-merge; pockets excluded from targets; ledger/templates untouched.
+- **Reason:** Empirically separate thin variant shell (near) and triage queue (mid) from mass far-noise without turning harvest into catalogue growth.
+
+## 2026-10-26: Decision-polarity surface cues (human)
+
+- **Context:** Polarity pockets still null-canonic; need holdable surface signs before naming.
+- **Decision:** Record (not mint):
+  1. **`decision_negative`** — cue family **`afgewezen`** (+ friends). Still ≠ `geen_resolutie` (null). Canonic stays null until a naming step.
+  2. **Approve-then-refer** — **`Naar Y gestuurt voor advies`** (slot Y) **especially after** `goetgevonden / goedgevonden en verstaan` is **composition** (`goedgevonden` + referral-for-advice), not one polarity type and not bare `ter_advies` scaffolding alone. Typical Y: **Raad van State**; also a **Commissie** with purpose clause **`om te … examineren`** (and kin). Slot Y / purpose are content slots, not separate hinges.
+  3. **Tentative:** **`afgehandeld te worden`** (not bare `afgehandeld`) — disposed/to-be-handled surface; polarity/role TBD (≠ `afgewezen`; ≠ `geen_resolutie`). May sit nearer purpose/referral than refuse. Hunt later; do not mint.
+  4. **Exposition cites execution / prior resoluties** — the exposition band (e.g. `advertentie` / houdende…) may **formulaically refer** to the same execution phrases (afgewezen / afgehandeld te worden / naar-Y-gestuurt…) **and** to **earlier resolutions**. That is **composition / cross-reference**, not a second copy of the decide hinge and not a new type minted from the citation surface. Position interprets (exposition place ≠ inventing formulaicity).
+  5. **Commissorial / advice-chain cues** (record, not mint): **`resolutie commissoriaal`**; **`hebben … geexamineerd`** (past of the `om te … examineren` purpose); **`op advies van`**. Likely compose with Raad-van-State / commissie referral and with `ter_advies` / `advies` openers — do not collapse into one hinge; roles TBD.
+  - **More polarity/referral cues deferred** (later chat) — do not invent.
+- **Reason:** Negative refusal and post-approve referral are distinct procedural moves; collapsing either into `goedgevonden` or `ter_advies` loses the catalogue edge. Exposition can *point at* those moves and prior acts without being them.
+
+## 2026-10-26: STEPT1ah addendum — decision polarity pockets
+
+- **Context:** Human glance of the hinge ledger: scaffolding covers cue/form (`waar_op`, `goedgevonden`, `geen_resolutie`) but not resolution outcome polarity.
+- **Decision:** Add four unnamed `pocket` rows — `decision_positive` / `decision_negative` / `decision_conditional` / `decision_deferred` (null canonic). Positive may later coincide with `goedgevonden`; deferred ≠ `geen_resolutie` and ≠ `advertentie`. No invented wording; no auto-merge.
+- **Reason:** Catalogue growth saturates procedural moves; lock intent before witness adjudicate.
+
+## 2026-10-26: STEPT1ah — seed hinge archetype ledger
+
+- **Context:** Redesign pause locked hinge/composition/witness ontology; next empirical work is archetypes first, not more harvest patches.
+- **Decision:** Ship **STEPT1ah** — hand-seed `formula_hinge_candidates` (now n=20 after polarity addendum): decision/referral scaffolding (`waar_op`, `geen_resolutie`, `goedgevonden`, `in_handen`, `advertentie`, `ter_advies`, `voldoening`, `ontfangen`), L2 of six blueprints as `from_blueprint`, STEPT1u + decision-polarity pockets unnamed. No `gedelibereert` id; no witness TF-IDF; no auto-mint.
+- **Reason:** Catalogue growth starts from a holdable hinge set; harvest remains archaeology until adjudicate step.
+
+## 2026-10-26: Formula-in-effect ontology (redesign pause)
+
+- **Context:** STEPT1aa–ag treated 5-gram / family / residual surfaces as almost-formulas and patched with sieves, caps, and reorder flags. Skim still showed hapax “cardinals,” person strings, and no holdable concept of what a formula is. User called a redesign pause.
+- **Decision:** Lock the ontology below (also in [`formula-conceptual-overview.md`](formula-conceptual-overview.md)). **Park** STEPT1aa–ag outputs as **candidate archaeology** — not the growth edge; no further residual/family patch steps. Empirical hinge work waits for a later chat after clear.
+  - **Formula-in-effect** (all required): recurrence; reduced skeleton (hinge); discourse/procedural function; composition/gaps allowed; position interprets (does not invent formulaicity alone).
+  - **What is real:** hinge → composition → human-named template; variants are not types. Harvest / overlap / fold / sequence rows are **witnesses**, not almost-formulas.
+  - **Catalogue band (18c procedural):** ~15–30 hinges; ~25–50 named types. ~6 is too few (opener-biased); >100 named ≈ oversplit; ~2000 families is never the target count.
+  - **Wide/small:** too wide → split at function boundaries, keep long string as composition evidence; too small → glue/tail/name (or F1b of an existing hinge), not a formula.
+  - **Witness adjudication:** proposed **archetypes first**; post-hoc compare gathered phrases to hinge-sized canonics (prefer char n-gram TF-IDF) → near / mid / far. Mid does not auto-mint or auto-merge. Not a discovery method.
+- **Reason:** Catalogue size comes from saturating procedural moves, not emptying residuals. Patches on the wrong unit cannot reach a holdable typology.
+
+## 2026-10-26: STEPT1ag — triviality sieve before residual review
+
+- **Context:** Post-fold skim had hundreds of thin/solo families (tok bigrams, place fillers, short tails). A full residual absorb/truncate hand-read would drown in trivia.
+- **Decision:** **STEPT1ag** — Pass 0 parks trivia (token≤3, tok-hinge without cue, closed-class/place/office, substring of multi, F1b short-tail, no-signal). Pass 1 emits capped (~60) absorb/truncate **proposals** only; overflow parked; no auto-merge.
+- **Reason:** Keep human judgment on formula-shaped leftovers; metrics count the mass.
+
+## 2026-10-26: STEPT1af — overlap-first; type from place
+
+- **Context:** Skim showed pre-overlap `suggested_role` (esp. any-hit `opener_abs`/`opener_rel`) labeling mid-text as openers; `gedelibereert` cue split decision chains; null mass swallowed by `waar_op`; person strings as exemplars.
+- **Decision:** **STEPT1af** reorder: repair → nest → overlap → name-strip → assign role from place+cue. Ignore profile `suggested_role`. Drop `gedelibereert_*` cue; null wins over `waar_op`; widen WAAR/bare-`waar` split; heuristic name mask before exemplar/hinge.
+- **Reason:** Type must follow formula identity (overlap + place), not early-position OR flags on raw 5-grams.
+
+## 2026-10-26: STEPT1ad accepted → STEPT1ae wire overlap-cue into fold
+
+- **Context:** STEPT1ad fixture prove 10/10; user accepted NOTES.
+- **Decision:** Open **STEPT1ae** — optional `--overlap` on `fold_phrases` / `run_formula_family_fold` calling prove helpers (union + paradigm + F1b annotate). Default path without `--overlap` stays STEPT1ab. No auto-mint; no F1b lookahead.
+- **Reason:** Prove locked the gates; wire is additive and reversible via CLI flag.
+
+## 2026-10-26: Prove-first overlap-cue fold (STEPT1ad)
+
+- **Context:** STEPT1ab hinge buckets leave sliding decision windows as separate families; Marijn’s overlap TSV encodes positional chains. Wiring straight into `formula_family_fold` risks opaque merges.
+- **Decision:** Ship **STEPT1ad** as a **separate prove** (`overlap_cue_prove` + `prove_overlap_cue_fold`): overlap union within place bands, bottom-up cues, paradigm cardinal/plural mask, cardinal corpus substring test, short-tail F1b suppress (no lookahead). Register `phrases_5gram_overlap`. Do **not** change production fold until NOTES accept → STEPT1ae.
+- **Reason:** Same prove-then-wire pattern as appointment-institution; principles are judgeable case-by-case before contaminating `formula_family_candidates`.
+
+## 2026-10-26: Harvest artefacts — positional overlap vs real formula boundaries
+
+- **Context:** 5-gram harvest windows often **overlap in position**. That yields (a) sliding windows of one formula and (b) windows that **straddle** two formulas (e.g. `advertentie waar op…`). Conversely, one long formula is chopped into overlapping fragments (`nomineeren te visiteeren examineeren` / `advis daar op` / …).
+- **Decision:** Treat these as **harvest artefacts**, not typology. Fold **repairs** them before science: split mid-window at decision-start **`waar op`** (prefix vs decision family); **glue** known long chopped chains into one family; refuse only **straddle re-attach** (e.g. advertentie|waar op), not null-decision sliding windows that share `geen resolutie`. Bare `waar op` → decision-start family; `waar op` + `geen resolutie` → null-decision family. Canonical exemplar remains the join key.
+- **Reason:** Overlapping positions are how the harvester works; formula typology must not inherit straddles or chops.
+
+## 2026-10-26: Do science on a canonical form (family exemplar join key)
+
+- **Context:** STEPT1ab folds sliding 5-grams / spelling variants into families. STEPT1z harvest treated nested surfaces as separate nodes and polluted the sequence matrix. Trifecta’s `canonical_pref_label` vs raw `target_word` is the same lesson.
+- **Decision:** **Do science on a canonical form.** Family **exemplar** is the join key for typology, sequence-matrix nodes, counts, and harvest. **Members** stay for human skim/evidence only. Zone/length ≠ role. Skim sheets use blank `keep` / `human_role` until human fill; prefer undecided over a wrong merge. Sequence-matrix impact (STEPT1ac) rebuilds harvest from exemplars and compares to STEPT1z with hard + soft (containment) metrics.
+- **Reason:** Surfaces undercount or explode graphs; false merges poison transitions worse than missing a rare phrase.
+
+## 2026-10-26: STEPT1aa/ab — 5-gram inventory → family fold (typology bridge)
+
+- **Context:** Track T opener treadmill paused; need a formula-level overview including decision scaffolding. Large frame is Marijn’s 5-gram occurrence dump (~26.7M rows), not `formula_documents` flags. Freq sieve alone drops rare carriers and does not settle variants.
+- **Decision:** Ship **STEPT1aa** (stream + `phrase_freq` Pass A + protected/rare sidecar; legacy `lcats`/zone) and **STEPT1ab** (nest collapse + variant fold → `formula_family_candidates`; human_role empty). No auto-mint. Next after human skim = typology map and **rebuild/compare `formula_sequence_matrix`** using folded exemplars as harvest nodes.
+- **Reason:** Size-safe recurrence evidence + Doc B scaffolding/carrier split; fold addresses nested surfaces that polluted STEPT1z harvest.
+
+## 2026-10-25: opener_candidates — human merge of formula surfaces
+
+- **Context:** STEPT1z harvest produces nested/alias surfaces (`in handen` / `handen`, variant openers). The candidate frame needs a way to collapse those without minting a new type.
+- **Decision:** Add human **`merge_candidates`** on `opener_candidates`: absorb `from_ids` into survivor `into_id`; accumulate `surfaces` / `merged_from` / `seed_refs` / `n_empty_support`; absorbed rows get `status=merged` + `merged_into`. Refuses absorbing or targeting blueprints. Optional `--canonic` on merge can pocket→named. Driver CLI: `--merge … --into …`. No auto-merge from the sequence matrix.
+- **Reason:** Process judgment stays human; sequence P-matrix noise is hygiene, fixed by merge in the queue before measure.
+
+## 2026-10-25: STEPT1z — probabilistic formula sequence matrix (+ harvest)
+
+- **Context:** After STEPT1y, hand-naming voordracht is a poor fit (surface-varied). User wants compute to propose candidates and a **probabilistic** before/after overview — not only counts or a linear queue.
+- **Decision:** Ship **STEPT1z**. Primary product = **row-stochastic adjacent transition matrix** P(next=B | current=A) on year 1780 (rows sum ≈ 1; include `END`). Companion = support `n` (+ optional precedes layer P(B later|A), median gap). Nodes = six blueprints + harvested scheme/pocket surfaces. Harvest from `formula_schemes_sample` + STEPT1u pockets (substring order; presence for blueprints). Do **not** auto-mint/`named`. No full DAG re-fit this step.
+- **Reason:** Conditional succession is the sequence story; raw n alone misleads; joint P(A,B) collapses back to co-presence. Human naming gate stays.
+
+## 2026-10-25: STEPT1y — human-judged `opener_candidates` write-back loop
+
+- **Context:** After STEPT1x (6 blueprints), each new opener still meant twin scripts (measure + promote). User asked for a pipeline plus a candidates dataframe that a human judges, with the pipeline writing evidence back into the table.
+- **Decision:** Ship **STEPT1y**. Durable loop = `opener_candidates` ↔ driver phases (`measure` → `wire` → `propose-promote`) ↔ human verdicts. Pipeline writes **evidence only**; human writes names + `a_verdict` / `promote_verdict`. No auto-mint, no auto-A, no auto-promote (`--apply-promote` requires human accept). Seed: 6 blueprint audit rows + `voordracht` / `conclusie_handen` pockets. Audit adapters only for the six done types; new types refuse measure until a later adapter.
+- **Reason:** Same bar as the 2026-10-22 human-naming gate; stops copy-paste STEPT1k/n/s/w twins without collapsing judgment into metrics.
+
+## 2026-10-25: STEPT1x — `rapport_gehoord` promoted to blueprint (6-core)
+
+- **Context:** STEPT1w accepted A; STEPT1x wired into presence + `ACCEPTED_TYPE_IDS` and re-ran 1780 composition-unknown (5-core → 6-core).
+- **Decision:** Promote `rapport_gehoord` to `role: "blueprint"`. Empty **0.122→0.107** (342→300). Three rapport-bearing cores clear support≥5 (solo 42; +requeste 10; +both requestes 7), all dominant_bag_frac 1.0 — gates 1–3 PASS. Period label stays `18c`; promote evidence is 1780 — recalibrate later for other periods. Next = human-judged `opener_candidates` queue + measure→wire→propose-promote driver (or 6-core empty re-char).
+- **Reason:** Unlike STEPT1t (empty flat), rapport pulls real residual empty mass; low-noise solo core confirms STEPT1u’s skeleton call under composition.
+
+## 2026-10-25: STEPT1w — rapport opener accepted A (cleanest FP so far)
+
+- **Context:** STEPT1u named `IS gehoord het rapport van` as the sharpest residual empty-band skeleton. Full ES `proposition_type=rapport` gold (n=13,928) + slot-cloud/DAG measured as `rapport_gehoord`.
+- **Decision:** Accept A — recall **0.895** PASS; FP **0.006** PASS (3/500); cloud 10,642/12,839; cut 7.5 (= 5-slot exact ceiling). Model trails wording ~5 pts (same pattern as missive/advies). Do **not** promote this step. Next = blueprint promote (STEPT1m-style) or voordracht / L3.
+- **Reason:** Stereotyped canonic on gold; mid-text `rapport` FP risk from STEPT1l did not materialise at this cut.
+
+## 2026-10-23: STEPT1v2 — Requeste is FP/specificity hinge; no recall hinge
+
+- **Context:** Full hard-drop on long-head `requeste_geleesen` (n=47,237; holdout 9,447): cuts move (9.0→6.5/7.5); recall flat ≈0.977 for every single drop except drop-Requeste (R 0.998 / FP 0.054). Five slots within ε for recall+FP; Requeste fails safe via FP rise +0.032.
+- **Decision:** Close STEPT1v2 as **PASS**. L2 naming: **Requeste** = specificity (FP) hinge; IS/ter/Vergaderinge/geleesen/de = scaffolding for recall. Do not deploy a reduced cut; skip leave-k. Next = rapport opener A (STEPT1u) or Doc B L3.
+- **Reason:** Hard-drop answers Doc B where soft optional could not. Hinge here is against negatives, not gold FN — do not mint a one-token skeleton from `l2_required_tokens_guess`.
+
+## 2026-10-23: STEPT1v2 opened — hard-drop L1→L2
+
+- **Context:** STEPT1v soft optional was a methodological no-op; Doc B needs forced absence.
+- **Decision:** Open **STEPT1v2** — remove each slot from `variant_lists`, recalibrate p20 per config, name hinge vs scaffolding on long-head `requeste_geleesen`. Guide + eval ready; measurement only (no frozen-cut / blueprint change). Leave-k optional after single drops show signal.
+- **Reason:** Hard-drop measures “identity without this token”; fixture already moves cut and span IoU where soft optional did not.
+
+## 2026-10-23: STEPT1v — soft optional ablation is a no-op; hard-drop next
+
+- **Context:** STEPT1v single-slot `optional_slots` ablation on long-head `requeste_geleesen` (n=47,237; holdout 9,447): every config identical (recall 0.9766, FP 0.022, cut 9.0, span IoU 1.0). No hinge; vacuous “all slots safe.”
+- **Decision:** Treat STEPT1v as **inconclusive method result**, not “formula has no required slots.” Soft optional *allows* skip; gold still takes the full six-slot path. **Next = STEPT1v2 hard-drop** (remove slot from `variant_lists` / reduced canonic, recalibrate). Do not change frozen cut 4.5 from this run. Amend Doc B: L1→L2 needs forced absence, not optional alone.
+- **Reason:** On a population that matches the full canonic, optional ablation cannot move scores; only removing the slot tests whether identity survives without it.
+
+## 2026-10-23: STEPT1v opened — L2 reduction before another opener
+
+- **Context:** After STEPT1u, user declined another opener; chose Doc B L1→L2 on a settled formula.
+- **Decision:** Measure on **`requeste_geleesen`** (long-head gold only); soft `optional_slots` first pass. Rapport-A / letter / close-clause parked.
+- **Reason:** Use accepted inventory to ask what a formula *is*, not grow opener coverage.
+
+## 2026-10-22: STEPT1u — 5-core empty is no longer rekest-headed
+
+- **Context:** After STEPT1t, empty stayed 342/2796 (0.122). STEPT1j’s empty (1329) was 53% rekest; that finding drove the requeste track. Re-ran empty-band characterisation on current 5-core scores.
+- **Decision:** Treat remaining empty as **several pockets**. Rekest share collapsed to **0.105** (36). New head = **voordracht** (80, 0.234). Named residuals: rapport skeleton + conclusie+handen. Do **not** mint from n=342. (Superseded next-step call: user declined another opener; L2 opened instead.)
+- **Reason:** Unknown-first says characterise before minting; the old rekest story is closed.
+
+## 2026-10-22: STEPT1t — `requeste_op_de` promoted to blueprint (5-core)
+
+- **Context:** STEPT1s accepted the short opener; STEPT1t wired it into presence + `ACCEPTED_TYPE_IDS` and re-ran the 1780 composition-unknown measurement (4-core → 5-core).
+- **Decision:** Promote `requeste_op_de` to `role: "blueprint"`. Empty mass **unchanged** at 0.122 (gate 1 FAIL — expected: long `requeste_geleesen` at cut 4.5 already scores short texts). Three dual-opener cores clear support≥5 (`requeste_geleesen`+`requeste_op_de` 188; +missive 109; +advies 7), all dominant_bag_frac 1.0 — gates 2–3 PASS. No solo short core: all 304 short presents also fire the long model (cut collision). Downstream five modules still untouched.
+- **Reason:** Typology gain is naming dual-opener composition, not further empty shrink. Gate 3 (low-noise) is the promotion call; STEPT1s cross-fire 0.02 keeps the types distinct under the short model despite long@4.5 asymmetry.
+
+## 2026-10-22: STEPT1s — `requeste_op_de` accepted as A (cut 4.5)
+
+- **Context:** STEPT1r named the short opener; STEPT1s measured it (slot-cloud + DAG) on head-filtered ES rekest gold (n=16,447, 22% of rekest).
+- **Decision:** Accept `requeste_op_de` (canonic `Op de Requeste`) as measured A. Operating cut **4.5**. Recall 1.0 (gold definition makes this near-tautological — trust FP + cross-fire). FP **0.064** FAILS ≤0.05 but accepted (32/500; far below long opener’s accepted 0.206). Cross-fire on long-head rekest **0.02**. Do **not** promote to blueprint / wire `ACCEPTED_TYPE_IDS` in this step. Letter short-opener parallel stays parked.
+- **Reason:** Split is operationally clean (low cross-fire); short canonic’s FP cost is real but modest; raising the cut cannot help (max score = 4.5).
+
+## 2026-10-22: STEPT1r — requeste low band is `Op de Requeste`; split confirmed
+
+- **Context:** STEPT1q’s bimodal `dag_frozen_score` on rekest gold (low ≈4.5 / high ≈9) looked like a cut tradeoff. Part A tied the low band to shorter texts and absent deliberation markers; part B hand-read + full clean-gold head tally showed it is a **second opener**, not a clipped long canonic.
+- **Decision:** Split after human name. Long type stays `requeste_geleesen` (`IS ter Vergaderinge geleesen de Requeste`). Short type named **`op_de_requeste`** (id `requeste_op_de`, canonic `Op de Requeste`). Do **not** mint in STEPT1r — next step = mint + calibrate (FP risk: short canonic). Park a likely **parallel short-vs-receipt opener split for letters/missives** until after that mint; do not fold letter work into the requeste step.
+- **Reason:** Clean bipartition on gold (low 0.973 `Op de Requeste`, high 0.992 long reading formula); frozen 4.5 is a three-slot collision, so one type cannot both inventory the short routine and keep a tight FP cut.
+
+## 2026-10-22: Template ridge — naming, scaffolding vs carriers, drift
+
+- **Context:** Direction judgment after STEPT1o–q: risk of drowning in statistical irrelevance (ubiquitous formulas) or variant dissipation (every surface a new id). User clarifications: (1) templates are mostly built from standard opening/decision formulas — **less frequent** formulas decide the type; (2) that sparsity also makes carriers **easier to find** once named; (3) formula wording **drifts** over time; (4) template **naming** needs human ground truth.
+- **Decision:**
+  1. **Human naming gate:** new `template_id` / blueprint names require a human NOTES call after characterisation (sample read). Auto-mint from rates, clusters, bags, or band n is forbidden.
+  2. **Scaffolding ≠ type:** keep ubiquitous openers/decision glue as measured presence / covariates with low popularity weight; do not treat them as the typology instrument. Prioritise characterisation (and eventual A acceptance) of **rarer type-carrying** formulas — default against new ids still applies; human name when distributional evidence supports a split.
+  3. **Drift ≠ new type:** absorb period/OCR wording via slot clouds, period keys, and discriminators; new ids only with independent distributional identity (STEPT1l pattern).
+  4. **STEPT1r** = characterise requeste low-score band (part A quantitative on disk; part B hand-read when flat mounted) **before** Doc B L2 reduction; L2 is a later step, not STEPT1r.
+- **Reason:** Stays on the ridge between coarse mush and catalogue explosion; matches Doc B frequency roles at formula level while correcting the composition-layer mistake of equating “frequent in bags” with “decides the template.”
+
 ## 2026-10-20: STEPT1o — missive joins the accepted core; four openers promoted to blueprint
 
 - **Context:** STEPT1n accepted `missive_ontfangen` (frozen cut 6.0), mirroring STEPT1m's requeste wiring gap: `composition_unknown.ACCEPTED_TYPE_IDS` still only held the three prior openers, so STEPT1i/T1m's proto-blueprint measurement never saw missive.
